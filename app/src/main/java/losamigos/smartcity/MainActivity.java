@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activite_principale);
+        setContentView(R.layout.activity_main);
         connecte= (TextView) findViewById(R.id.connecte);
         pseudo= (EditText) findViewById(R.id.pseudoInput);
         password= (EditText) findViewById(R.id.passwordInput);
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
             }
             else {
                 connecte.setText(result + " est connecté !");
-                Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+                Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
                 startActivity(intent);
             }
         }

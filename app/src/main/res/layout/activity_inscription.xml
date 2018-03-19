@@ -39,22 +39,18 @@
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:text="JJ"/>
+        />
     <EditText
         android:id="@+id/month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:layout_toRightOf="@id/day"
-        android:text="MM"/>
+        />
     <EditText
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/month"
-        android:inputType="number"
-        android:text="AAAA"/>
+        android:layout_toRightOf="@id/month" />
     </android.support.v7.widget.LinearLayoutCompat>
 
     <TextView
@@ -63,6 +59,7 @@
         android:layout_height="wrap_content" android:text="@string/sexe"/>
 
     <RadioGroup
+        android:id = "@+id/groupe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -70,13 +67,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/femme"
-            android:onClick="buttonclicked"
             android:text="Femme"/>
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/homme"
-            android:onClick="buttonclicked"
             android:text="Homme"/>
     </RadioGroup>
 
@@ -104,7 +99,7 @@
         android:inputType="number" />
 
     <Button
-        android:id="@+id/okbutton"
+        android:id="@+id/inscrbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Suite"

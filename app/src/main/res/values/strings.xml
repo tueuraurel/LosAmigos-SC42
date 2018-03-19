@@ -29,7 +29,7 @@
     <string name="pseudo">Pseudo</string>
     <string name="password">Mot de passe</string>
     <string name="connecte"></string>
-    <string name="dateNaissance">Date de Naissance</string>
+    <string name="dateNaissance">Date de Naissance (JJ MM AAAA)</string>
     <string name="taille">Taille</string>
     <string name="poids">Poids</string>
     <string name="sexe">Sexe</string>
