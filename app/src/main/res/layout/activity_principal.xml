@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.marine.connexapp.PrincipalActivity">
+    tools:context="losamigos.smartcity.PrincipalActivity">
     <Button
         android:id="@+id/actualites"
         android:layout_width="wrap_content"
