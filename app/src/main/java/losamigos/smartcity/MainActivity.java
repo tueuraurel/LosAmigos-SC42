@@ -46,6 +46,14 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        Button btn3 = (Button) findViewById(R.id.boutonSkip);
+        btn3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void Affiche(){
