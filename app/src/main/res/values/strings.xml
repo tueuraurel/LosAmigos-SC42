@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">SmartCity</string>
+    <string name="Reseau">Debut Reseau</string>
+    <string name="Confirmer">Confirmer</string>
+    <string name="ajouterUnReseau">+</string>
+    <string name="partieActualites">Actualités</string>
+    <string name="meteo">Météo</string>
+    <string name="alarme">Alarme</string>
+    <string name="actualite">Actualités</string>
+    <string name="etattrafic">Etat Trafic</string>
+    <string name="agenda">Agenda</string>
+    <string name="change_city">Changer la ville</string>
+    <string name="weather_sunny">&#xf00d;</string>
+    <string name="weather_clear_night">&#xf02e;</string>
+    <string name="weather_foggy">&#xf014;</string>
+    <string name="weather_cloudy">&#xf013;</string>
+    <string name="weather_rainy">&#xf019;</string>
+    <string name="weather_snowy">&#xf01b;</string>
+    <string name="weather_thunder">&#xf01e;</string>
+    <string name="weather_drizzle">&#xf01c;</string>
+
+    <string name="place_not_found">Désolé ! La météo n\'a pas été trouvée !</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="partieConnexion">ConnexApp</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Mot de passe</string>
+    <string name="connecte"></string>
+    <string name="dateNaissance">Date de Naissance</string>
+    <string name="taille">Taille</string>
+    <string name="poids">Poids</string>
+    <string name="sexe">Sexe</string>
+</resources>

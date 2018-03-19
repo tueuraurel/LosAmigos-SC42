@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="losamigos.smartcity.ActualiteActivity"
+    >
+
+    <Button
+        android:id="@+id/buttonMeteo"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/meteo"
+        android:textColor="#FFFF" />
+
+    <Button
+        android:id="@+id/buttonAlarme"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/alarme"
+        android:textColor="#FFFF" />
+
+    <Button
+        android:id="@+id/buttonActualite"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/actualite"
+        android:textColor="#FFFF" />
+
+    <Button
+        android:id="@+id/buttonEtatTrafic"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/etattrafic"
+        android:textColor="#FFFF" />
+
+    <Button
+        android:id="@+id/buttonAgenda"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/agenda"
+        android:textColor="#FFFF" />
+
+</LinearLayout>
