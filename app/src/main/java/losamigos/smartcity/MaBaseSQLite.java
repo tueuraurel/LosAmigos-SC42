@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class MaBaseSQLite extends SQLiteOpenHelper {
-
+//ceci est un commentaire
     private static final String TABLE_RESEAU = "Reseau";
     private static final String COL_SUJET = "sujet";
     private static final String COL_DESCRIPTION = "description";
