@@ -1,25 +1,37 @@
 package losamigos.smartcity;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResult;
+import com.google.android.gms.location.places.Places;
 
 /* Premiere page de l'application, on y presente les 4 boutons principaux.
 C'est ici également que l'on récupere les informations de l'utilisateur qui serront ensuite
 passe d activite en activite (le pseudo et la ville)
  */
-public class ActivitePrincipale extends Activity {
+public class ActivitePrincipale extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    static GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
-
-        Log.d("ActivitePrincipale","demarage");
 
         setContentView(R.layout.activite_principale);
 
@@ -136,7 +148,133 @@ public class ActivitePrincipale extends Activity {
                 startActivity(intent);
             }
         });
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        placePhotosTask();
     }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this,
+                "La connexion à Google Places API a échoué",
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if( mGoogleApiClient != null )
+            mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        if( mGoogleApiClient != null && mGoogleApiClient.isConnected() ) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
+    abstract class PhotoTask extends AsyncTask<String, Void, PhotoTask.AttributedPhoto> {
+
+        private int mHeight;
+
+        private int mWidth;
+
+        public PhotoTask(int width, int height) {
+            mHeight = height;
+            mWidth = width;
+        }
+
+        /**
+         * Charge la première photo pour l'ID d'un lieu provenant de l'API Geo Data
+         * L'ID du lieu doit être le seul (et unique) paramètre
+         */
+        @Override
+        protected AttributedPhoto doInBackground(String... params) {
+            if (params.length != 1) {
+                return null;
+            }
+            final String placeId = params[0];
+            AttributedPhoto attributedPhoto = null;
+
+            PlacePhotoMetadataResult result = Places.GeoDataApi
+                    .getPlacePhotos(mGoogleApiClient, placeId).await();
+
+
+            if (result.getStatus().isSuccess()) {
+                PlacePhotoMetadataBuffer photoMetadataBuffer = result.getPhotoMetadata();
+
+                if (photoMetadataBuffer.getCount() > 0 && !isCancelled()) {
+                    // Obtenir la premiere photo et son attribution
+                    PlacePhotoMetadata photo = photoMetadataBuffer.get(0);
+                    CharSequence attribution = photo.getAttributions();
+                    // Charge une image redimensionnée pour cette photo
+                    Bitmap bitImage = photo.getScaledPhoto(mGoogleApiClient, mWidth, mHeight).await()
+                            .getBitmap();
+
+                    attributedPhoto = new AttributedPhoto(attribution, bitImage);
+
+                }
+                // Pour empêcher les fuites de mémoire
+                photoMetadataBuffer.release();
+            }
+            return attributedPhoto;
+        }
+
+        /**
+         * Classe représentant l'image et son attribution
+         */
+        class AttributedPhoto {
+
+            public final CharSequence attribution;
+
+            public final Bitmap bitmap;
+
+            public AttributedPhoto(CharSequence attribution, Bitmap bitmap) {
+                this.attribution = attribution;
+                this.bitmap = bitmap;
+            }
+        }
+    }
+
+    private void placePhotosTask() {
+        final ImageView image;
+        image = (ImageView) findViewById(R.id.imageVille);
+
+
+    /*
+      L'ID utiliséee ici est à titre d'exemple, l'objectif final étant d'obtenir une ID
+      de la ville associée à l'utilisateur lors du paramétrage de l'application
+    */
+        final String placeId = "ChIJsZ3dJQevthIRAuiUKHRWh60";
+
+
+        // Crée une nouvelle tâche asynchrone qui affiche la bitmap une fois chargée
+        new PhotoTask(image.getMaxWidth(), image.getMaxHeight()) {
+            @Override
+            protected void onPreExecute() {
+                Log.i("BOUH", Integer.toString(image.getWidth()) + Integer.toString(image.getHeight()));
+            }
+
+            @Override
+            protected void onPostExecute(AttributedPhoto attributedPhoto) {
+                if (attributedPhoto != null) {
+                    // La photo est chargée, on l'affiche
+                    image.setImageBitmap(attributedPhoto.bitmap);
+
+                }
+            }
+        }.execute(placeId);
+    }
+
 }
 
 

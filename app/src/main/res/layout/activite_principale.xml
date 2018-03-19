@@ -6,43 +6,72 @@
     android:layout_height="match_parent"
     tools:context="losamigos.smartcity.ActivitePrincipale">
 
-    <Button
-        android:id="@+id/Actualites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Actualités"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        />
-    <Button
-        android:id="@+id/commerces"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Commerces"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/Actualites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Actualités"
+
+                />
+            <Button
+                android:id="@+id/commerces"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Commerces"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/Reseaux"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Réseaux Sociaux"
+                />
+            <Button
+                android:id="@+id/pub"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Publicités"
+
+                />
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imageVille"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
         android:layout_centerInParent="true"
         android:background="@color/colorPrimaryDark"/>
-    <Button
-        android:id="@+id/Reseaux"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Réseaux Sociaux"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        />
-    <Button
-        android:id="@+id/pub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Publicités"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        />
 
 
 </RelativeLayout>
