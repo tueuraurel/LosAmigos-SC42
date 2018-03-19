@@ -1,8 +1,6 @@
 package losamigos.smartcity;
 
-/**
- * Created by aurelien on 17/03/18.
- */
+
 
 public class Adherent  {
     private String pseudo;

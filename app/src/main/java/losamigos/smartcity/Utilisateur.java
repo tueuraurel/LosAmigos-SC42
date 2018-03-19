@@ -1,10 +1,6 @@
 package losamigos.smartcity;
 
 
-/**
- * Created by aurelien on 14/03/18.
- */
-
 public class Utilisateur {
     private String pseudo;
     private String MDP;

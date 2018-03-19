@@ -1,8 +1,5 @@
 package losamigos.smartcity;
 
-/**
- * Created by aurelien on 14/03/18.
- */
 
 public class Message {
     private int id;

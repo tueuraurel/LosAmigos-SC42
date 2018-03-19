@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-/**
- * Created by aurelien on 17/03/18.
- */
+
 
 public class NouveauMessageActivity extends Activity {
 

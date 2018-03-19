@@ -8,9 +8,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by aurelien on 13/03/18.
- */
 
 public class ReseauBDD {
 
