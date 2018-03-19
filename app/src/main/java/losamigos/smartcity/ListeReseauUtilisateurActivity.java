@@ -13,9 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by aurelien on 15/03/18.
- */
+
 
 public class ListeReseauUtilisateurActivity extends Activity implements AdapterView.OnItemClickListener{
 

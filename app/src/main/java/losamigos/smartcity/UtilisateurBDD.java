@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-/**
- * Created by aurelien on 14/03/18.
- */
 
 public class UtilisateurBDD {
 

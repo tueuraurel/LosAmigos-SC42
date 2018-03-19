@@ -11,9 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-/**
- * Created by aurelien on 15/03/18.
- */
+
 
 public class CreationReseauxActivity extends Activity {
     @Override

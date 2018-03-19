@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-/**
- * Created by aurelien on 13/03/18.
- */
 
 public class Reseau {
     private String sujet;

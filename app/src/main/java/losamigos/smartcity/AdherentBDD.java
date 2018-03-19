@@ -8,9 +8,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by aurelien on 17/03/18.
- */
+
 
 public class AdherentBDD {
 
