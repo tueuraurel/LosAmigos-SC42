@@ -1,8 +1,10 @@
 package losamigos.smartcity;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 public class InscriptionActivity extends AppCompatActivity {
 
@@ -10,9 +12,13 @@ public class InscriptionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
-    }
-
-    public void showDatePickerDialog(View view) {
+        Button btn = (Button) findViewById(R.id.inscrbutton);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent  = new Intent(InscriptionActivity.this, ChoixThemeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void buttonclicked(View view) {
