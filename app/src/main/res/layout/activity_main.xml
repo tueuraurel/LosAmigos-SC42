@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.marine.connexapp.MainActivity">
+    tools:context="losamigos.smartcity.MainActivity">
 
     <TextView
         android:id="@+id/pseudo"

@@ -9,11 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MaBaseSQLite extends SQLiteOpenHelper {
 //ceci est un commentaire
     private static final String TABLE_RESEAU = "Reseau";
-    private static final String COL_SUJET = "sujet";
-    private static final String COL_DESCRIPTION = "description";
-    private static final String COL_PSEUDOADMIN = "pseudoAdmin";
-    private static final String COL_LOCALISATION = "localisation";
-    private static final String COL_VISIBILITE = "visibilite";
 
     private static final String TABLE_UTILISATEUR = "Utilisateur";
 
@@ -23,17 +18,13 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
 
     private static final String TABLE_ADHERENT = "Adherent";
 
-    /*private static final String CREATE_TABLE_RESEAU = "CREATE TABLE " + TABLE_RESEAU + " ("
-            + COL_SUJET + " TEXT PRIMARY KEY, "
-            + COL_DESCRIPTION + " TEXT,"+ COL_PSEUDOADMIN + "TEXT,"+COL_LOCALISATION+"TEXT,"+
-            COL_VISIBILITE +"INTEGER);";*/
 
     private static final String CREATE_TABLE_RESEAU = "CREATE TABLE Reseau(sujet TEXT " +
             "PRIMARY KEY, description TEXT,pseudoAdmin TEXT,localisation TEXT, visibilite INTEGER);";
 
     private static final String CREATE_TABLE_UTILISATEUR = "CREATE TABLE Utilisateur(pseudo TEXT " +
-            "PRIMARY KEY, MDP TEXT,dateNaissance TEXT,sexe INTEGER, taille INTEGER" +
-            ",poids INTEGER);";
+            "PRIMARY KEY, MDP TEXT,dateNaissance TEXT,sexe INTEGER, taille REAL" +
+            ",poids REAL);";
 
     private static final String CREATE_TABLE_ANNONCE = "CREATE TABLE Annonce(titre TEXT " +
             "PRIMARY KEY, contenu TEXT);";
