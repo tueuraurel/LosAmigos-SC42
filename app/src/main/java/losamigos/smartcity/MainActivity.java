@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
             response="";
             HttpClient httpclient= new DefaultHttpClient();
             try {
-                HttpGet httpGet= new HttpGet("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/"+login+"/"+password);
+                HttpGet httpGet= new HttpGet("http://10.0.2.2/~aurelien/projetMobile/serveur.php/utilisateur/"+login+"/"+password);
                 HttpResponse httpresponse=httpclient.execute(httpGet);
                 HttpEntity httpentity=httpresponse.getEntity();
                 if (httpentity!=null){
