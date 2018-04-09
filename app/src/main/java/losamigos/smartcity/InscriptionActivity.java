@@ -18,6 +18,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -25,9 +26,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,12 +51,16 @@ public class InscriptionActivity extends AppCompatActivity {
         final EditText jour = (EditText) findViewById(R.id.day);
         final EditText mois = (EditText) findViewById(R.id.month);
         final EditText annee = (EditText) findViewById(R.id.year);
-        final String date = jour.getText().toString()+"-"+mois.getText().toString()+"-"+annee.getText().toString();
+
         final EditText taille = (EditText) findViewById(R.id.tailleInput);
         final EditText poids = (EditText) findViewById(R.id.poidsInput);
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                final String date = jour.getText().toString()+"-"+mois.getText().toString()+"-"+annee.getText().toString();
+
+                //Log.d("date", jour.getText().toString());
+                //Log.d("date", date);
                 Intent intent  = new Intent(InscriptionActivity.this, ChoixThemeActivity.class);
                 //creation de l'utilisateur dans la base du telephone
                 final RadioGroup groupe = findViewById(R.id.groupe);
@@ -94,34 +105,60 @@ class RetrieveUtilisateurTask extends AsyncTask<HashMap<String,String>, Void, Vo
     @Override
     protected Void doInBackground(HashMap<String, String>[] hashMaps) {
         HashMap<String, String> hashMap = hashMaps[0];
-        Log.d("post","entree");
-        HttpPost httppost = new HttpPost("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur");
-        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-        postParameters.add(new BasicNameValuePair("pseudo", hashMap.get("pseudo")));
-        postParameters.add(new BasicNameValuePair("MDP", hashMap.get("MDP")));
-        postParameters.add(new BasicNameValuePair("sexe", hashMap.get("sexe")));
-        postParameters.add(new BasicNameValuePair("taille", hashMap.get("taille")));
-        postParameters.add(new BasicNameValuePair("poids", hashMap.get("poids")));
-        postParameters.add(new BasicNameValuePair("dateNaissance", hashMap.get("dateNaissance")));
+        InputStream inputStream = null;
+        String result = "";
         try {
-            httppost.setEntity(new UrlEncodedFormEntity(postParameters));
+            // 1. create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-            HttpResponse response = httpclient.execute(httppost); //Voila, la requête est envoyée
-            HttpEntity httpEntity = response.getEntity();
-            String result = EntityUtils.toString(httpEntity, "utf-8");
-            JSONObject jsonObject = new JSONObject(result);
-            String status = jsonObject.getString("status");
-            if (!status.equals("success")) {
-                throw new Exception(jsonObject.getString("msg"));
-            }
-            System.out.println(status);
+
+            // 2. make POST request to the given URL
+            HttpPost httpPost = new HttpPost("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur");
+
+            String json = "";
+
+            // 3. build jsonObject
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("pseudo", hashMap.get("pseudo"));
+            jsonObject.accumulate("MDP", hashMap.get("MDP"));
+            jsonObject.accumulate("sexe", Integer.parseInt(hashMap.get("sexe")));
+            jsonObject.accumulate("taille", Float.parseFloat(hashMap.get("taille")));
+            jsonObject.accumulate("dateNaissance", hashMap.get("dateNaissance"));
+            jsonObject.accumulate("poids", Float.parseFloat(hashMap.get("poids")));
+
+            // 4. convert JSONObject to JSON to String
+            json = jsonObject.toString();
+
+            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
+            // ObjectMapper mapper = new ObjectMapper();
+            // json = mapper.writeValueAsString(person);
+
+            // 5. set json to StringEntity
+            StringEntity se = new StringEntity(json);
+
+            // 6. set httpPost Entity
+            httpPost.setEntity(se);
+
+            // 7. Set some headers to inform server about the type of the content
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            // 8. Execute POST request to the given URL
+            HttpResponse httpResponse = httpclient.execute(httpPost);
+
+            // 9. receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // 10. convert inputstream to string
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
         return null;
     }
 }
