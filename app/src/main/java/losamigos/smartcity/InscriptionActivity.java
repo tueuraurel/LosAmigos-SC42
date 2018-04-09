@@ -11,19 +11,25 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InscriptionActivity extends AppCompatActivity {
@@ -57,6 +63,14 @@ public class InscriptionActivity extends AppCompatActivity {
                         sexe = 0;
                     }
                 }
+                HashMap<String, String> parametres = new HashMap<String, String>();
+                parametres.put("pseudo", pseudo.getText().toString());
+                parametres.put("MDP", MDP.getText().toString());
+                parametres.put("sexe",String.valueOf(sexe));
+                parametres.put("taille",taille.getText().toString());
+                parametres.put("poids",poids.getText().toString());
+                parametres.put("dateNaissance",date);
+                new RetrieveUtilisateurTask().execute(parametres);
                 UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(InscriptionActivity.this);
                 maBaseUtilisateur.open();
 
@@ -66,8 +80,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 //Log.d("CreationUtilisateur", "pseudo : "+intent.getStringExtra("pseudo"));
                 maBaseUtilisateur.close();
                 //ajouter l'utilisateur dans la base du serveur
-
-                new RetrieveUtilisateurTask(pseudo.getText().toString(), MDP.getText().toString(), date, String.valueOf(sexe), taille.getText().toString(), poids.getText().toString()).execute();
+                //new RetrieveUtilisateurTask(pseudo.getText().toString(), MDP.getText().toString(), String.valueOf(sexe), taille.getText().toString(), poids.getText().toString(),date).execute();
                 //lancement de la prochaine activité -> choix des themes
                 startActivity(intent);
             }
@@ -76,64 +89,41 @@ public class InscriptionActivity extends AppCompatActivity {
 
 }
 
-class RetrieveUtilisateurTask extends AsyncTask<String, Void, Void> {
+class RetrieveUtilisateurTask extends AsyncTask<HashMap<String,String>, Void, Void> {
 
-    private Exception exception;
-    String pseudo;
-    String MDP;
-    String date;
-    String sexe;
-    String taille;
-    String poids;
-
-    public RetrieveUtilisateurTask(String pseudo, String MDP, String sexe, String taille, String poids, String date) {
-        this.date = date;
-        this.poids = poids;
-        this.taille = taille;
-        this.sexe = sexe;
-        this.pseudo = pseudo;
-        this.MDP = MDP;
-    }
-
-    protected Void doInBackground(String... urls) {
+    @Override
+    protected Void doInBackground(HashMap<String, String>[] hashMaps) {
+        HashMap<String, String> hashMap = hashMaps[0];
+        Log.d("post","entree");
+        HttpPost httppost = new HttpPost("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur");
+        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+        postParameters.add(new BasicNameValuePair("pseudo", hashMap.get("pseudo")));
+        postParameters.add(new BasicNameValuePair("MDP", hashMap.get("MDP")));
+        postParameters.add(new BasicNameValuePair("sexe", hashMap.get("sexe")));
+        postParameters.add(new BasicNameValuePair("taille", hashMap.get("taille")));
+        postParameters.add(new BasicNameValuePair("poids", hashMap.get("poids")));
+        postParameters.add(new BasicNameValuePair("dateNaissance", hashMap.get("dateNaissance")));
         try {
-            List nameValuePairs = new ArrayList();
-            nameValuePairs.add(new BasicNameValuePair("pseudo", pseudo));
-            nameValuePairs.add(new BasicNameValuePair("MDP", MDP));
-            nameValuePairs.add(new BasicNameValuePair("sexe", sexe));
-            nameValuePairs.add(new BasicNameValuePair("taille", taille));
-            nameValuePairs.add(new BasicNameValuePair("poids", poids));
-            nameValuePairs.add(new BasicNameValuePair("dateNaissance", date));
-            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
-
-            URL url = new URL("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            OutputStream post = conn.getOutputStream();
-            entity.writeTo(post);
-            post.flush();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine, response = "";
-
-            while ((inputLine = in.readLine()) != null) {
-                response += inputLine;
+            httppost.setEntity(new UrlEncodedFormEntity(postParameters));
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse response = httpclient.execute(httppost); //Voila, la requête est envoyée
+            HttpEntity httpEntity = response.getEntity();
+            String result = EntityUtils.toString(httpEntity, "utf-8");
+            JSONObject jsonObject = new JSONObject(result);
+            String status = jsonObject.getString("status");
+            if (!status.equals("success")) {
+                throw new Exception(jsonObject.getString("msg"));
             }
-            post.close();
-            in.close();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            System.out.println(status);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 }
+
+///////ERREUR : Ajout dans la BDD serveur d'un objet vide !!
