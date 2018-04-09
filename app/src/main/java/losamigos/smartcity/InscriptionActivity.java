@@ -54,7 +54,7 @@ public class InscriptionActivity extends AppCompatActivity {
 
         final EditText taille = (EditText) findViewById(R.id.tailleInput);
         final EditText poids = (EditText) findViewById(R.id.poidsInput);
-
+//
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final String date = jour.getText().toString()+"-"+mois.getText().toString()+"-"+annee.getText().toString();
