@@ -11,13 +11,11 @@ public class ChoixThemeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choix_theme);
-        Log.v("activity","ici");
         context = getApplicationContext();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new ThemeFragment())
                     .commit();
-            Log.v("acti","text2");
         }
     }
 }
