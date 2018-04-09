@@ -84,9 +84,15 @@ public class MessageBDD {
         }
 
     public ArrayList<Message> getAllMessageWithSujetReseau(String sujetReseau)  {
-        //Récupère dans un Cursor les valeurs correspondant à un message contenu dans la BDD (ici on sélectionne le message grâce à son titre)
+        //Récupère dans un Cursor les valeurs correspondant à un message contenu dans la BDD (ici on sélectionne le message grâce à son sujet)
         Cursor c = bdd.query(TABLE_MESSAGE, new String[] {COL_ID, COL_CONTENU, COL_SUJETRESEAU,COL_PSEUDOAUTEUR}, COL_SUJETRESEAU + " LIKE \"" + sujetReseau +"\"", null, null, null, null);
         return cursorToArray(c);
+    }
+
+    public Message getLatestMessageWithSujetReseau(String sujetReseau)  {
+        //Récupère dans un Cursor les valeurs correspondant à un message contenu dans la BDD (ici on sélectionne le message grâce à son titre)
+        Cursor c = bdd.query(TABLE_MESSAGE, new String[] {COL_ID, COL_CONTENU, COL_SUJETRESEAU,COL_PSEUDOAUTEUR}, COL_SUJETRESEAU + " LIKE \"" + sujetReseau +"\" AND " + COL_CONTENU + " = MAX(id)", null, null, null, null);
+        return cursorToMessage(c);
     }
 
 
