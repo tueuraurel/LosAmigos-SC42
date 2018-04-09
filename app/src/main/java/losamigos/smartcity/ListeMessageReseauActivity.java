@@ -48,7 +48,7 @@ public class ListeMessageReseauActivity extends Activity {
 
             ArrayList<Message> MesMessage;
             MesMessage = maBaseMessage.getAllMessageWithSujetReseau(sujetReseau);
-            maBaseMessage.close();
+
             if (MesMessage!=null) {
                 Log.d("ApresGETALL", "La taille est :" + MesMessage.size());
                 String[] NomMessage = new String[MesMessage.size()];
@@ -62,6 +62,8 @@ public class ListeMessageReseauActivity extends Activity {
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(ListeMessageReseauActivity.this,
                         android.R.layout.simple_list_item_1, NomMessage);
                 listeViewMessage.setAdapter(adapter);
+                //Log.d("Synchro BDD",maBaseMessage.getLatestMessageWithSujetReseau(sujetReseau).getContenu());
+                maBaseMessage.close();
             }
             else{
                 Toast.makeText(this, "Il n'y a pas de message sur ce reseau"
