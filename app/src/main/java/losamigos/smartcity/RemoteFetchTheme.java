@@ -15,7 +15,7 @@ public class RemoteFetchTheme {
 
     public static JSONArray getJSON(){
         try {
-            URL url = new URL("http://10.0.2.2/~aurelien/projetMobile/serveur.php/themesprincipaux");
+            URL url = new URL("http://10.0.2.2/~marine/mobile/serveur.php/themesprincipaux");
             Log.v("test","URI");
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
