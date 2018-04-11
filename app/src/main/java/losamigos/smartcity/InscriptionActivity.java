@@ -56,14 +56,6 @@ public class InscriptionActivity extends AppCompatActivity {
         final EditText taille = (EditText) findViewById(R.id.tailleInput);
         final EditText poids = (EditText) findViewById(R.id.poidsInput);
 
-        Button btn3 = (Button) findViewById(R.id.boutonSkip2);
-        btn3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(InscriptionActivity.this, ChoixThemeActivity.class);
-                startActivity(intent);
-            }
-        });
-
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /*if(pseudo.getText().toString().equals(null)){
@@ -115,6 +107,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 }*/
 
                 Intent intent  = new Intent(InscriptionActivity.this, ChoixThemeActivity.class);
+
                 //sexe
                 final RadioGroup groupe = findViewById(R.id.groupe);
                 int sexe=-1;
@@ -148,6 +141,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 maBaseUtilisateur.close();
 
                 //lancement de la prochaine activité -> choix des themes
+                intent.putExtra("PSEUDO", pseudo.getText().toString());
                 startActivity(intent);
             }
         });
