@@ -57,10 +57,13 @@ public class MainActivity extends Activity {
     }
 
     public void Affiche(){
-        String login = pseudo.getText().toString();
+        String login = pseudo.getText().toString().trim(); //.trim() enleve les espaces en fin de chaine
         String mdp = password.getText().toString();
-        new RequestTask(login,mdp).execute("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/"+login+"/"+password);
+        // new RequestTask(login,mdp).execute("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/"+login+"/"+password);
+        new RequestTask(login,mdp).execute("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/utilisateur/"+login+"/"+password);
+
     }
+
 
     private class RequestTask extends AsyncTask<String, Void, String> {
         private String response = "";
@@ -83,7 +86,7 @@ public class MainActivity extends Activity {
             response="";
             HttpClient httpclient= new DefaultHttpClient();
             try {
-                HttpGet httpGet= new HttpGet("http://10.0.2.2/~aurelien/projetMobile/serveur.php/utilisateur/"+login+"/"+password);
+                HttpGet httpGet= new HttpGet("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/utilisateur/"+login+"/"+password);
                 HttpResponse httpresponse=httpclient.execute(httpGet);
                 HttpEntity httpentity=httpresponse.getEntity();
                 if (httpentity!=null){
@@ -112,6 +115,7 @@ public class MainActivity extends Activity {
             else {
                 connecte.setText(result + " est connecté !");
                 Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
+                intent.putExtra("pseudoUser",result);
                 startActivity(intent);
             }
         }

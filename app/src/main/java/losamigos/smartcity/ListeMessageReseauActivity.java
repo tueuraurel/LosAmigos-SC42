@@ -36,6 +36,7 @@ public class ListeMessageReseauActivity extends Activity {
                 public void onClick(View view) {
                     Intent intent2 = new Intent(ListeMessageReseauActivity.this,NouveauMessageActivity.class);
                     intent2.putExtra("sujetReseau",intent.getStringExtra("sujetReseau"));
+                    intent2.putExtra("pseudoUser",intent.getStringExtra("pseudoUser"));
                     startActivity(intent2);
                 }
             });

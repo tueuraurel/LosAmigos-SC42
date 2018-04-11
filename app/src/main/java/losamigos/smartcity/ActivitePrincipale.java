@@ -30,6 +30,8 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final Intent intentPrecedent = getIntent();
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
@@ -37,8 +39,10 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
 
         UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(this);
         maBaseUtilisateur.open();
+
+        final String pseudoUser = intentPrecedent.getStringExtra("pseudoUser");
+
         /* Ici il faudra une methode pour recuperer le login et le lieu de la personne automatiquement */
-        final String pseudoUser = "Aurelien";
         final String lieuUser = "Montpellier";
 
         /* ici une liste d'exemple pour avoir une base pré-rempli pour les test sans

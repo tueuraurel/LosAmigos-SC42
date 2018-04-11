@@ -13,6 +13,26 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+
+import android.util.Log;
+
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class ListeReseauUtilisateurActivity extends Activity implements AdapterView.OnItemClickListener{
@@ -62,7 +82,9 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
         ReseauBDD maBaseReseau = new ReseauBDD(this);
         maBaseReseau.open();
         ArrayList<Reseau> MesReseaux;
-        //MesReseaux = maBaseReseau.getAllReseauWithPseudoUser("Aurelien");
+
+
+
         MesReseaux = maBaseReseau.getAllReseauAccessUser(intentIn.getStringExtra("pseudoUser"));
         maBaseReseau.close();
         if(MesReseaux!=null) {
@@ -115,4 +137,32 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     public void onPointerCaptureChanged(boolean hasCapture) {
     }
 
+
+    }
+
+    class RecuperationReseauAccess {
+
+    public static org.json.JSONArray getJSON(String pseudoUser){
+        try {
+            URL url = new URL("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/reseauAccess/"+pseudoUser);
+            Log.v("test","URI");
+            HttpURLConnection connection =
+                    (HttpURLConnection)url.openConnection();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            StringBuffer json = new StringBuffer(1024);
+            String tmp="";
+            while((tmp=reader.readLine())!=null)
+                json.append(tmp).append("\n");
+            reader.close();
+
+            JSONArray data = new JSONArray(json.toString());
+            Log.v("json", json.toString());
+            return data;
+        }catch(Exception e){
+            return null;
+        }
+    }
 }
