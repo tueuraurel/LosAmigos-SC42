@@ -95,7 +95,7 @@ class exportMessageServeur extends AsyncTask<java.util.HashMap<String,String>, V
             HttpClient httpclient = new DefaultHttpClient();
 
             // 2. make POST request to the given URL
-            HttpPost httpPost = new HttpPost("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/reseau/message");
+            HttpPost httpPost = new HttpPost(MainActivity.chemin+"reseau/message");
 
             String json = "";
 

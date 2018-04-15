@@ -2,8 +2,10 @@ package losamigos.smartcity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,10 +29,26 @@ public class MainActivity extends Activity {
     public TextView connecte;
     public EditText pseudo;
     public EditText password;
+    public static String chemin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Recuperation des preferences
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        //tutu
+        editor.putString("cheminDev","http://192.168.1.114/~aurelien/projetMobile/serveur/serveur.php/");
+        // marine
+        //editor.putString("cheminDev","/serveur.php/");
+        // sofian
+        //editor.putString("cheminDev","/serveur.php/");
+
+        editor.commit();
+        chemin=preferences.getString("cheminDev","");
+        Log.d("testPreference",preferences.getString("cheminDev",""));
+
         connecte= (TextView) findViewById(R.id.connecte);
         pseudo= (EditText) findViewById(R.id.pseudoInput);
         password= (EditText) findViewById(R.id.passwordInput);
@@ -61,7 +79,7 @@ public class MainActivity extends Activity {
     public void Affiche(){
         String login = pseudo.getText().toString();
         String mdp = password.getText().toString();
-        new RequestTask(login,mdp).execute("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/"+login+"/"+password);
+        new RequestTask(login,mdp).execute(chemin+"utilisateur/"+login+"/"+password);
     }
 
     private class RequestTask extends AsyncTask<String, Void, String> {
@@ -85,7 +103,7 @@ public class MainActivity extends Activity {
             response="";
             HttpClient httpclient= new DefaultHttpClient();
             try {
-                HttpGet httpGet= new HttpGet("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/"+login+"/"+password);
+                HttpGet httpGet= new HttpGet(chemin+"utilisateur/"+login+"/"+password);
                 HttpResponse httpresponse=httpclient.execute(httpGet);
                 HttpEntity httpentity=httpresponse.getEntity();
                 if (httpentity!=null){
@@ -113,7 +131,7 @@ public class MainActivity extends Activity {
             }
             else {
                 connecte.setText(result + " est connecté !");
-                new RequestInfosTask(login).execute("http://10.0.2.2/~marine/mobile/serveur.php/choisiVille/"+login);
+                new RequestInfosTask(login).execute(chemin+"choisiVille/"+login);
                 /*Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
                 startActivity(intent);*/
             }
@@ -138,7 +156,7 @@ public class MainActivity extends Activity {
         public Villes Recup_WS_Villes_domo(){
             HttpClient httpclient= new DefaultHttpClient();
             try {
-                HttpGet httpGet= new HttpGet("http://10.0.2.2/~marine/mobile/serveur.php/choisiVille/"+login);
+                HttpGet httpGet= new HttpGet(chemin+"choisiVille/"+login);
                 HttpResponse httpresponse=httpclient.execute(httpGet);
                 HttpEntity httpentity=httpresponse.getEntity();
                 if (httpentity!=null){
@@ -169,6 +187,7 @@ public class MainActivity extends Activity {
                 intent.putExtra("LATITUDE", villes.getLatitude());
                 intent.putExtra("LONGITUDE", villes.getLongitude());
                 intent.putExtra("VILLE", villes.getNom());
+                intent.putExtra("pseudoUser",login);
                 Log.d("test Latitude", login);
                 Log.d("test Latitude", villes.getLatitude());
                 Log.d("test Longitude", villes.getLongitude());

@@ -145,7 +145,7 @@ class RetrieveThemeTask extends AsyncTask<HashMap<String,String>, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
 
             // 2. make POST request to the given URL
-            HttpPost httpPost = new HttpPost("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/apprecie");
+            HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/apprecie");
 
             String json = "";
 

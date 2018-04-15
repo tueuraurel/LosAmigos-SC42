@@ -46,13 +46,16 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         updatePlaceData();
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
+        final Intent intentPrecedent = getIntent();
 
         setContentView(R.layout.activite_principale);
 
         UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(this);
         maBaseUtilisateur.open();
         /* Ici il faudra une methode pour recuperer le login et le lieu de la personne automatiquement */
-        final String pseudoUser = "Aurelien";
+        final String pseudoUser = intentPrecedent.getStringExtra("pseudoUser");
+        //Log.d("chercheErreur","n"+pseudoUser+"n");
+        //final String pseudoUser = "Aurelien";
         final String lieuUser = "Montpellier";
 
         /* ici une liste d'exemple pour avoir une base pré-rempli pour les test sans
@@ -124,7 +127,7 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
             maBaseAdherent.close();
 
 
-            
+
             /*TextView texte1 = findViewById(R.id.texte1);
             texte1.setText(DeuxReseauDeLaBase.toString());
 

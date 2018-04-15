@@ -134,7 +134,7 @@ public class ListeMessageReseauActivity extends Activity {
         // Recupere l'ensemble des message d un reseau.
         public static org.json.JSONArray getJSON(String sujetReseau){
             try {
-                URL url = new URL("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/message/"+sujetReseau);
+                URL url = new URL("http://192.168.1.114/~aurelien/projetMobile/serveur/serveur.php/message/"+sujetReseau);
                 Log.v("test","URI");
                 HttpURLConnection connection =
                         (HttpURLConnection)url.openConnection();

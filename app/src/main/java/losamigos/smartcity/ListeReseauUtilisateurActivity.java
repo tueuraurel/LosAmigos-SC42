@@ -38,7 +38,8 @@ import java.net.URL;
 
 
 public class ListeReseauUtilisateurActivity extends Activity implements AdapterView.OnItemClickListener{
-
+// Activite permettant de recuperer l ensemble des reseaux accessible par l utilisateur, ainsi que
+    //d'amener au page pour en creer un ou en rechercher.
     public static final String EXTRA_SUJETRESEAU="sujetReseau";
     ArrayList<Reseau> reseauList;
     ThemeAdapter thAdapter;
@@ -89,8 +90,9 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
         maBaseReseau.open();*/
 
         ArrayList<Reseau> MesReseaux;
+        Log.d("pseudoUser : ","n"+intentIn.getStringExtra("pseudoUser")+"n");
 
-        MesReseaux=renderReseau(RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser")));
+        MesReseaux=renderReseau(RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser").trim()));
 
 
 /*
@@ -178,13 +180,16 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     public ArrayList<Reseau> renderReseau(JSONArray json) {
         try {
             ArrayList<Reseau> reseaux = new ArrayList<>();
-
+            if(json!=null){
             for (int i = 0; i < json.length(); i++) {
                 JSONObject jsonobject = json.getJSONObject(i);
             reseaux.add(new Reseau(jsonobject.getString("sujet"),jsonobject.getString("description"),jsonobject.getString("pseudoAdmin"),jsonobject.getString("localisation"), jsonobject.getInt("visibilite")));
             }
 
             return reseaux;
+            }else{
+                Log.d("probleme","probleme json");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -199,24 +204,28 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     // Recupere l'ensemble des reseaux auquel un utilisateur a acces.
     public static org.json.JSONArray getJSON(String pseudoUser){
         try {
-            URL url = new URL("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/reseauAccess/"+pseudoUser);
-            Log.v("test","URI");
+            URL url = new URL(MainActivity.chemin+"reseauAccess/"+pseudoUser);
+            Log.v("test",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
-
+            Log.v("test",url.toString());
+            Log.v("test",connection.getResponseMessage());
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
 
             StringBuffer json = new StringBuffer(1024);
             String tmp="";
+            Log.v("test",url.toString());
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
-
+            Log.v("testFF",url.toString());
             JSONArray data = new JSONArray(json.toString());
             Log.v("json", json.toString());
+
             return data;
         }catch(Exception e){
+            Log.d("catch","probleme");
             return null;
         }
     }
