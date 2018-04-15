@@ -62,20 +62,21 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
                         final Intent intent = getIntent();
                         String pseudo = intent.getStringExtra("PSEUDO");
                         //pour la suite, on conserve le pseudo
-                        intent.putExtra("PSEUDO", pseudo);
+                        Intent intent2  = new Intent(ChoixThemeActivity.this, ChoixVilleActivity.class);
+                        intent2.putExtra("PSEUDO", pseudo);
                         parametres.put("pseudo", pseudo);
                         parametres.put("idTheme", String.valueOf(theme.getId()));
                         //creation de l'utilisateur dans la base du serveur
                         new RetrieveThemeTask().execute(parametres);
-                        //lancement de la prochaine activité -> choix des themes
-
-                        startActivity(intent);
+                        //lancement de la prochaine activité -> choix de la ville
+                        startActivity(intent2);
                     }
                 }
-                Intent intent  = new Intent(ChoixThemeActivity.this, ChoixVilleActivity.class);
 
             }
         });
+
+
     }
 
 

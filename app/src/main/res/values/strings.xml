@@ -18,7 +18,8 @@
     <string name="weather_snowy">&#xf01b;</string>
     <string name="weather_thunder">&#xf01e;</string>
     <string name="weather_drizzle">&#xf01c;</string>
-
+    <string name="title_activity_photo">PhotoActivity</string>
+    <string name="ville_not_found">Ville non existante, veuillez la resaisir !</string>
     <string name="place_not_found">Désolé ! La météo n\'a pas été trouvée !</string>
     <string name="data_not_found">Désolé ! Les informations n\'ont pas pu être récupérées !</string>
 

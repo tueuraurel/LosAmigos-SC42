@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -83,7 +85,7 @@ public class MainActivity extends Activity {
             response="";
             HttpClient httpclient= new DefaultHttpClient();
             try {
-                HttpGet httpGet= new HttpGet("http://10.0.2.2/~aurelien/projetMobile/serveur.php/utilisateur/"+login+"/"+password);
+                HttpGet httpGet= new HttpGet("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/"+login+"/"+password);
                 HttpResponse httpresponse=httpclient.execute(httpGet);
                 HttpEntity httpentity=httpresponse.getEntity();
                 if (httpentity!=null){
@@ -111,9 +113,69 @@ public class MainActivity extends Activity {
             }
             else {
                 connecte.setText(result + " est connecté !");
+                new RequestInfosTask(login).execute("http://10.0.2.2/~marine/mobile/serveur.php/choisiVille/"+login);
+                /*Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
+                startActivity(intent);*/
+            }
+        }
+    }
+
+    private class RequestInfosTask extends AsyncTask<String, Void, Villes> {
+        private Villes villes;
+        String login;
+
+        public RequestInfosTask(String login){
+            this.login = login;
+        }
+
+        @Override
+        protected Villes doInBackground(String... urls) {
+            villes =Recup_WS_Villes_domo();
+            return villes;
+        }
+
+
+        public Villes Recup_WS_Villes_domo(){
+            HttpClient httpclient= new DefaultHttpClient();
+            try {
+                HttpGet httpGet= new HttpGet("http://10.0.2.2/~marine/mobile/serveur.php/choisiVille/"+login);
+                HttpResponse httpresponse=httpclient.execute(httpGet);
+                HttpEntity httpentity=httpresponse.getEntity();
+                if (httpentity!=null){
+                    InputStream inputstream=httpentity.getContent();
+                    BufferedReader bufferedreader=new BufferedReader(
+                            new InputStreamReader(inputstream));
+                    StringBuilder strinbulder=new StringBuilder();
+                    String ligne=bufferedreader.readLine();
+                    bufferedreader.close();
+
+                    JSONObject jso=new JSONObject(ligne);
+                    villes = new Villes(jso.getString("nom"), jso.getString("latitude"), jso.getString("longitude"));
+
+
+                }
+            } catch (Exception e) {
+            }
+            return villes;
+        }
+
+        protected void onPostExecute(Villes result) {
+            if(result.equals(null)){
+                Toast.makeText(MainActivity.this, "Erreur : Ville non trouvée !", Toast.LENGTH_LONG).show();
+            }
+            else {
                 Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
+                intent.putExtra("PSEUDO",login);
+                intent.putExtra("LATITUDE", villes.getLatitude());
+                intent.putExtra("LONGITUDE", villes.getLongitude());
+                intent.putExtra("VILLE", villes.getNom());
+                Log.d("test Latitude", login);
+                Log.d("test Latitude", villes.getLatitude());
+                Log.d("test Longitude", villes.getLongitude());
                 startActivity(intent);
             }
         }
     }
 }
+
+//Serveur à été modifié : route GET /utilisateur/choisiVille/pseudo en /choisiVille/pseudo

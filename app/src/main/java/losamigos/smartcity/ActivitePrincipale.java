@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -19,6 +20,12 @@ import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.Places;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 /* Premiere page de l'application, on y presente les 4 boutons principaux.
 C'est ici également que l'on récupere les informations de l'utilisateur qui serront ensuite
 passe d activite en activite (le pseudo et la ville)
@@ -26,10 +33,17 @@ passe d activite en activite (le pseudo et la ville)
 public class ActivitePrincipale extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     static GoogleApiClient mGoogleApiClient;
+    Handler handler;
+    String IDPLace;
+
+    public ActivitePrincipale() {
+        handler = new Handler();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updatePlaceData();
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
@@ -149,15 +163,51 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
             }
         });
 
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .addOnConnectionFailedListener(this)
-                .build();
+    }
 
-        placePhotosTask();
+    public void recupereIDPlace(JSONObject json) {
+        try {
+            JSONArray jsonResult = json.getJSONArray("results");
+            for (int i = 0; i < jsonResult.length(); i++) {
+                IDPLace = jsonResult.getJSONObject(i).getString("place_id");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updatePlaceData() {
+        new Thread() {
+            public void run() {
+                Intent intent = getIntent();
+                String latitude = intent.getStringExtra("LATITUDE");
+                String longitude = intent.getStringExtra("LONGITUDE");
+                final JSONObject json = RemoteFetchIDPlace.getJSON(latitude,longitude); //a changer
+                Log.d("test", json.toString());
+                if (json == null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(ActivitePrincipale.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            recupereIDPlace(json);
+                            mGoogleApiClient = new GoogleApiClient
+                                    .Builder(ActivitePrincipale.this)
+                                    .addApi(Places.GEO_DATA_API)
+                                    .addApi(Places.PLACE_DETECTION_API)
+                                    .enableAutoManage(ActivitePrincipale.this, ActivitePrincipale.this)
+                                    .addOnConnectionFailedListener(ActivitePrincipale.this)
+                                    .build();
+                            placePhotosTask();
+                        }
+                    });
+                }
+            }
+        }.start();
+
     }
 
     @Override
@@ -199,6 +249,7 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
          */
         @Override
         protected AttributedPhoto doInBackground(String... params) {
+
             if (params.length != 1) {
                 return null;
             }
@@ -249,18 +300,19 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         final ImageView image;
         image = (ImageView) findViewById(R.id.imageVille);
 
+        /*
+          L'ID utiliséee ici est à titre d'exemple, l'objectif final étant d'obtenir une ID
+          de la ville associée à l'utilisateur lors du paramétrage de l'application
+        */
 
-    /*
-      L'ID utiliséee ici est à titre d'exemple, l'objectif final étant d'obtenir une ID
-      de la ville associée à l'utilisateur lors du paramétrage de l'application
-    */
-        final String placeId = "ChIJsZ3dJQevthIRAuiUKHRWh60";
+        final String placeId = IDPLace;
 
 
         // Crée une nouvelle tâche asynchrone qui affiche la bitmap une fois chargée
         new PhotoTask(image.getMaxWidth(), image.getMaxHeight()) {
             @Override
             protected void onPreExecute() {
+
                 Log.i("BOUH", Integer.toString(image.getWidth()) + Integer.toString(image.getHeight()));
             }
 
