@@ -3,6 +3,7 @@ package losamigos.smartcity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,11 +14,36 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+
+import android.util.Log;
+
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class ListeReseauUtilisateurActivity extends Activity implements AdapterView.OnItemClickListener{
 
     public static final String EXTRA_SUJETRESEAU="sujetReseau";
+    ArrayList<Reseau> reseauList;
+    ThemeAdapter thAdapter;
+    Handler handler;
+    ListView ListeDeMesReseaux;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +55,7 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
         super.onResume();
         final Intent intentIn = getIntent();
 
-        ListView ListeDeMesReseaux = findViewById(R.id.listeViewReseauUtilisateur);
+        ListeDeMesReseaux = findViewById(R.id.listeViewReseauUtilisateur);
         Button boutonAjouterReseau = findViewById(R.id.boutonVersCreationReseau);
         Button boutonRechercherReseau = findViewById(R.id.boutonVersRechercheReseau);
 
@@ -59,12 +85,17 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
         });
 
 
-        ReseauBDD maBaseReseau = new ReseauBDD(this);
-        maBaseReseau.open();
+        /*ReseauBDD maBaseReseau = new ReseauBDD(this);
+        maBaseReseau.open();*/
+
         ArrayList<Reseau> MesReseaux;
-        //MesReseaux = maBaseReseau.getAllReseauWithPseudoUser("Aurelien");
+
+        MesReseaux=renderReseau(RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser")));
+
+
+/*
         MesReseaux = maBaseReseau.getAllReseauAccessUser(intentIn.getStringExtra("pseudoUser"));
-        maBaseReseau.close();
+        maBaseReseau.close();*/
         if(MesReseaux!=null) {
             Log.d("ApresGETALL", "La taille est :" + MesReseaux.size());
 
@@ -115,4 +146,78 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     public void onPointerCaptureChanged(boolean hasCapture) {
     }
 
+
+
+    /* private void updateThemeData() {
+        new Thread() {
+            public void run() {
+                final Intent intentIn = getIntent();
+                final JSONArray json = RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser"));
+                if (json == null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(ListeReseauUtilisateurActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            reseauList = renderTheme(json);
+                            thAdapter= new ReseauAdapter(themeList,ChoixThemeActivity.this);
+                            ListeDeMesReseaux.setAdapter(thAdapter);
+                        }
+                    });
+                }
+            }
+        }.start();
+
+    } */
+
+
+    // Recupere un JSONArray de reseau et le transforme en un ArrayList de reseau.
+    public ArrayList<Reseau> renderReseau(JSONArray json) {
+        try {
+            ArrayList<Reseau> reseaux = new ArrayList<>();
+
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject jsonobject = json.getJSONObject(i);
+            reseaux.add(new Reseau(jsonobject.getString("sujet"),jsonobject.getString("description"),jsonobject.getString("pseudoAdmin"),jsonobject.getString("localisation"), jsonobject.getInt("visibilite")));
+            }
+
+            return reseaux;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    }
+
+    class RecuperationReseauAccess {
+
+    // Recupere l'ensemble des reseaux auquel un utilisateur a acces.
+    public static org.json.JSONArray getJSON(String pseudoUser){
+        try {
+            URL url = new URL("http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/reseauAccess/"+pseudoUser);
+            Log.v("test","URI");
+            HttpURLConnection connection =
+                    (HttpURLConnection)url.openConnection();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            StringBuffer json = new StringBuffer(1024);
+            String tmp="";
+            while((tmp=reader.readLine())!=null)
+                json.append(tmp).append("\n");
+            reader.close();
+
+            JSONArray data = new JSONArray(json.toString());
+            Log.v("json", json.toString());
+            return data;
+        }catch(Exception e){
+            return null;
+        }
+    }
 }
