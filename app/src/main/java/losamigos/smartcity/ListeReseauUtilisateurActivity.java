@@ -38,8 +38,10 @@ import java.net.URL;
 
 
 public class ListeReseauUtilisateurActivity extends Activity implements AdapterView.OnItemClickListener{
-// Activite permettant de recuperer l ensemble des reseaux accessible par l utilisateur, ainsi que
+
+    // Activite permettant de recuperer l ensemble des reseaux accessible par l utilisateur, ainsi que
     //d'amener au page pour en creer un ou en rechercher.
+
     public static final String EXTRA_SUJETRESEAU="sujetReseau";
     ArrayList<Reseau> reseauList;
     ThemeAdapter thAdapter;
@@ -47,19 +49,26 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     ListView ListeDeMesReseaux;
 
     @Override
+    // A la creation de l'activite on selection le layout correspondant
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.liste_reseau_utilisateur_layout);
     }
 
+    // Quand l'activite est au premier plan :
     protected  void onResume(){
         super.onResume();
+
+        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
         final Intent intentIn = getIntent();
 
+
+        // On recupere les elements du layout:
         ListeDeMesReseaux = findViewById(R.id.listeViewReseauUtilisateur);
         Button boutonAjouterReseau = findViewById(R.id.boutonVersCreationReseau);
         Button boutonRechercherReseau = findViewById(R.id.boutonVersRechercheReseau);
 
+        // Sur le bouton d'ajout on place un click listener permettant d'amener a l activite de creation
         boutonAjouterReseau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +81,8 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
             }
         });
 
+
+        // Sur le bouton de recherche on place un click listener permettant d'amener a l activite de recherche
 
         boutonRechercherReseau.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,15 +100,22 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
         /*ReseauBDD maBaseReseau = new ReseauBDD(this);
         maBaseReseau.open();*/
 
+        // On prepare une arrayList qui recupera l'ensemble des réseaux disponible
         ArrayList<Reseau> MesReseaux;
-        Log.d("pseudoUser : ","n"+intentIn.getStringExtra("pseudoUser")+"n");
+        Log.d("pseudoUser : ",intentIn.getStringExtra("pseudoUser"));
 
+
+        // On recupere tout d'abord le json grace au serveur, puis on le transforme en arrayList
         MesReseaux=renderReseau(RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser").trim()));
 
 
 /*
         MesReseaux = maBaseReseau.getAllReseauAccessUser(intentIn.getStringExtra("pseudoUser"));
         maBaseReseau.close();*/
+
+// Si on a recupere des reseaux, on recupere les sujets que l'on place dans
+// un adapter avant de les afficher
+
         if(MesReseaux!=null) {
             Log.d("ApresGETALL", "La taille est :" + MesReseaux.size());
 
@@ -145,8 +163,7 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-    }
+    public void onPointerCaptureChanged(boolean hasCapture) {}
 
 
 
@@ -205,21 +222,21 @@ public class ListeReseauUtilisateurActivity extends Activity implements AdapterV
     public static org.json.JSONArray getJSON(String pseudoUser){
         try {
             URL url = new URL(MainActivity.chemin+"reseauAccess/"+pseudoUser);
-            Log.v("test",url.toString());
+            Log.d("test getJSON",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
-            Log.v("test",url.toString());
-            Log.v("test",connection.getResponseMessage());
+
+            Log.d("test getJSON",connection.getResponseMessage());
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
 
             StringBuffer json = new StringBuffer(1024);
             String tmp="";
-            Log.v("test",url.toString());
+            Log.d("test getJSON",json.toString());
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
-            Log.v("testFF",url.toString());
+            Log.v("test getJSON",json.toString());
             JSONArray data = new JSONArray(json.toString());
             Log.v("json", json.toString());
 
