@@ -46,6 +46,12 @@ public class MainActivity extends Activity {
         //editor.putString("cheminDev","/serveur.php/");
 
         editor.commit();
+
+        // a enlever après le dev
+        this.deleteDatabase("SmartCity.db");
+
+
+
         chemin=preferences.getString("cheminDev","");
         Log.d("testPreference",preferences.getString("cheminDev",""));
 
@@ -71,6 +77,11 @@ public class MainActivity extends Activity {
         btn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
+                intent.putExtra("pseudoUser","tueuraurel");
+                intent.putExtra("PSEUDO","tueuraurel");
+                intent.putExtra("LATITUDE", "43.6");
+                intent.putExtra("LONGITUDE", "3.883333");
+                intent.putExtra("VILLE","MONTPELLIER");
                 startActivity(intent);
             }
         });

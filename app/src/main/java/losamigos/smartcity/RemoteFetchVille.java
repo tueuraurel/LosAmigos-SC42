@@ -15,7 +15,7 @@ public class RemoteFetchVille {
     public static JSONArray getJSON(double latitude, double longitude){
         try {
             Log.d("test3",longitude+" "+latitude);
-            URL url = new URL("http://10.0.2.2/~marine/mobile/serveur.php/villes/proximite/"+latitude+"/"+longitude);
+            URL url = new URL(MainActivity.chemin+"villes/proximite/"+latitude+"/"+longitude);
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -38,7 +38,7 @@ public class RemoteFetchVille {
     //permet de trouver la ville saisie
     public static JSONObject getJSONVille(String ville){
         try {
-            URL url = new URL("http://10.0.2.2/~marine/mobile/serveur.php/villes/"+ville);
+            URL url = new URL(MainActivity.chemin+"villes/"+ville);
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 

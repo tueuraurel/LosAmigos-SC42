@@ -15,8 +15,9 @@ public class RemoteFetchIDPlace {
 
     public static JSONObject getJSON(String latitude, String longitude) {
         try {
-            Log.d("tset","test:"+latitude+" "+longitude);
+            Log.d("getJSONIDplace","test:"+latitude+" "+longitude);
             URL url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+","+longitude+"&radius=1000&key=AIzaSyBXLfKfWodcGvq-HM0wsoHsOviym0RV33k");
+            Log.d("url getJSON",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection) url.openConnection();
 
