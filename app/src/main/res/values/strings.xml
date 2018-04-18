@@ -34,4 +34,5 @@
     <string name="taille">Taille</string>
     <string name="poids">Poids</string>
     <string name="sexe">Sexe</string>
+    <string name="pas_de_message">Aucun messages dans cette conversation !</string>
 </resources>

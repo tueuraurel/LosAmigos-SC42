@@ -276,6 +276,7 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
 
                     attributedPhoto = new AttributedPhoto(attribution, bitImage);
 
+
                 }
                 // Pour empêcher les fuites de mémoire
                 photoMetadataBuffer.release();
