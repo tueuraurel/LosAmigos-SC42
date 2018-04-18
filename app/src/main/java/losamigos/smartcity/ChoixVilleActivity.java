@@ -68,7 +68,7 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
             //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
             longitude = gps.getLongitude();
             latitude = gps.getLatitude();
-            Log.d("test",longitude+" "+latitude);
+            Log.d("ChoixVilleGPS",longitude+" "+latitude);
             //recuperer les données du serveur
             updateVilleData();
         }else{
@@ -243,7 +243,8 @@ class RetrieveVilleTask extends AsyncTask<HashMap<String,String>, Void, Void> {
             HttpClient httpclient = new DefaultHttpClient();
 
             // 2. make POST request to the given URL
-            HttpPost httpPost = new HttpPost("http://10.0.2.2/~marine/mobile/serveur.php/utilisateur/choisiVille");
+            HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/choisiVille");
+            Log.d("ChoixVilleBackground",httpPost.toString());
 
             String json = "";
 

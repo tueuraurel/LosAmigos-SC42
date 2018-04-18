@@ -1,4 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-</PreferenceScreen>
+        android:title="@string/root_title">
+
+        <Preference
+            android:key="Pseudo"
+            android:title="Pseudo" />
+
+    <Preference
+        android:key="Ville"
+        android:title="Ville" />
+
+    <Preference
+        android:key="Theme"
+        android:title="Theme" />
+
+    <Preference
+        android:key="FrequenceRaffraichissement"
+        android:title="Frequence Raffraichissement" />
+
+      <!--  <Preference
+            android:key="stylish_preference"
+            android:title="@string/title_stylish_preference"
+            android:summary="@string/summary_stylish_preference" />
+
+            <Preference
+            android:key="preference_with_icon"
+            android:title="Preference with icon"
+            android:summary="This preference has an icon"
+            android:icon="@android:drawable/ic_menu_camera" />
+
+        <PreferenceCategory
+            android:title="@string/inline_preferences">
+
+            <CheckBoxPreference
+                android:key="checkbox_preference"
+                android:title="@string/title_checkbox_preference"
+                android:summary="@string/summary_checkbox_preference" />
+
+            <SwitchPreference
+                android:key="switch_preference"
+                android:title="Switch preference"
+                android:summary="This is a switch" />
+
+            <DropDownPreference
+                android:key="dropdown_preference"
+                android:title="@string/title_dropdown_preference"
+                android:summary="@string/summary_dropdown_preference"
+                android:entries="@array/entries_list_preference"
+                android:entryValues="@array/entryvalues_list_preference" />
+
+        </PreferenceCategory>
+-->
+
+
+   </PreferenceScreen>
+

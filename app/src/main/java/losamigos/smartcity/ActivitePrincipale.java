@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,12 +42,12 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         handler = new Handler();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updatePlaceData();
-        // a enlever après le dev
-        this.deleteDatabase("SmartCity.db");
+
         final Intent intentPrecedent = getIntent();
 
         setContentView(R.layout.activite_principale);
@@ -168,6 +170,20 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menusetting, menu);
+        return true;
+    }
+
+  /* public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuPreference:
+                              fragment=getFragmentManager().findFragmentById(R.id.prefe )
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
+
     public void recupereIDPlace(JSONObject json) {
         try {
             JSONArray jsonResult = json.getJSONArray("results");
@@ -185,8 +201,10 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                 Intent intent = getIntent();
                 String latitude = intent.getStringExtra("LATITUDE");
                 String longitude = intent.getStringExtra("LONGITUDE");
+                Log.d("PlaceData ",latitude);
+                Log.d("PlaceData ",longitude);
                 final JSONObject json = RemoteFetchIDPlace.getJSON(latitude,longitude); //a changer
-                Log.d("test", json.toString());
+                Log.d("jsonPlaceData", json.toString());
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
@@ -252,7 +270,7 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
          */
         @Override
         protected AttributedPhoto doInBackground(String... params) {
-
+            Log.d("ActiPrinciBackground",String.valueOf(params.length));
             if (params.length != 1) {
                 return null;
             }
