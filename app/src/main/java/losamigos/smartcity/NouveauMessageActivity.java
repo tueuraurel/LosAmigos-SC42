@@ -104,7 +104,7 @@ class exportMessageServeur extends AsyncTask<java.util.HashMap<String,String>, V
             jsonObject.accumulate("contenu", hashMap.get("contenu"));
             jsonObject.accumulate("pseudoAuteur", hashMap.get("pseudoAuteur"));
             jsonObject.accumulate("sujetReseau", hashMap.get("sujetReseau"));
-            Log.d("insertionBase",jsonObject.toString());
+            //Log.d("insertionBase",jsonObject.toString());
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
