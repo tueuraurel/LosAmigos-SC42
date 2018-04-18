@@ -171,6 +171,7 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("optionMenu","");
         getMenuInflater().inflate(R.menu.menusetting, menu);
         return true;
     }
