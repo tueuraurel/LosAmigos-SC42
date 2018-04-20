@@ -35,4 +35,6 @@
     <string name="poids">Poids</string>
     <string name="sexe">Sexe</string>
     <string name="pas_de_message">Aucun messages dans cette conversation !</string>
+
+    <string name="setting">Option</string>
 </resources>

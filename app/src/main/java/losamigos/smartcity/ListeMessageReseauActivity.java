@@ -163,6 +163,11 @@ public class ListeMessageReseauActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.liste_message_reseaux);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         lv = (ListView) findViewById(R.id.listeViewMessageReseau);
         //recuperer les données du serveur
         updateMessageData();
@@ -176,6 +181,7 @@ public class ListeMessageReseauActivity extends Activity {
                 Intent intent2 = new Intent(ListeMessageReseauActivity.this, NouveauMessageActivity.class);
                 intent2.putExtra("sujetReseau", intent.getStringExtra("sujetReseau"));
                 intent2.putExtra("pseudoUser", intent.getStringExtra("pseudoUser"));
+                Log.d("pseudoUserIntent",intent.getStringExtra("pseudoUser").toString());
                 startActivity(intent2);
             }
         });

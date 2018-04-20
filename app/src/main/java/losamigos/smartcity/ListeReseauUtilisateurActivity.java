@@ -395,13 +395,19 @@ public class ListeReseauUtilisateurActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.liste_reseau_utilisateur_layout);
-        ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauUtilisateur);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauUtilisateur);
         //recuperer les données du serveur
         updateReseauData();
 
         // On recupere l'intent precedent pour avoir les donnees qu'il transporte
         final Intent intentIn = getIntent();
-
+        Log.d("pseudoListeRes",intentIn.getStringExtra("pseudoUser"));
+        Log.d("villeListeRes",intentIn.getStringExtra("lieuUser"));
 
         // On recupere les elements du layout:
         ListeDeMesReseaux = findViewById(R.id.listeViewReseauUtilisateur);
@@ -484,9 +490,12 @@ public class ListeReseauUtilisateurActivity extends Activity {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
+            Intent intentIn = getIntent();
             Reseau resultat = (Reseau) adapter.getItemAtPosition(position);
             Intent intent = new Intent(ListeReseauUtilisateurActivity.this, ListeMessageReseauActivity.class );
             intent.putExtra("sujetReseau",resultat.getSujet());
+            intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
+            intent.putExtra("lieuUser",intentIn.getStringExtra("lieuUser"));
             startActivity(intent);
         }
 

@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         //tutu
-        editor.putString("cheminDev","http://192.168.5.127/~aurelien/projetMobile/serveur/serveur.php/");
+        editor.putString("cheminDev","http://192.168.1.114/~aurelien/projetMobile/serveur/serveur.php/");
         // marine
         //editor.putString("cheminDev","http://10.0.2.2/~marine/mobile/serveur.php/");
         // sofian
@@ -200,8 +200,7 @@ public class MainActivity extends Activity {
                 intent.putExtra("LATITUDE", villes.getLatitude());
                 intent.putExtra("LONGITUDE", villes.getLongitude());
                 intent.putExtra("VILLE", villes.getNom());
-                intent.putExtra("pseudoUser",login);
-                Log.d("test Latitude", login);
+                Log.d("test pseudo", login);
                 Log.d("test Latitude", villes.getLatitude());
                 Log.d("test Longitude", villes.getLongitude());
                 startActivity(intent);
