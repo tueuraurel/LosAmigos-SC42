@@ -1,5 +1,8 @@
 package losamigos.smartcity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,7 +54,12 @@ public class MeteoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
-        updateWeatherData(new VillePreference(getActivity()).getCity());
+        Intent intent = getActivity().getIntent();
+        VillePreference villePref = new VillePreference(getActivity());
+        villePref.setCity(intent.getStringExtra("VILLE"));
+        Log.d("test",villePref.getCity());
+        Log.d("test"," "+intent.getStringExtra("VILLE"));
+        updateWeatherData(villePref.getCity());
     }
 
     private void updateWeatherData(final String city){

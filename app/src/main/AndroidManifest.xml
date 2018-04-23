@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:label="SmartCity - Connexion">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +41,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB12T6E17C7RH2nVddt7aRLqhUfoI37TxE" />
+            android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -50,6 +50,7 @@
         <activity android:name=".ActivitePrincipale" />
         <activity android:name=".ChoixVilleActivity" android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".PhotoActivity"/>
+        <activity android:name=".MapsActivity"/>
     </application>
 
 </manifest>

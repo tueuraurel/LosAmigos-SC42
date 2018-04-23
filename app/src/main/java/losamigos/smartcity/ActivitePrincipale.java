@@ -162,8 +162,12 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ActivitePrincipale.this,ActualiteActivity.class);
+                Intent intent2 = getIntent();
                 intent.putExtra("pseudoUser",pseudoUser);
-                intent.putExtra("lieuUser",lieuUser);
+                //intent.putExtra("lieuUser",lieuUser);
+                intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
                 startActivity(intent);
             }
         });

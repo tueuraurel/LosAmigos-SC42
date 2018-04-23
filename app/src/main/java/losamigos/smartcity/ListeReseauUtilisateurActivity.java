@@ -446,7 +446,7 @@ public class ListeReseauUtilisateurActivity extends Activity {
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(ListeReseauUtilisateurActivity.this, R.string.pas_de_message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ListeReseauUtilisateurActivity.this, R.string.pas_de_reseau, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
