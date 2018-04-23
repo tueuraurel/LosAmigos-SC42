@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -55,10 +56,11 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(this);
         maBaseUtilisateur.open();
         /* Ici il faudra une methode pour recuperer le login et le lieu de la personne automatiquement */
-        final String pseudoUser = intentPrecedent.getStringExtra("pseudoUser");
-        //Log.d("chercheErreur","n"+pseudoUser+"n");
+        final String pseudoUser = intentPrecedent.getStringExtra("PSEUDO");
+        Log.d("pseudoActivitePri",pseudoUser);
         //final String pseudoUser = "Aurelien";
-        final String lieuUser = "Montpellier";
+        final String lieuUser = intentPrecedent.getStringExtra("VILLE");
+        Log.d("villeActivitePri",lieuUser);
 
         /* ici une liste d'exemple pour avoir une base pré-rempli pour les test sans
         synchronisation avec le serveur.
@@ -175,9 +177,9 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("optionMenu","");
-        getMenuInflater().inflate(R.menu.menusetting, menu);
-        return true;
+        MenuInflater findMenuItems = getMenuInflater();
+        findMenuItems.inflate(R.menu.menusetting, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
   /* public boolean onOptionsItemSelected(MenuItem item) {

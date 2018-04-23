@@ -102,11 +102,12 @@ public class CreationReseauxActivity extends Activity {
                     /* A modifier ensuite pour ne pas pouvoir faire un retour dessus,
                      utiliser finish();
                      */
-
+                    finish();
+                                /*
                                 Intent intentRetour = new Intent(CreationReseauxActivity.this,ListeReseauUtilisateurActivity.class);
                                 intentRetour.putExtra("pseudoUser",intent.getStringExtra("pseudoUser"));
                                 intentRetour.putExtra("lieuUser",intent.getStringExtra("lieuUser"));
-                                startActivity(intentRetour);
+                                startActivity(intentRetour);*/
                             }
                     }
 
