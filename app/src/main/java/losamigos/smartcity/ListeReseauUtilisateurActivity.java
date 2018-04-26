@@ -395,22 +395,10 @@ public class ListeReseauUtilisateurActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.liste_reseau_utilisateur_layout);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauUtilisateur);
-        //recuperer les données du serveur
-        updateReseauData();
-
-        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
         final Intent intentIn = getIntent();
-        Log.d("pseudoListeRes",intentIn.getStringExtra("pseudoUser"));
-        Log.d("villeListeRes",intentIn.getStringExtra("lieuUser"));
+
 
         // On recupere les elements du layout:
-        ListeDeMesReseaux = findViewById(R.id.listeViewReseauUtilisateur);
         Button boutonAjouterReseau = findViewById(R.id.boutonVersCreationReseau);
         Button boutonRechercherReseau = findViewById(R.id.boutonVersRechercheReseau);
 
@@ -441,6 +429,21 @@ public class ListeReseauUtilisateurActivity extends Activity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauUtilisateur);
+        //recuperer les données du serveur
+        updateReseauData();
+
+        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
+        final Intent intentIn = getIntent();
+        Log.d("pseudoListeRes",intentIn.getStringExtra("pseudoUser"));
+        Log.d("villeListeRes",intentIn.getStringExtra("lieuUser"));
+
+
     }
 
 
@@ -528,49 +531,6 @@ class RecuperationReseaux {
         }catch(Exception e){
             return null;
         }
-    }
-}
-
-
-class ReseauAdapter extends ArrayAdapter<Reseau>{
-
-    private List<Reseau> reseauList;
-    private Context context;
-
-    public ReseauAdapter(List<Reseau> reseauList, Context context) {
-        super(context, R.layout.single_listview_item, reseauList);
-        this.reseauList = reseauList;
-        this.context = context;
-    }
-
-    private static class ReseauHolder {
-        public TextView sujet;
-        public TextView description;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View v = convertView;
-
-        ReseauHolder holder = new ReseauHolder();
-
-        if(convertView == null) {
-
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.single_reseau_item, null);
-
-            holder.sujet = (TextView) v.findViewById(R.id.sujet);
-            holder.description = (TextView) v.findViewById(R.id.description);
-        } else {
-            holder = (ReseauHolder) v.getTag();
-        }
-
-        Reseau p = reseauList.get(position);
-        holder.sujet.setText(p.getSujet());
-        holder.description.setText(p.getDescription());
-
-        return v;
     }
 }
 

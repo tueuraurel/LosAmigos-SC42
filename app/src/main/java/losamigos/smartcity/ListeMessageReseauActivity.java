@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,20 +193,20 @@ public class ListeMessageReseauActivity extends Activity {
         new Thread() {
             public void run() {
                 final Intent intent = getIntent();
-                Log.d("testInt",intent.getStringExtra("sujetReseau"));
+                Log.d("updateMessage int",intent.getStringExtra("sujetReseau"));
                 final JSONArray json = RecuperationMessage.getJSON(intent.getStringExtra("sujetReseau"));
-                Log.d("test","tset "+json);
+                Log.d("updateMessage","json: "+json);
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(ListeMessageReseauActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ListeMessageReseauActivity.this, R.string.pas_de_message, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
                             messageList = renderMessage(json);
-                            msgAdapter = new MessageAdapter(messageList, ListeMessageReseauActivity.this);
+                            msgAdapter = new MessageAdapter(messageList, ListeMessageReseauActivity.this, intent);
                             lv.setAdapter(msgAdapter);
                         }
                     });
@@ -221,7 +222,7 @@ public class ListeMessageReseauActivity extends Activity {
 
             for (int i = 0; i < json.length(); i++) {
                 JSONObject jsonobject = json.getJSONObject(i);
-                messages.add(new Message(jsonobject.getString("contenu"), jsonobject.getString("pseudoAuteur"), jsonobject.getString("sujetReseau")));
+                messages.add(new Message(jsonobject.getString("contenu"), jsonobject.getString("sujetReseau"), jsonobject.getString("pseudoAuteur")));
             }
 
             return messages;
@@ -237,7 +238,10 @@ class RecuperationMessage {
     // Recupere l'ensemble des message d un reseau.
     public static JSONArray getJSON(String sujetReseau){
         try {
-            URL url = new URL(MainActivity.chemin+"message/"+sujetReseau);
+            String sujetReseaubis = sujetReseau.replaceAll(" ","%20"); // on remplace les " " par de %20 pour le serveur
+            URL url = new URL(MainActivity.chemin+"message/"+sujetReseaubis);
+
+            Log.d("recupMessage","URL  : "+url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
             BufferedReader reader = new BufferedReader(
@@ -260,11 +264,13 @@ class MessageAdapter extends ArrayAdapter<Message>{
 
     private List<Message> messageList;
     private Context context;
+    private Intent intent;
 
-    public MessageAdapter(List<Message> messageList, Context context) {
+    public MessageAdapter(List<Message> messageList, Context context, Intent intent) {
         super(context, R.layout.single_message_item, messageList);
         this.messageList = messageList;
         this.context = context;
+        this.intent = intent;
     }
 
     private static class MessageHolder {
@@ -294,6 +300,12 @@ class MessageAdapter extends ArrayAdapter<Message>{
         Message p = messageList.get(position);
         holder.message.setText(p.getContenu());
         holder.auteur.setText(p.getPseudoAuteur());
+        Log.d("MessageAdapter","pseudoUser = "+intent.getStringExtra("pseudoUser"));
+
+        if(p.getPseudoAuteur().equals(intent.getStringExtra("pseudoUser"))){
+            holder.auteur.setGravity(Gravity.END);
+            holder.message.setGravity(Gravity.END);
+        }
 
         return v;
     }
