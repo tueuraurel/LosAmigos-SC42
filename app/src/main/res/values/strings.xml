@@ -36,6 +36,7 @@
     <string name="sexe">Sexe</string>
     <string name="pas_de_message">Aucun messages dans cette conversation !</string>
     <string name="pas_de_reseau">Aucun réseaux adhéré !</string>
+    <string name="pas_de_commerce">Aucun commerce !</string>
     <string name="setting">Option</string>
 
     <string name="presentationCommerce">Cette publicite vous est proposéepar : </string>

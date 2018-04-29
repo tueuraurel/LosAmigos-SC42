@@ -94,6 +94,21 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
             }
         });
 
+        Button boutonCommerce = findViewById(R.id.Commerces);
+        boutonCommerce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivitePrincipale.this,ChoixPartieCommerceActivity.class);
+                Intent intent2 = getIntent();
+                intent.putExtra("pseudoUser",pseudoUser);
+                //intent.putExtra("lieuUser",lieuUser);
+                intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
+                startActivity(intent);
+            }
+        });
+
         Button boutonPub = findViewById(R.id.pub);
         boutonPub.setOnClickListener(new View.OnClickListener() {
             @Override

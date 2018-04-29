@@ -41,12 +41,13 @@ public class MainActivity extends Activity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         //tutu
-        editor.putString("cheminDev","http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/");
-
+        //editor.putString("cheminDev","http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/");
+        //editor.putString("cheminDev","http://192.168.1.114/~aurelien/projetMobile/serveur/serveur.php/");
         // marine
         //editor.putString("cheminDev","http://10.0.2.2/~marine/mobile/serveur.php/");
         // sofian
-        //editor.putString("cheminDev","/serveur.php/");
+        //editor.putString("cheminDev","http://192.168.1.14/~sofian/smartcity/serveur/serveur.php/");
+        editor.putString("cheminDev","http://192.168.1.55/~sofian/smartcity/serveur/serveur.php/");
 
         editor.commit();
 
