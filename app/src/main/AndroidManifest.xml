@@ -51,6 +51,7 @@
         <activity android:name=".ChoixVilleActivity" android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".PhotoActivity"/>
         <activity android:name=".MapsActivity"/>
+        <activity android:name=".publiciteActivity" />
     </application>
 
 </manifest>

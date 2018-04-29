@@ -94,6 +94,15 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
             }
         });
 
+        Button boutonPub = findViewById(R.id.pub);
+        boutonPub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ActivitePrincipale.this,publiciteActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 
         editor.commit();
 
+
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
