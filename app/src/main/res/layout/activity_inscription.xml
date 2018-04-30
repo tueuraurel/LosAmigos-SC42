@@ -8,21 +8,29 @@
 
     <TextView
         android:id="@+id/pseudo"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:text="@string/pseudo"/>
 
     <EditText
         android:id="@+id/pseudoInput"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/password"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:text="@string/password"/>
 
     <EditText
         android:id="@+id/passwordInput"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword" />
@@ -30,32 +38,47 @@
     <TextView
         android:id="@+id/dateNaissance"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:text="@string/dateNaissance"/>
+
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/dateNaissance"/>
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
     <EditText
         android:id="@+id/day"
         android:inputType="number"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:maxLength="2"
         />
     <EditText
         android:id="@+id/month"
-        android:layout_width="wrap_content"
+        android:inputType="number"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/day"
+        android:layout_marginRight="15dp"
+        android:maxLength="2"
         />
     <EditText
         android:id="@+id/year"
-        android:layout_width="wrap_content"
+        android:inputType="number"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/month" />
+        android:layout_toRightOf="@id/month"
+        android:maxLength="4"/>
     </android.support.v7.widget.LinearLayoutCompat>
 
     <TextView
         android:id="@+id/sexe"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:text="@string/sexe"/>
 
@@ -63,6 +86,7 @@
         android:id = "@+id/groupe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
         <RadioButton
             android:layout_width="wrap_content"
@@ -78,28 +102,41 @@
 
     <TextView
         android:id="@+id/taille"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:text="@string/taille"/>
     <EditText
         android:id="@+id/tailleInput"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:maxLength="3"/>
 
     <TextView
         android:id="@+id/poids"
         android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:layout_height="wrap_content" android:text="@string/poids"/>
 
     <EditText
         android:id="@+id/poidsInput"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="number" />
+        android:inputType="number"
+        android:maxLength="3"/>
 
     <Button
+        android:gravity="center"
+        android:layout_gravity="center"
         android:id="@+id/inscrbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -40,9 +40,9 @@ public class MainActivity extends Activity {
 
         // Recuperation des preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
+        //SharedPreferences.Editor editor = preferences.edit();
         //tutu
-        editor.putString("cheminDev", "http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/");
+        //editor.putString("cheminDev", "http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/");
         //editor.putString("cheminDev","http://192.168.1.114/~aurelien/projetMobile/serveur/serveur.php/");
         // marine
         //editor.putString("cheminDev","http://10.0.2.2/~marine/mobile/serveur.php/");
@@ -50,13 +50,13 @@ public class MainActivity extends Activity {
         //editor.putString("cheminDev","http://192.168.1.14/~sofian/smartcity/serveur/serveur.php/");
         //editor.putString("cheminDev","http://192.168.1.55/~sofian/smartcity/serveur/serveur.php/");
 
-        editor.commit();
+        //editor.commit();
 
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
 
-        chemin = preferences.getString("cheminDev", "");
+        chemin = "https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/";
         Log.d("testPreference", preferences.getString("cheminDev", ""));
 
 

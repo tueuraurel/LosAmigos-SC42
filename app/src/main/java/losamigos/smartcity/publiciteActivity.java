@@ -38,6 +38,8 @@ public class publiciteActivity extends Activity {
     String lienPub;
     Handler handler;
 
+    publiciteActivity() {handler = new Handler();}
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +62,13 @@ public class publiciteActivity extends Activity {
         updatePubData();
 
 
+    } // fin onCreate()
+
+
+    public void affichagePub() {
         // Recuperation de l'extension :
         // l'appli est ici prepare pour des mp4 et des jpg, a voir pour la suite
-        /*String extension = lienPub.substring(lienPub.length() - 3);
+        String extension = lienPub.substring(lienPub.length() - 3);
         Log.d("lienPub", extension);
 
 
@@ -104,9 +110,7 @@ public class publiciteActivity extends Activity {
 
             }
         }
-*/
-    } // fin onCreate()
-
+    }
 
     // Cette methode modifie l'image d'un image view en allant chercher l'image sur internet
     private void setImage(final String url, final ImageView v) {
@@ -166,6 +170,7 @@ public class publiciteActivity extends Activity {
                                 titrePublicite=json.getString("titre");
                                 fournisseur=json.getString("nomFournisseur");
                                 lienPub=json.getString("lienPub");
+                                affichagePub();
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }

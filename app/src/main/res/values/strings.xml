@@ -32,13 +32,13 @@
     <string name="connecte"></string>
     <string name="resterCo">Rester connecté</string>
     <string name="dateNaissance">Date de Naissance (JJ MM AAAA)</string>
-    <string name="taille">Taille</string>
-    <string name="poids">Poids</string>
+    <string name="taille">Taille (en cm)</string>
+    <string name="poids">Poids (en kg)</string>
     <string name="sexe">Sexe</string>
     <string name="pas_de_message">Aucun messages dans cette conversation !</string>
     <string name="pas_de_reseau">Aucun réseaux adhéré !</string>
     <string name="pas_de_commerce">Aucun commerce !</string>
     <string name="setting">Option</string>
 
-    <string name="presentationCommerce">Cette publicite vous est proposéepar : </string>
+    <string name="presentationCommerce">Cette publicite vous est proposée par : </string>
 </resources>
