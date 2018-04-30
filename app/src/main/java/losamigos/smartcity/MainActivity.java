@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
         // sofian
         //editor.putString("cheminDev","http://192.168.1.14/~sofian/smartcity/serveur/serveur.php/");
         //editor.putString("cheminDev","http://192.168.1.55/~sofian/smartcity/serveur/serveur.php/");
-        editor.putString("cheminDev","https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/");
+        //editor.putString("cheminDev","https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/");
 
         //editor.commit();
 

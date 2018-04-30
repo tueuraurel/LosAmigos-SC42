@@ -44,5 +44,5 @@
     <string name="ajoutFavori">Ajouter un favori</string>
     <string name="supprimerFavori">Supprimer un favori</string>
 
-    <string name="presentationCommerce">Cette publicite vous est proposéepar : </string>
+    <string name="presentationCommerce">Cette publicite vous est proposée par : </string>
 </resources>
