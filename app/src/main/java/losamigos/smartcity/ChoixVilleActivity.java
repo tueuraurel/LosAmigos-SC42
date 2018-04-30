@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -35,7 +36,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChoixVilleActivity extends Activity implements android.widget.CompoundButton.OnCheckedChangeListener{
+public class ChoixVilleActivity extends Activity {
     ListView lv;
     ArrayList<Villes> villesList;
     VilleAdapter vAdapter;
@@ -53,7 +54,9 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
     }
 
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_ville);
+        lv = (ListView) findViewById(R.id.listview);
         if(ContextCompat.checkSelfPermission(ChoixVilleActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
         }
@@ -62,7 +65,6 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
         }
         //on recupere la position géographique
         gps = new GPSTracker(ChoixVilleActivity.this);
-
         // si le GPS est disponible
         if(gps.canGetLocation()){
             //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
@@ -71,6 +73,15 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
             Log.d("ChoixVilleGPS",longitude+" "+latitude);
             //recuperer les données du serveur
             updateVilleData();
+            Button boutonChoix2 = (Button) findViewById(R.id.buttonSaisie);
+            boutonChoix2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //ville saisie recuperation nom
+                    EditText editVille = findViewById(R.id.villeEdit);
+                    villeSaisie = editVille.getText().toString();
+                    ResearchVilleData();
+                }
+            });
         }else{
             Toast.makeText(getApplicationContext(), "Erreur GPS", Toast.LENGTH_LONG).show();
             // can't get location
@@ -78,47 +89,6 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
             // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ville);
-        lv = (ListView) findViewById(R.id.listview);
-
-        //Selection nom ville parmi la liste
-        Button boutonChoix = (Button) findViewById(R.id.choixButton);
-        boutonChoix.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                for (Villes ville : villesList) {
-                    if (ville.selected) {
-                        HashMap<String, String> parametres = new HashMap<String, String>();
-                        //recuperation du pseudo
-                        final Intent intent = getIntent();
-                        String pseudo = intent.getStringExtra("PSEUDO");
-                        //pour la suite, on conserve le pseudo
-                        Intent intent2 = new Intent(ChoixVilleActivity.this, ActivitePrincipale.class);
-                        intent2.putExtra("PSEUDO", pseudo);
-                        intent2.putExtra("LATITUDE", ville.latitude);
-                        intent2.putExtra("LONGITUDE", ville.longitude);
-                        intent2.putExtra("VILLE", ville.nom);
-                        parametres.put("pseudo", pseudo);
-                        parametres.put("nomVille",ville.nom);
-                        //creation de l'utilisateur dans la base du serveur
-                        new RetrieveVilleTask().execute(parametres);
-                        //lancement de la prochaine activité -> choix de la photo
-                        startActivity(intent2);
-                    }
-                }
-            }
-        });
-
-        //Nom ville saisie
-        Button boutonChoix2 = (Button) findViewById(R.id.buttonSaisie);
-        boutonChoix2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //ville saisie recuperation nom
-                EditText editVille = findViewById(R.id.villeEdit);
-                villeSaisie = editVille.getText().toString();
-                ResearchVilleData();
-            }
-        });
 
     }
 
@@ -195,6 +165,7 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
                             villesList = renderVille(json);
                             vAdapter= new VilleAdapter(villesList,ChoixVilleActivity.this);
                             lv.setAdapter(vAdapter);
+                            lv.setOnItemClickListener(new ListClickHandler());
                         }
                     });
                 }
@@ -219,15 +190,32 @@ public class ChoixVilleActivity extends Activity implements android.widget.Compo
         return null;
     }
 
+    public class ListClickHandler implements AdapterView.OnItemClickListener {
 
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        int pos = lv.getPositionForView(buttonView);
-        if (pos != ListView.INVALID_POSITION) {
-            Villes v = villesList.get(pos);
-            v.setSelected(isChecked);
+        @Override
+        public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
+            Villes ville = (Villes) adapter.getItemAtPosition(position);
+            HashMap<String, String> parametres = new HashMap<String, String>();
+            //recuperation du pseudo
+            final Intent intent = getIntent();
+            String pseudo = intent.getStringExtra("PSEUDO");
+            //pour la suite, on conserve le pseudo
+            Intent intent2 = new Intent(ChoixVilleActivity.this, ActivitePrincipale.class);
+            intent2.putExtra("PSEUDO", pseudo);
+            intent2.putExtra("LATITUDE", ville.latitude);
+            intent2.putExtra("LONGITUDE", ville.longitude);
+            intent2.putExtra("VILLE", ville.nom);
+            parametres.put("pseudo", pseudo);
+            parametres.put("nomVille",ville.nom);
+            //creation de l'utilisateur dans la base du serveur
+            new RetrieveVilleTask().execute(parametres);
+            //lancement de la prochaine activité -> choix de la photo
+            startActivity(intent2);
         }
+
     }
+
+
 }
 
 

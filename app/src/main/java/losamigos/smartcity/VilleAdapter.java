@@ -14,7 +14,6 @@ class Villes {
     String nom;
     String latitude;
     String longitude;
-    boolean selected = false;
 
     public Villes(String nom, String latitude, String longitude) {
         this.nom = nom;
@@ -45,13 +44,7 @@ class Villes {
     public void setNom(String nom) {
         this.nom = nom;
     }
-    public boolean isSelected() {
-        return selected;
-    }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
 }
 
 class VilleAdapter extends ArrayAdapter<Villes> {
@@ -67,7 +60,6 @@ class VilleAdapter extends ArrayAdapter<Villes> {
 
     private static class VilleHolder {
         public TextView villeName;
-        public CheckBox chkBox;
     }
 
     @Override
@@ -80,11 +72,9 @@ class VilleAdapter extends ArrayAdapter<Villes> {
         if(convertView == null) {
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.single_listview_item, null);
+            v = inflater.inflate(R.layout.single_listview_item_ville, null);
 
             holder.villeName = (TextView) v.findViewById(R.id.name);
-            holder.chkBox = (CheckBox) v.findViewById(R.id.chk_box);
-            holder.chkBox.setOnCheckedChangeListener((ChoixVilleActivity) context);
 
 
         } else {
@@ -93,10 +83,6 @@ class VilleAdapter extends ArrayAdapter<Villes> {
 
         Villes p = villesList.get(position);
         holder.villeName.setText(p.getNom());
-        holder.chkBox.setChecked(p.isSelected());
-        holder.chkBox.setTag(p);
         return v;
     }
 }
-
-//bug à l'ouverture du clavier
