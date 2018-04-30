@@ -90,7 +90,8 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = getIntent();
                 final int idTheme = intent.getIntExtra("idTheme",0);
-                final JSONArray jsonCommerce = RecuperationCommerce.getJSON(idTheme);
+                final String ville = intent.getStringExtra("VILLE");
+                final JSONArray jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville);
 
                 if (jsonCommerce == null) {
                     handler.post(new Runnable() {
@@ -261,12 +262,12 @@ class ThemesCommerceAdapter extends ArrayAdapter<ThemeCommerce> {
 class RecuperationCommerce {
 
     // Recupere l'ensemble des commerces correspondant au thème
-    public static JSONArray getJSON(int idTheme){
+    public static JSONArray getJSON(int idTheme, String ville){
 
         try {
             URL url;
             Log.v("IDTheme",String.valueOf(idTheme));
-            url = new URL(MainActivity.chemin+"commerce/theme/"+idTheme);
+            url = new URL(MainActivity.chemin+"commerce/theme/"+idTheme+"/"+ville);
 
             Log.v("test","URI");
             HttpURLConnection connection =

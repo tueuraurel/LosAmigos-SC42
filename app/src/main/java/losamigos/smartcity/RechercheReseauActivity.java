@@ -60,7 +60,6 @@ public class RechercheReseauActivity extends Activity {
         setContentView(R.layout.recherche_nouveau_reseau_layout);
         ListeDeNouveauxReseaux = findViewById(R.id.listeViewRechercheNouveauReseau);
         updateRechercheReseauData();
-        final Intent intent = getIntent();
 
     }
 

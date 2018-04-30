@@ -4,11 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CommerceActivity">
+    tools:context=".CommerceActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/infosCommerce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INFO COMMERCE"/>
     
     <TextView
         android:id="@+id/nomCommerce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/favoriCommerce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favori (en cours de dev)"/>
 
 </LinearLayout>

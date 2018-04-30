@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
         // sofian
         //editor.putString("cheminDev","http://192.168.1.14/~sofian/smartcity/serveur/serveur.php/");
         //editor.putString("cheminDev","http://192.168.1.55/~sofian/smartcity/serveur/serveur.php/");
+        editor.putString("cheminDev","https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/");
 
         //editor.commit();
 
@@ -133,7 +134,6 @@ public class MainActivity extends Activity {
                     InputStream inputstream=httpentity.getContent();
                     BufferedReader bufferedreader=new BufferedReader(
                             new InputStreamReader(inputstream));
-                    StringBuilder strinbulder=new StringBuilder();
                     String ligne=bufferedreader.readLine();
                     bufferedreader.close();
 

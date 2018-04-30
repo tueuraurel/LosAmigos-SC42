@@ -27,7 +27,7 @@ public class ChoixPartieCommerceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ChoixPartieCommerceActivity.this,RechercheCommerceActivity.class);
                 Intent intent2 = getIntent();
-                intent.putExtra("pseudoUser", intent2.getStringArrayExtra("pseudoUser"));
+                intent.putExtra("pseudoUser", intent2.getStringExtra("pseudoUser"));
                 //intent.putExtra("lieuUser",lieuUser);
                 intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
                 intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
@@ -42,7 +42,7 @@ public class ChoixPartieCommerceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ChoixPartieCommerceActivity.this,OffreCommerceActivity.class);
                 Intent intent2 = getIntent();
-                intent.putExtra("pseudoUser", intent2.getStringArrayExtra("pseudoUser"));
+                intent.putExtra("pseudoUser", intent2.getStringExtra("pseudoUser"));
                 //intent.putExtra("lieuUser",lieuUser);
                 intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
                 intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));

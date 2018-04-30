@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import java.util.List;
 public class CommerceActivity extends AppCompatActivity {
 
     TextView textViewNomCommerce;
+    Button boutonFavoriCommerce;
     Handler handler;
 
     public CommerceActivity() {
@@ -56,12 +58,13 @@ public class CommerceActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = getIntent();
                 final int idCommerce = intent.getIntExtra("idCommerce",0);
-                final JSONObject jsonCommerce = RecuperationInfosCommerce.getJSON(idCommerce);
+                final String pseudoUser = intent.getStringExtra("pseudoUser");
+                final JSONObject jsonCommerce = RecuperationInfosCommerce.getJSON(idCommerce, pseudoUser);
 
                 if (jsonCommerce == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(CommerceActivity.this, R.string.pas_de_commerce, Toast.LENGTH_LONG).show();
+                            Toast.makeText(CommerceActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
@@ -69,8 +72,26 @@ public class CommerceActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 textViewNomCommerce = (TextView) findViewById(R.id.nomCommerce);
+                                boutonFavoriCommerce = (Button) findViewById(R.id.favoriCommerce);
+
                                 textViewNomCommerce.setText(jsonCommerce.getString("nom"));
-                            }catch (Exception e){
+
+                                if (jsonCommerce.getBoolean("favori")) {
+                                    boutonFavoriCommerce.setText(R.string.supprimerFavori);
+                                    boutonFavoriCommerce.setOnClickListener(new View.OnClickListener() {
+                                        public void onClick(View v) {
+                                            // Code here executes on main thread after user presses button
+                                        }
+                                    });
+                                } else {
+                                    boutonFavoriCommerce.setText(R.string.ajoutFavori);
+                                    boutonFavoriCommerce.setOnClickListener(new View.OnClickListener() {
+                                        public void onClick(View v) {
+                                            // Code here executes on main thread after user presses button
+                                        }
+                                    });
+                                }
+                            } catch (Exception e){
 
                             }
                         }
@@ -85,14 +106,12 @@ public class CommerceActivity extends AppCompatActivity {
 class RecuperationInfosCommerce {
 
     // Recupere l'ensemble des commerces correspondant au thème
-    public static JSONObject getJSON(int idCommerce){
+    public static JSONObject getJSON(int idCommerce, String pseudoUser){
 
         try {
             URL url;
             Log.v("IDCommerce",String.valueOf(idCommerce));
             url = new URL(MainActivity.chemin+"commerce/id/"+idCommerce);
-
-            Log.v("test","URI");
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -107,9 +126,36 @@ class RecuperationInfosCommerce {
 
             Log.v("json", jso.toString());
 
-            return jso;
+            try {
+                URL url2;
+                url2 = new URL(MainActivity.chemin+"utilisateur/favoriCommerce/"+pseudoUser+"/"+idCommerce);
+
+                Log.v("test",url2.toString());
+                HttpURLConnection connection2 =
+                        (HttpURLConnection)url2.openConnection();
+
+                BufferedReader reader2 = new BufferedReader(
+                        new InputStreamReader(connection2.getInputStream()));
+
+                String ligne2=reader2.readLine();
+                reader2.close();
+
+                if (ligne2.equals("false")){
+                    jso.put("favori", false);
+                }else {
+                    jso.put("favori", true);
+                }
+
+                Log.v("test",jso.toString());
+                return jso;
+
+            }catch(Exception e){
+                return null;
+            }
+
         }catch(Exception e){
             return null;
         }
+
     }
 }
