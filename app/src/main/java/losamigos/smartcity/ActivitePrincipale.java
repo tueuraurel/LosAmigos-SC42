@@ -170,6 +170,13 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                     handler.post(new Runnable() {
                         public void run() {
                             recupereIDPlace(json);
+                            mGoogleApiClient = new GoogleApiClient
+                                    .Builder(ActivitePrincipale.this)
+                                    .addApi(Places.GEO_DATA_API)
+                                    .addApi(Places.PLACE_DETECTION_API)
+                                    .enableAutoManage(ActivitePrincipale.this, ActivitePrincipale.this)
+                                    .addOnConnectionFailedListener(ActivitePrincipale.this)
+                                    .build();
                             placePhotosTask();
                         }
                     });
