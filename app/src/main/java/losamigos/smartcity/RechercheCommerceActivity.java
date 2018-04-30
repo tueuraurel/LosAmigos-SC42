@@ -169,7 +169,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             Intent intentIn = getIntent();
             Commerce resultat = (Commerce) adapter.getItemAtPosition(position);
             Intent intent = new Intent(RechercheCommerceActivity.this, CommerceActivity.class );
-            intent.putExtra("idTheme",resultat.getId());
+            intent.putExtra("idCommerce",resultat.getId());
             intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
             intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
             intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
@@ -307,7 +307,6 @@ class CommerceAdapter extends ArrayAdapter<Commerce> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.v("test","COUCOU JE SUIS DANS COMMERCEADAPTER ET LA VIE EST BELLE PAR ICI");
 
         View v = convertView;
 

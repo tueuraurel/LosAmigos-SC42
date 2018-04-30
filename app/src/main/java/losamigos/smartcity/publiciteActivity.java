@@ -150,7 +150,7 @@ public class publiciteActivity extends Activity {
         new Thread() {
             public void run() {
                 Intent intent = getIntent();
-                final JSONArray json = RecuperationPub.getJSON("Montpellier");
+                final JSONObject json = RecuperationPub.getJSON("Montpellier");
                 //final JSONArray json = RecuperationPub.getJSON(intent.getStringExtra("lieuUser"));
                 Log.d("updateMessage","json: "+json);
                 if (json == null) {
@@ -163,10 +163,9 @@ public class publiciteActivity extends Activity {
                     handler.post(new Runnable() {
                         public void run() {
                             try {
-                                JSONObject jsonObject = json.getJSONObject(0);
-                                titrePublicite=jsonObject.getString("titre");
-                                fournisseur=jsonObject.getString("nomFournisseur");
-                                lienPub=jsonObject.getString("lienPub");
+                                titrePublicite=json.getString("titre");
+                                fournisseur=json.getString("nomFournisseur");
+                                lienPub=json.getString("lienPub");
                             }catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -196,7 +195,7 @@ public class publiciteActivity extends Activity {
     class RecuperationPub {
 
         // Recupere une publicite.
-        public static JSONArray getJSON(String ville){
+        public static JSONObject getJSON(String ville){
             try {
                 URL url = new URL(MainActivity.chemin+"publicite/"+ville);
 
@@ -205,13 +204,11 @@ public class publiciteActivity extends Activity {
                         (HttpURLConnection)url.openConnection();
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(connection.getInputStream()));
-                StringBuffer json = new StringBuffer(1024);
-                String tmp="";
-                while((tmp=reader.readLine())!=null)
-                    json.append(tmp).append("\n");
+                String ligne=reader.readLine();
                 reader.close();
-                JSONArray data = new JSONArray(json.toString());
-                return data;
+
+                JSONObject jso=new JSONObject(ligne);
+                return jso;
             }catch(Exception e){
                 return null;
             }
