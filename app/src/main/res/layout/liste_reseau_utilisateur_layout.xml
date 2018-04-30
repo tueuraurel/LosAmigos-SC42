@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mes Reseaux" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mes Reseaux" />
 
-    <Button
-        android:text="@string/ajouterUnReseau"
-        android:id="@+id/boutonVersCreationReseau"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <Button
+            android:text="@string/ajouterUnReseau"
+            android:id="@+id/boutonVersCreationReseau"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:text="Rechercher un reseau"
-        android:id="@+id/boutonVersRechercheReseau"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <Button
+            android:text="Rechercher un reseau"
+            android:id="@+id/boutonVersRechercheReseau"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <ListView
         android:id="@+id/listeViewReseauUtilisateur"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        >
+    </ListView>
 
 </LinearLayout>

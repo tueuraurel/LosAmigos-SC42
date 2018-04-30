@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class RechercheReseauActivity extends Activity implements AdapterView.OnItemClickListener{
+public class RechercheReseauActivity extends Activity {
 
 
     ListView ListeDeNouveauxReseaux;
@@ -56,36 +56,30 @@ public class RechercheReseauActivity extends Activity implements AdapterView.OnI
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recherche_nouveau_reseau_layout);
         ListeDeNouveauxReseaux = findViewById(R.id.listeViewRechercheNouveauReseau);
-        updateReseauData();
+        updateRechercheReseauData();
         final Intent intent = getIntent();
-
-
-
-
 
     }
 
 
-    @Override
+  /*  @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.d("HelloListView", "You clicked Item: " + id + " at position:" + position);
         Log.d("HelloListView", "Vous avez choisi "+adapterView.getItemAtPosition(position));
         Intent intent = new Intent(RechercheReseauActivity.this,DemandeAdhesionActivity.class);
         intent.putExtra("reseauClique",(String)adapterView.getItemAtPosition(position));
         startActivity(intent);
-    }
+    }*/
 
-    @Override
+ /*   @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-    }
+    }*/
 
     // charge les infos du serveur
-    private void updateReseauData() {
+    private void updateRechercheReseauData() {
         new Thread() {
             public void run() {
                 final Intent intent = getIntent();
@@ -102,10 +96,10 @@ public class RechercheReseauActivity extends Activity implements AdapterView.OnI
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
-                            reseauList = renderReseau(json);
+                            reseauList = renderRechercheReseau(json);
                             reseauAdapter= new ReseauAdapter(reseauList,RechercheReseauActivity.this);
                             ListeDeNouveauxReseaux.setAdapter(reseauAdapter);
-                            ListeDeNouveauxReseaux.setOnItemClickListener(new RechercheReseauActivity.ListClickHandler());
+                            ListeDeNouveauxReseaux.setOnItemClickListener(new ListClickHandler());
                         }
                     });
                 }
@@ -114,7 +108,7 @@ public class RechercheReseauActivity extends Activity implements AdapterView.OnI
 
     }
 
-    public ArrayList<Reseau> renderReseau(JSONArray json) {
+    public ArrayList<Reseau> renderRechercheReseau(JSONArray json) {
         try {
             ArrayList<Reseau> reseaux = new ArrayList<Reseau>();
 
@@ -130,13 +124,13 @@ public class RechercheReseauActivity extends Activity implements AdapterView.OnI
         return null;
     }
 
-    public class ListClickHandler implements AdapterView.OnItemClickListener {
+   public class ListClickHandler implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
             Intent intentIn = getIntent();
             Reseau resultat = (Reseau) adapter.getItemAtPosition(position);
-            Intent intent = new Intent(RechercheReseauActivity.this, ListeMessageReseauActivity.class );
+            Intent intent = new Intent(RechercheReseauActivity.this, DemandeAdhesionActivity.class );
             intent.putExtra("sujetReseau",resultat.getSujet());
             intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
             intent.putExtra("lieuUser",intentIn.getStringExtra("lieuUser"));
@@ -174,4 +168,3 @@ class RechercheReseaux {
         }
     }
 }
-

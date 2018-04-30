@@ -12,15 +12,20 @@
 
     <ListView
         android:id="@+id/listeViewMessageReseau"
-        android:layout_width="wrap_content"
-        android:layout_height="444dp" />
+        android:layout_width="match_parent"
+        android:layout_height="444dp"
+        android:padding="5sp"/>
 
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <Button
         android:id="@+id/boutonNouveauMessage"
         android:text="Nouveau Message"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+    </android.support.v7.widget.LinearLayoutCompat>
 </LinearLayout>
 
 
