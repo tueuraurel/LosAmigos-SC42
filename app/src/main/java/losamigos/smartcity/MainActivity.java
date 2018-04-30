@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,44 +42,50 @@ public class MainActivity extends Activity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         //tutu
-        //editor.putString("cheminDev","http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/");
+        editor.putString("cheminDev", "http://192.168.1.64/~aurelien/projetMobile/serveur/serveur.php/");
         //editor.putString("cheminDev","http://192.168.1.114/~aurelien/projetMobile/serveur/serveur.php/");
         // marine
         //editor.putString("cheminDev","http://10.0.2.2/~marine/mobile/serveur.php/");
         // sofian
         //editor.putString("cheminDev","http://192.168.1.14/~sofian/smartcity/serveur/serveur.php/");
-        editor.putString("cheminDev","http://192.168.1.55/~sofian/smartcity/serveur/serveur.php/");
+        //editor.putString("cheminDev","http://192.168.1.55/~sofian/smartcity/serveur/serveur.php/");
 
         editor.commit();
-
 
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
 
+        chemin = preferences.getString("cheminDev", "");
+        Log.d("testPreference", preferences.getString("cheminDev", ""));
 
-        chemin=preferences.getString("cheminDev","");
-        Log.d("testPreference",preferences.getString("cheminDev",""));
 
-        connecte= (TextView) findViewById(R.id.connecte);
-        pseudo= (EditText) findViewById(R.id.pseudoInput);
-        password= (EditText) findViewById(R.id.passwordInput);
-        Button btn = (Button) findViewById(R.id.okbutton);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Affiche();
-            }
-        });
+        // Skip la partie connection
+        if (!preferences.getString("pseudoUser", "").isEmpty() && !preferences.getString("mdp", "").isEmpty()) {
+            String login = preferences.getString("pseudoUser", "");
+            String mdp = preferences.getString("mdp", "");
+            new RequestTask(login, mdp).execute(chemin + "utilisateur/" + login + "/" + mdp);
+        }
 
-        Button btn2 = (Button) findViewById(R.id.inscriptionbutton);
-        btn2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, InscriptionActivity.class);
-                startActivity(intent);
-            }
-        });
+            connecte = (TextView) findViewById(R.id.connecte);
+            pseudo = (EditText) findViewById(R.id.pseudoInput);
+            password = (EditText) findViewById(R.id.passwordInput);
+            Button btn = (Button) findViewById(R.id.okbutton);
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Affiche();
+                }
+            });
 
-        Button btn3 = (Button) findViewById(R.id.boutonSkip);
+            Button btn2 = (Button) findViewById(R.id.inscriptionbutton);
+            btn2.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, InscriptionActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+      /*  Button btn3 = (Button) findViewById(R.id.boutonSkip);
         btn3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
@@ -89,8 +96,8 @@ public class MainActivity extends Activity {
                 intent.putExtra("VILLE","MONTPELLIER");
                 startActivity(intent);
             }
-        });
-    }
+        }); */
+        }
 
     public void Affiche(){
         String login = pseudo.getText().toString();
@@ -206,6 +213,16 @@ public class MainActivity extends Activity {
                 Log.d("test pseudo", login);
                 Log.d("test Latitude", villes.getLatitude());
                 Log.d("test Longitude", villes.getLongitude());
+                CheckBox resterConnecter=findViewById(R.id.resterConnecter);
+
+                //On ajoute les preferences de connexion pour skip la connexion au prochain demarrage
+                if (resterConnecter.isChecked()){
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("pseudoUser",login);
+                    editor.putString("mdp",password.getText().toString());
+                    editor.commit();
+                }
                 startActivity(intent);
             }
         }

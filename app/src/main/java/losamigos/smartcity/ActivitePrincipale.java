@@ -1,11 +1,13 @@
 package losamigos.smartcity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -60,8 +62,8 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
 
         setContentView(R.layout.activite_principale);
 
-        UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(this);
-        maBaseUtilisateur.open();
+        /*UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(this);
+        maBaseUtilisateur.open();*/
         /* Ici il faudra une methode pour recuperer le login et le lieu de la personne automatiquement */
         final String pseudoUser = intentPrecedent.getStringExtra("PSEUDO");
         Log.d("pseudoActivitePri",pseudoUser);
@@ -69,7 +71,19 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         final String lieuUser = intentPrecedent.getStringExtra("VILLE");
         Log.d("villeActivitePri",lieuUser);
 
-
+        Button deconnexion=findViewById(R.id.buttonDeconnexion);
+        deconnexion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent pageConnexion=new Intent(ActivitePrincipale.this,MainActivity.class);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitePrincipale.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.remove("pseudoUser");
+                editor.remove("mdp");
+                editor.commit();
+                startActivity(pageConnexion);
+            }
+        });
 
         Button boutonReseau = findViewById(R.id.Reseaux);
         boutonReseau.setOnClickListener(new View.OnClickListener() {

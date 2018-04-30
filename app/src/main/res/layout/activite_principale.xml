@@ -81,5 +81,14 @@
         android:maxWidth="300dp"
         />
 
+    <Button
+        android:id="@+id/buttonDeconnexion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="13dp"
+        android:text="Deconnecter" />
+
 
 </RelativeLayout>
