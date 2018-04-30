@@ -1,12 +1,16 @@
 package losamigos.smartcity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +39,7 @@ passe d activite en activite (le pseudo et la ville)
  */
 public class ActivitePrincipale extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    static GoogleApiClient mGoogleApiClient;
+    GoogleApiClient mGoogleApiClient;
     Handler handler;
     String IDPLace;
 
@@ -47,6 +51,13 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
         updatePlaceData();
 
         final Intent intentPrecedent = getIntent();
@@ -173,7 +184,6 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                 startActivity(intent);
             }
         });
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -205,13 +215,15 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     private void updatePlaceData() {
         new Thread() {
             public void run() {
+
                 Intent intent = getIntent();
                 String latitude = intent.getStringExtra("LATITUDE");
                 String longitude = intent.getStringExtra("LONGITUDE");
                 Log.d("PlaceData ",latitude);
                 Log.d("PlaceData ",longitude);
-                final JSONObject json = RemoteFetchIDPlace.getJSON(latitude,longitude); //a changer
+                final JSONObject json = RemoteFetchIDPlace.getJSON(latitude,longitude);
                 Log.d("jsonPlaceData", json.toString());
+
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
@@ -222,13 +234,6 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                     handler.post(new Runnable() {
                         public void run() {
                             recupereIDPlace(json);
-                            mGoogleApiClient = new GoogleApiClient
-                                    .Builder(ActivitePrincipale.this)
-                                    .addApi(Places.GEO_DATA_API)
-                                    .addApi(Places.PLACE_DETECTION_API)
-                                    .enableAutoManage(ActivitePrincipale.this, ActivitePrincipale.this)
-                                    .addOnConnectionFailedListener(ActivitePrincipale.this)
-                                    .build();
                             placePhotosTask();
                         }
                     });
@@ -282,13 +287,14 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                 return null;
             }
             final String placeId = params[0];
+            Log.d("param", params[0]);
             AttributedPhoto attributedPhoto = null;
-
-            PlacePhotoMetadataResult result = Places.GeoDataApi
-                    .getPlacePhotos(mGoogleApiClient, placeId).await();
-
+            Log.d("tst",placeId);
+            PlacePhotoMetadataResult result = Places.GeoDataApi.getPlacePhotos(mGoogleApiClient, placeId).await();
+            Log.d("GoogleCrash",result.getStatus().toString());
 
             if (result.getStatus().isSuccess()) {
+                Log.d("testtt","rtess");
                 PlacePhotoMetadataBuffer photoMetadataBuffer = result.getPhotoMetadata();
 
                 if (photoMetadataBuffer.getCount() > 0 && !isCancelled()) {
@@ -300,11 +306,15 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                             .getBitmap();
 
                     attributedPhoto = new AttributedPhoto(attribution, bitImage);
+                    Log.d("att","test "+attributedPhoto.toString());
 
 
                 }
                 // Pour empêcher les fuites de mémoire
                 photoMetadataBuffer.release();
+            }
+            else{
+                Log.d("erreur", "Erreur de recuperation image");
             }
             return attributedPhoto;
         }
@@ -325,24 +335,18 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void placePhotosTask() {
         final ImageView image;
         image = (ImageView) findViewById(R.id.imageVille);
 
-        /*
-          L'ID utiliséee ici est à titre d'exemple, l'objectif final étant d'obtenir une ID
-          de la ville associée à l'utilisateur lors du paramétrage de l'application
-        */
-
         final String placeId = IDPLace;
-
+        Log.d("id place",placeId);
 
         // Crée une nouvelle tâche asynchrone qui affiche la bitmap une fois chargée
         new PhotoTask(image.getMaxWidth(), image.getMaxHeight()) {
             @Override
             protected void onPreExecute() {
-
-                Log.i("BOUH", Integer.toString(image.getWidth()) + Integer.toString(image.getHeight()));
             }
 
             @Override
@@ -350,8 +354,11 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
                 if (attributedPhoto != null) {
                     // La photo est chargée, on l'affiche
                     image.setImageBitmap(attributedPhoto.bitmap);
-
+                    RoundedBitmapDrawable roundDrawable = RoundedBitmapDrawableFactory.create(getResources(), attributedPhoto.bitmap);
+                    roundDrawable.setCircular(true);
+                    image.setImageDrawable(roundDrawable);
                 }
+
             }
         }.execute(placeId);
     }

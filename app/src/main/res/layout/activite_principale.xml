@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="losamigos.smartcity.ActivitePrincipale">
+    tools:context="losamigos.smartcity.ActivitePrincipale"
+    android:background="@color/colorPrimary">
 
 
     <LinearLayout
@@ -23,17 +24,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Actualités"
+                android:background="#FF0099CC"
 
-                />
+                android:text="Actualités"
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/commerces"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/colorPrimary"
                 android:text="Commerces"
 
-                />
+                android:textSize="20dp" />
 
         </LinearLayout>
 
@@ -48,16 +52,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/colorPrimary"
                 android:text="Réseaux Sociaux"
-                />
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/pub"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#FF0099CC"
                 android:text="Publicités"
 
-                />
+                android:textSize="20dp" />
 
 
 
@@ -67,12 +74,12 @@
 
     <ImageView
         android:id="@+id/imageVille"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
+        android:layout_width="300dp"
         android:layout_centerInParent="true"
-        android:background="@color/colorPrimaryDark"
-        android:maxHeight="200dp"
-        android:maxWidth="200dp" />
+        android:maxHeight="300dp"
+        android:maxWidth="300dp"
+        />
 
 
 </RelativeLayout>

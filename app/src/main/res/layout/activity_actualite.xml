@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <Button
         android:id="@+id/buttonMeteo"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="116dp"
         android:background="@color/colorPrimary"
+        android:drawableTop="@drawable/ic_wb_sunny_black_24dp"
         android:text="@string/meteo"
-        android:textColor="#FFFF" />
+        android:textColor="#FFFF"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonAlarme"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:drawableTop="@android:drawable/ic_lock_idle_alarm"
+        android:layout_height="118dp"
+        android:background="#FF0099CC"
+        android:drawableTop="@drawable/ic_alarm_black_24dp"
         android:text="@string/alarme"
-        android:textColor="#FFFF" />
+        android:textColor="#FFFF"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonActualite"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="122dp"
         android:background="@color/colorPrimary"
+        android:drawableTop="@drawable/ic_import_contacts_black_24dp"
         android:text="@string/actualite"
         android:textColor="#FFFF"
-        tools:drawableTop="@android:drawable/ic_dialog_info" />
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonEtatTrafic"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:layout_height="114dp"
+        android:background="#FF0099CC"
+        android:drawableTop="@drawable/ic_directions_car_black_24dp"
         android:text="@string/etattrafic"
         android:textColor="#FFFF"
-        tools:drawableTop="@android:drawable/ic_dialog_map" />
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonAgenda"
@@ -50,9 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:drawableTop="@drawable/ic_today_black_24dp"
         android:text="@string/agenda"
         android:textColor="#FFFF"
-        tools:drawableTop="@android:drawable/ic_menu_agenda" />
+        android:textSize="18sp" />
 
 </GridLayout>
 

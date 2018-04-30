@@ -1,5 +1,6 @@
 package losamigos.smartcity;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +50,18 @@ public class ActualiteActivity extends AppCompatActivity {
                 intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
                 intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
                 startActivity(intent) ;
+            }
+        });
+
+        //on envoie sur l'agenda present sur le téléphone
+        final Button button5 = findViewById(R.id.buttonAgenda);
+        button5.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = getPackageManager().getLaunchIntentForPackage("com.google.android.calendar");
+                if (i != null)
+                {
+                    startActivity(i);
+                }
             }
         });
     }
