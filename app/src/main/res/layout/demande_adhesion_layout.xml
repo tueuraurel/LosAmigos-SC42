@@ -6,8 +6,42 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="CETTE PAGE EST EN COURS D IMPLEMENTATION, nous cherchons comment envoyer
-et faire parvenir les demandes d'adhesion"/>
+        android:layout_height="wrap_content"
+        android:text="@string/demandeAdhesion_NomReseau"/>
+
+    <TextView
+        android:id="@+id/demandeAdhesionSujetReseau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/demandeAdhesion_DescriptionReseau"/>
+
+    <TextView
+        android:id="@+id/demandeAdhesionDesciptionReseau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/demandeAdhesion_AdminReseau"/>
+
+    <TextView
+        android:id="@+id/demandeAdhesionAdminReseau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <Button
+        android:id="@+id/demandeAdhesionValider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/DemandeAdhesionBouton"/>
+
 
 </LinearLayout>

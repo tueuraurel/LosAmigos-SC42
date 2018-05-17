@@ -45,4 +45,14 @@
     <string name="supprimerFavori">Supprimer un favori</string>
 
     <string name="presentationCommerce">Cette publicite vous est proposée par : </string>
+
+
+
+
+    <!--____________Demande adhesion activity ______________-->
+
+    <string name="demandeAdhesion_AdminReseau">Admin du réseau : </string>
+    <string name="demandeAdhesion_NomReseau">Nom du réseau :</string>
+    <string name="demandeAdhesion_DescriptionReseau">Description du réseau</string>
+    <string name="DemandeAdhesionBouton">S\'inscrire</string>
 </resources>

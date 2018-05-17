@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ListeReseauUtilisateurActivity" />
-        <activity android:name=".ListeMessageReseauActivity" />
+        <activity android:name=".ListeMessageReseauActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CreationReseauxActivity" />
         <activity android:name=".RechercheReseauActivity" />
         <activity android:name=".DemandeAdhesionActivity" />

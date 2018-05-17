@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
 
     <TextView
@@ -17,14 +18,26 @@
         android:padding="5sp"/>
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    <Button
-        android:id="@+id/boutonNouveauMessage"
-        android:text="Nouveau Message"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bordure">
+
+        <EditText
+            android:id="@+id/EditTextNouveauMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/BoutonValider"
+            android:text="OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+
     </android.support.v7.widget.LinearLayoutCompat>
 </LinearLayout>
 

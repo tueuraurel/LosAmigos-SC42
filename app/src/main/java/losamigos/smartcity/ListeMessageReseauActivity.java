@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,114 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/*
-public class ListeMessageReseauActivity extends Activity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.liste_message_reseaux);
-    }
-
-    protected void onResume() {
-        super.onResume();
-        final Intent intent = getIntent();
-        TextView test = findViewById(R.id.test);
-        ListView listeViewMessage = findViewById(R.id.listeViewMessageReseau);
-
-        if (intent != null) {
-            Button boutonNouveauMessage = findViewById(R.id.boutonNouveauMessage);
-
-            boutonNouveauMessage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent2 = new Intent(ListeMessageReseauActivity.this, NouveauMessageActivity.class);
-                    intent2.putExtra("sujetReseau", intent.getStringExtra("sujetReseau"));
-                    intent2.putExtra("pseudoUser", intent.getStringExtra("pseudoUser"));
-                    startActivity(intent2);
-                }
-            });
-
-            String sujetReseau = intent.getStringExtra("sujetReseau");
-            test.setText(intent.getStringExtra("sujetReseau"));
-
-           /* MessageBDD maBaseMessage = new MessageBDD(this);
-            maBaseMessage.open();*/
-
-            /*ArrayList<Message> MesMessage;
-            MesMessage=renderMessage(RecuperationMessage.getJSON(intent.getStringExtra("sujetReseau")));
-
-            *//*MesMessage = maBaseMessage.getAllMessageWithSujetReseau(sujetReseau);*/
-
-           /* if (MesMessage != null) {
-                Log.d("ApresGETALL", "La taille est :" + MesMessage.size());
-                String[] NomMessage = new String[MesMessage.size()];
-
-                for (int i = 0; i < MesMessage.size(); i++) {
-                    NomMessage[i] = MesMessage.get(i).getContenu();
-                }*/
-                //android.R.layout.simple_list_item_1 est une vue disponible de base dans le SDK android,
-                //Contenant une TextView avec comme identifiant "@android:id/text1"
-
-               /* final ArrayAdapter<String> adapter = new ArrayAdapter<String>(ListeMessageReseauActivity.this,
-                        android.R.layout.simple_list_item_1, NomMessage);
-                listeViewMessage.setAdapter(adapter);
-                //Log.d("Synchro BDD",maBaseMessage.getLatestMessageWithSujetReseau(sujetReseau).getContenu());
-                //maBaseMessage.close();
-            } else {
-                Toast.makeText(this, "Il n'y a pas de message sur ce reseau"
-                        , Toast.LENGTH_LONG).show();
-            }
-        } else {
-            test.setText("ERREUR");
-        }
-    }*/
-
-      /* private void updateThemeData() {
-        new Thread() {
-            public void run() {
-                final Intent intentIn = getIntent();
-                final JSONArray json = RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser"));
-                if (json == null) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            Toast.makeText(ListeReseauUtilisateurActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            reseauList = renderTheme(json);
-                            thAdapter= new ReseauAdapter(themeList,ChoixThemeActivity.this);
-                            ListeDeMesReseaux.setAdapter(thAdapter);
-                        }
-                    });
-                }
-            }
-        }.start();
-
-    } */
-
-
-        // Recupere un JSONArray de message et le transforme en un ArrayList de message.
-   /*     public ArrayList<Message> renderMessage(JSONArray json) {
-            try {
-                ArrayList<Message> message = new ArrayList<>();
-
-                for (int i = 0; i < json.length(); i++) {
-                    JSONObject jsonobject = json.getJSONObject(i);
-                    message.add(new Message(jsonobject.getString("contenu"),jsonobject.getString("pseudoAuteur"),jsonobject.getString("sujetReseau")));
-                }
-
-                return message;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-
-    }*/
 
 
 public class ListeMessageReseauActivity extends Activity {
@@ -171,12 +64,17 @@ public class ListeMessageReseauActivity extends Activity {
         super.onResume();
         lv = (ListView) findViewById(R.id.listeViewMessageReseau);
         //recuperer les données du serveur
-        updateMessageData();
-        Button boutonNouveauMessage = findViewById(R.id.boutonNouveauMessage);
+
+        final Handler boucleMessage= new Handler();
+
+
+        boucleMessage.postDelayed(monRunnable,2000);
+        // updateMessageData();
+       // Button boutonNouveauMessage = findViewById(R.id.boutonNouveauMessage);
 
         final Intent intent = getIntent();
         Log.d("testInt",intent.getStringExtra("sujetReseau"));
-        boutonNouveauMessage.setOnClickListener(new View.OnClickListener() {
+        /*boutonNouveauMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent2 = new Intent(ListeMessageReseauActivity.this, NouveauMessageActivity.class);
@@ -185,9 +83,51 @@ public class ListeMessageReseauActivity extends Activity {
                 Log.d("pseudoUserIntent",intent.getStringExtra("pseudoUser").toString());
                 startActivity(intent2);
             }
+        });*/
+
+        final EditText nouveauMessage = findViewById(R.id.EditTextNouveauMessage);
+        Button valider = findViewById(R.id.BoutonValider);
+
+
+        valider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HashMap<String, String> parametres = new HashMap<String, String>();
+                parametres.put("contenu", nouveauMessage.getText().toString());
+                parametres.put("pseudoAuteur", intent.getStringExtra("pseudoUser"));
+                parametres.put("sujetReseau",intent.getStringExtra("sujetReseau"));
+                Log.d("NouveauMessBase",nouveauMessage.getText().toString());
+                Log.d("NouveauMessBase",intent.getStringExtra("pseudoUser"));
+                Log.d("NouveauMessBase",intent.getStringExtra("sujetReseau"));
+
+                new exportMessageServeur().execute(parametres);
+
+                boucleMessage.postDelayed(monRunnable,2000);
+                nouveauMessage.setText("");
+
+                //MessageBDD maBaseMessage = new MessageBDD(NouveauMessageActivity.this);
+                //maBaseMessage.open();
+                /*maBaseMessage.insertMessage(new Message(nouveauMessage.getText()),
+                        intent.getStringExtra(pseudoUser),intent.getStringExtra(sujetReseau));*/
+                //Log.d("NouveauMessageActivity",String.valueOf(nouveauMessage.getText()));
+                //Log.d("NouveauMessageActivity",intent.getStringExtra("sujetReseau"));
+              //  maBaseMessage.insertMessage(new Message(nouveauMessage.getText().toString(),intent.getStringExtra("sujetReseau"),"Aurelien"));
+               // maBaseMessage.close();
+                //finish();
+                /*Intent intent2 = new Intent(NouveauMessageActivity.this,ListeMessageReseau.class);
+                intent2.putExtra("sujetReseau",intent.getStringExtra("sujetReseau"));
+                startActivity(intent2);*/
+            }
         });
     }
 
+    // met a jour les messages toutes les 2 secondes
+    private Runnable monRunnable =new Runnable() {
+        @Override
+        public void run() {
+            updateMessageData();
+        }
+    };
 
     private void updateMessageData() {
         new Thread() {
@@ -208,6 +148,7 @@ public class ListeMessageReseauActivity extends Activity {
                             messageList = renderMessage(json);
                             msgAdapter = new MessageAdapter(messageList, ListeMessageReseauActivity.this, intent);
                             lv.setAdapter(msgAdapter);
+                            lv.setSelection(lv.getAdapter().getCount()-1);
                         }
                     });
                 }
@@ -292,6 +233,7 @@ class MessageAdapter extends ArrayAdapter<Message>{
 
             holder.message = (TextView) v.findViewById(R.id.message);
             holder.auteur = (TextView) v.findViewById(R.id.auteur);
+            v.setTag(holder);
 
         } else {
             holder = (MessageHolder) v.getTag();
@@ -310,3 +252,176 @@ class MessageAdapter extends ArrayAdapter<Message>{
         return v;
     }
 }
+
+class exportMessageServeur extends AsyncTask<java.util.HashMap<String,String>, Void, Void> {
+
+    @Override
+    protected Void doInBackground(HashMap<String, String>[] hashMaps) {
+        HashMap<String, String> hashMap = hashMaps[0];
+        InputStream inputStream = null;
+        String result = "";
+        try {
+            // 1. create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // 2. make POST request to the given URL
+            HttpPost httpPost = new HttpPost(MainActivity.chemin+"reseau/message");
+
+            String json = "";
+
+            // 3. build jsonObject
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("contenu", hashMap.get("contenu"));
+            jsonObject.accumulate("pseudoAuteur", hashMap.get("pseudoAuteur"));
+            jsonObject.accumulate("sujetReseau", hashMap.get("sujetReseau"));
+            //Log.d("insertionBase",jsonObject.toString());
+
+            // 4. convert JSONObject to JSON to String
+            json = jsonObject.toString();
+
+            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
+            // ObjectMapper mapper = new ObjectMapper();
+            // json = mapper.writeValueAsString(person);
+
+            // 5. set json to StringEntity
+            StringEntity se = new StringEntity(json);
+
+            // 6. set httpPost Entity
+            httpPost.setEntity(se);
+
+            // 7. Set some headers to inform server about the type of the content
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            // 8. Execute POST request to the given URL
+            HttpResponse httpResponse = httpclient.execute(httpPost);
+
+            // 9. receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // 10. convert inputstream to string
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+}
+
+
+
+
+/*
+public class ListeMessageReseauActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.liste_message_reseaux);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        final Intent intent = getIntent();
+        TextView test = findViewById(R.id.test);
+        ListView listeViewMessage = findViewById(R.id.listeViewMessageReseau);
+
+        if (intent != null) {
+            Button boutonNouveauMessage = findViewById(R.id.boutonNouveauMessage);
+
+            boutonNouveauMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent2 = new Intent(ListeMessageReseauActivity.this, NouveauMessageActivity.class);
+                    intent2.putExtra("sujetReseau", intent.getStringExtra("sujetReseau"));
+                    intent2.putExtra("pseudoUser", intent.getStringExtra("pseudoUser"));
+                    startActivity(intent2);
+                }
+            });
+
+            String sujetReseau = intent.getStringExtra("sujetReseau");
+            test.setText(intent.getStringExtra("sujetReseau"));
+
+           /* MessageBDD maBaseMessage = new MessageBDD(this);
+            maBaseMessage.open();*/
+
+            /*ArrayList<Message> MesMessage;
+            MesMessage=renderMessage(RecuperationMessage.getJSON(intent.getStringExtra("sujetReseau")));
+
+            *//*MesMessage = maBaseMessage.getAllMessageWithSujetReseau(sujetReseau);*/
+
+           /* if (MesMessage != null) {
+                Log.d("ApresGETALL", "La taille est :" + MesMessage.size());
+                String[] NomMessage = new String[MesMessage.size()];
+
+                for (int i = 0; i < MesMessage.size(); i++) {
+                    NomMessage[i] = MesMessage.get(i).getContenu();
+                }*/
+//android.R.layout.simple_list_item_1 est une vue disponible de base dans le SDK android,
+//Contenant une TextView avec comme identifiant "@android:id/text1"
+
+               /* final ArrayAdapter<String> adapter = new ArrayAdapter<String>(ListeMessageReseauActivity.this,
+                        android.R.layout.simple_list_item_1, NomMessage);
+                listeViewMessage.setAdapter(adapter);
+                //Log.d("Synchro BDD",maBaseMessage.getLatestMessageWithSujetReseau(sujetReseau).getContenu());
+                //maBaseMessage.close();
+            } else {
+                Toast.makeText(this, "Il n'y a pas de message sur ce reseau"
+                        , Toast.LENGTH_LONG).show();
+            }
+        } else {
+            test.setText("ERREUR");
+        }
+    }*/
+
+      /* private void updateThemeData() {
+        new Thread() {
+            public void run() {
+                final Intent intentIn = getIntent();
+                final JSONArray json = RecuperationReseauAccess.getJSON(intentIn.getStringExtra("pseudoUser"));
+                if (json == null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(ListeReseauUtilisateurActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            reseauList = renderTheme(json);
+                            thAdapter= new ReseauAdapter(themeList,ChoixThemeActivity.this);
+                            ListeDeMesReseaux.setAdapter(thAdapter);
+                        }
+                    });
+                }
+            }
+        }.start();
+
+    } */
+
+
+// Recupere un JSONArray de message et le transforme en un ArrayList de message.
+   /*     public ArrayList<Message> renderMessage(JSONArray json) {
+            try {
+                ArrayList<Message> message = new ArrayList<>();
+
+                for (int i = 0; i < json.length(); i++) {
+                    JSONObject jsonobject = json.getJSONObject(i);
+                    message.add(new Message(jsonobject.getString("contenu"),jsonobject.getString("pseudoAuteur"),jsonobject.getString("sujetReseau")));
+                }
+
+                return message;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+
+    }*/

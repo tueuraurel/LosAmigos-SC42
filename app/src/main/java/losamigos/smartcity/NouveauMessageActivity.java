@@ -82,7 +82,7 @@ public class NouveauMessageActivity extends Activity {
 
     }
 }
-
+/*
 class exportMessageServeur extends AsyncTask<java.util.HashMap<String,String>, Void, Void> {
 
     @Override
@@ -142,4 +142,4 @@ class exportMessageServeur extends AsyncTask<java.util.HashMap<String,String>, V
 
         return null;
     }
-}
+} */

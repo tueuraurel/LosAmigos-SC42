@@ -103,7 +103,6 @@ public class publiciteActivity extends Activity {
             video.start();
         } else {
             if (extension.equals("jpg")) {
-                //setContentView(R.layout.publicite_image);
                 video.setVisibility(VideoView.GONE);
                 imageView.setVisibility(ImageView.VISIBLE);
                 this.setImage(lienPub, imageView);
@@ -182,19 +181,6 @@ public class publiciteActivity extends Activity {
 
     }
 
-    /*public JSONObject transformationJSONArrayToObject(JSONArray json) {
-        try {
-            for (int i = 0; i < json.length(); i++) {
-                JSONObject jsonobject = json.getJSONObject(i);
-                messages.add(new Message(jsonobject.getString("contenu"), jsonobject.getString("sujetReseau"), jsonobject.getString("pseudoAuteur")));
-            }
-
-            return messages;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 }
 
     class RecuperationPub {
