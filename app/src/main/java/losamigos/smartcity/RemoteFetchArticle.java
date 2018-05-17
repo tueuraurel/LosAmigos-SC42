@@ -13,11 +13,20 @@ public class RemoteFetchArticle {
 
 
 
-    public static JSONObject getJSON() {
+    public static JSONObject getJSON(String ville, String journaux) {
         try {
-
-            URL url = new URL("https://newsapi.org/v2/top-headlines?country=fr&apiKey=f8a6fdbf9cce430ca6da3c56e89e9518");
-            HttpURLConnection connection =
+            URL url;
+            if(journaux == null) {
+                if (ville == null || ville.equals("FRANCE")) {
+                    url = new URL("https://newsapi.org/v2/top-headlines?country=fr&sortBy=popularity&apiKey=75ed10851fb34f4bb26946a2d0a66b7f");
+                } else {
+                    url = new URL("https://newsapi.org/v2/everything?q=" + ville + "&sortBy=popularity&apiKey=75ed10851fb34f4bb26946a2d0a66b7f");
+                }
+            }
+            else{
+                url = new URL("https://newsapi.org/v2/everything?domains="+journaux+"&sortBy=popularity&apiKey=75ed10851fb34f4bb26946a2d0a66b7f");
+            }
+                HttpURLConnection connection =
                     (HttpURLConnection) url.openConnection();
 
             InputStream responseBody = connection.getInputStream();

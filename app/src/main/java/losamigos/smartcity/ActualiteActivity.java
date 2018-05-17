@@ -37,6 +37,8 @@ public class ActualiteActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ActualiteActivity.this, ActualitesActivity.class);
+                Intent intent2 = getIntent();
+                intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
                 startActivity(intent);
             }
         });

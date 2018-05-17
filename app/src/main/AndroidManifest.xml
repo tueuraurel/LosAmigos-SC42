@@ -47,9 +47,8 @@
 
         <activity android:name=".ChoixThemeActivity" />
         <activity android:name=".ActivitePrincipale" />
-        <activity
-            android:name=".ChoixVilleActivity"
-             />
+        <activity android:name=".ChoixVilleActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PhotoActivity" />
         <activity android:name=".MapsActivity" />
         <activity android:name=".ChoixPartieCommerceActivity" />

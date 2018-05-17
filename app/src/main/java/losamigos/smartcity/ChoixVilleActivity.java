@@ -56,7 +56,6 @@ public class ChoixVilleActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ville);
-        lv = (ListView) findViewById(R.id.listview);
         if(ContextCompat.checkSelfPermission(ChoixVilleActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
         }
@@ -71,8 +70,6 @@ public class ChoixVilleActivity extends Activity {
             longitude = gps.getLongitude();
             latitude = gps.getLatitude();
             Log.d("ChoixVilleGPS",longitude+" "+latitude);
-            //recuperer les données du serveur
-            updateVilleData();
             Button boutonChoix2 = (Button) findViewById(R.id.buttonSaisie);
             boutonChoix2.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -89,6 +86,15 @@ public class ChoixVilleActivity extends Activity {
             // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        lv = (ListView) findViewById(R.id.listview);
+        //recuperer les données du serveur
+        updateVilleData();
 
     }
 

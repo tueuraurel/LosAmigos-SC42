@@ -55,4 +55,5 @@
     <string name="demandeAdhesion_NomReseau">Nom du réseau :</string>
     <string name="demandeAdhesion_DescriptionReseau">Description du réseau</string>
     <string name="DemandeAdhesionBouton">S\'inscrire</string>
+    <string name="Filtres">Filtres</string>
 </resources>

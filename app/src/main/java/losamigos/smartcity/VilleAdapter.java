@@ -75,7 +75,7 @@ class VilleAdapter extends ArrayAdapter<Villes> {
             v = inflater.inflate(R.layout.single_listview_item_ville, null);
 
             holder.villeName = (TextView) v.findViewById(R.id.name);
-
+            v.setTag(holder);
 
         } else {
             holder = (VilleHolder) v.getTag();

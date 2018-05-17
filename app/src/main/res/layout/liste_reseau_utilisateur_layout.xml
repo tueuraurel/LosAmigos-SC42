@@ -7,25 +7,29 @@
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mes Reseaux" />
+        android:layout_marginLeft="100dp"
+        android:orientation="horizontal">
 
         <Button
-            android:text="@string/ajouterUnReseau"
             android:id="@+id/boutonVersCreationReseau"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:drawableLeft="@drawable/ic_add_black_24dp"
+            android:text="Ajouter" />
 
         <Button
-            android:text="Rechercher un reseau"
             android:id="@+id/boutonVersRechercheReseau"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_search_black_24dp"
+            android:text="RECHERCHE" />
     </android.support.v7.widget.LinearLayoutCompat>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Liste de mes Reseaux"
+        android:textSize="24sp" />
     <ListView
         android:id="@+id/listeViewReseauUtilisateur"
         android:layout_width="wrap_content"
