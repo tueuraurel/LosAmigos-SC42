@@ -56,4 +56,8 @@
     <string name="demandeAdhesion_DescriptionReseau">Description du réseau</string>
     <string name="DemandeAdhesionBouton">S\'inscrire</string>
     <string name="Filtres">Filtres</string>
+    <string name="deconnexion">Déconnexion</string>
+    <string name="listeReseauUtilisateurAjout">Créer</string>
+    <string name="listeReseauUtilisateurRechercher">Rechercher</string>
+    <string name="listeReseauUtilisateurTexte">Liste de mes réseaux</string>
 </resources>

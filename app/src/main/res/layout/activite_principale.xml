@@ -7,7 +7,13 @@
     tools:context="losamigos.smartcity.ActivitePrincipale"
     android:background="@color/colorPrimary">
 
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -81,14 +87,6 @@
         android:maxWidth="300dp"
         />
 
-    <Button
-        android:id="@+id/buttonDeconnexion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="13dp"
-        android:text="Deconnecter" />
 
 
 </RelativeLayout>

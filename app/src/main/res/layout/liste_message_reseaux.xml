@@ -7,9 +7,13 @@
 
 
     <TextView
-        android:id="@+id/test"
-        android:layout_width="402dp"
-        android:layout_height="33dp" />
+        android:id="@+id/listeMessageSujetReseau"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="35dp"
+        android:textStyle="bold"/>
 
     <ListView
         android:id="@+id/listeViewMessageReseau"

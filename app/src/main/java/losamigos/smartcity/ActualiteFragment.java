@@ -84,7 +84,14 @@ public class ActualiteFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateActualiteData(null, null);
+        Handler attendre = new Handler();
+        attendre.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateActualiteData(null, null);
+            }
+        },2000);
+
     }
 
     private void updateActualiteData(final String ville, final String journaux) {

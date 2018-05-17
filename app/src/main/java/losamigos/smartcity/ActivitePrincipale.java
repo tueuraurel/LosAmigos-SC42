@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 C'est ici également que l'on récupere les informations de l'utilisateur qui seront ensuite
 passe d activite en activite (le pseudo et la ville)
  */
-public class ActivitePrincipale extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class ActivitePrincipale extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     GoogleApiClient mGoogleApiClient;
     Handler handler;
@@ -56,6 +57,8 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         updatePlaceData();
 
         final Intent intentPrecedent = getIntent();
@@ -71,19 +74,6 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
         final String lieuUser = intentPrecedent.getStringExtra("VILLE");
         Log.d("villeActivitePri",lieuUser);
 
-        Button deconnexion=findViewById(R.id.buttonDeconnexion);
-        deconnexion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent pageConnexion=new Intent(ActivitePrincipale.this,MainActivity.class);
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitePrincipale.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove("pseudoUser");
-                editor.remove("mdp");
-                editor.commit();
-                startActivity(pageConnexion);
-            }
-        });
 
         Button boutonReseau = findViewById(R.id.Reseaux);
         boutonReseau.setOnClickListener(new View.OnClickListener() {
@@ -140,17 +130,26 @@ public class ActivitePrincipale extends FragmentActivity implements GoogleApiCli
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater findMenuItems = getMenuInflater();
         findMenuItems.inflate(R.menu.menusetting, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
-  /* public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuPreference:
-                              fragment=getFragmentManager().findFragmentById(R.id.prefe )
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
+  public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+          case R.id.menu_setting:
+              return true;
+          case R.id.deconnexion:
+              Intent pageConnexion=new Intent(ActivitePrincipale.this,MainActivity.class);
+              SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitePrincipale.this);
+              SharedPreferences.Editor editor = preferences.edit();
+              editor.remove("pseudoUser");
+              editor.remove("mdp");
+              editor.commit();
+              startActivity(pageConnexion);
+          default:
+              return super.onOptionsItemSelected(item);
+      }
+    }
 
     public void recupereIDPlace(JSONObject json) {
         try {

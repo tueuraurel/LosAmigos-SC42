@@ -5,30 +5,32 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        android:gravity="end">
 
         <Button
             android:id="@+id/boutonVersCreationReseau"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:drawableLeft="@drawable/ic_add_black_24dp"
-            android:text="Ajouter" />
+
+            android:drawableStart="@drawable/ic_add_black_24dp"
+            android:text="@string/listeReseauUtilisateurAjout"
+        />
 
         <Button
             android:id="@+id/boutonVersRechercheReseau"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_search_black_24dp"
-            android:text="RECHERCHE" />
+            android:drawableStart="@drawable/ic_search_black_24dp"
+            android:text="@string/listeReseauUtilisateurRechercher" />
     </android.support.v7.widget.LinearLayoutCompat>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Liste de mes Reseaux"
+        android:text="@string/listeReseauUtilisateurTexte"
         android:textSize="24sp" />
     <ListView
         android:id="@+id/listeViewReseauUtilisateur"

@@ -88,7 +88,7 @@ public class Reseau {
             this.setContentView(R.layout.liste_message_reseaux);
 
             Intent intent= getIntent();
-            TextView test = findViewById(R.id.test);
+            TextView test = findViewById(R.id.listeMessageSujetReseau);
             test.setText(intent.getStringExtra("sujetReseau"));
         }
     }

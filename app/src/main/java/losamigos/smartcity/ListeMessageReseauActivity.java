@@ -73,17 +73,11 @@ public class ListeMessageReseauActivity extends Activity {
        // Button boutonNouveauMessage = findViewById(R.id.boutonNouveauMessage);
 
         final Intent intent = getIntent();
+
+        TextView titre = findViewById(R.id.listeMessageSujetReseau);
+        titre.setText(intent.getStringExtra("sujetReseau"));
         Log.d("testInt",intent.getStringExtra("sujetReseau"));
-        /*boutonNouveauMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent2 = new Intent(ListeMessageReseauActivity.this, NouveauMessageActivity.class);
-                intent2.putExtra("sujetReseau", intent.getStringExtra("sujetReseau"));
-                intent2.putExtra("pseudoUser", intent.getStringExtra("pseudoUser"));
-                Log.d("pseudoUserIntent",intent.getStringExtra("pseudoUser").toString());
-                startActivity(intent2);
-            }
-        });*/
+
 
         final EditText nouveauMessage = findViewById(R.id.EditTextNouveauMessage);
         Button valider = findViewById(R.id.BoutonValider);
@@ -247,6 +241,9 @@ class MessageAdapter extends ArrayAdapter<Message>{
         if(p.getPseudoAuteur().equals(intent.getStringExtra("pseudoUser"))){
             holder.auteur.setGravity(Gravity.END);
             holder.message.setGravity(Gravity.END);
+        }else {
+            holder.auteur.setGravity(Gravity.LEFT);
+            holder.message.setGravity(Gravity.LEFT);
         }
 
         return v;
