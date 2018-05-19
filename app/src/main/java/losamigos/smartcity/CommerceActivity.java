@@ -16,13 +16,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.IOUtils;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,14 +93,14 @@ public class CommerceActivity extends AppCompatActivity {
                                     boutonFavoriCommerce.setText(R.string.supprimerFavori);
                                     boutonFavoriCommerce.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
-                                            // Code here executes on main thread after user presses button
+                                            supprimerFavoriThread();
                                         }
                                     });
                                 } else {
                                     boutonFavoriCommerce.setText(R.string.ajoutFavori);
                                     boutonFavoriCommerce.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
-                                            // Code here executes on main thread after user presses button
+                                            ajouterFavoriThread();
                                         }
                                     });
                                 }
@@ -100,6 +113,206 @@ public class CommerceActivity extends AppCompatActivity {
             }
         }.start();
 
+    }
+
+    private void supprimerFavoriThread(){
+        new Thread() {
+            public void run() {
+                final String supprimerFavori = supprimerFavori();
+
+                if (supprimerFavori == null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CommerceActivity.this, R.string.erreur, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else if (supprimerFavori.equals("1")){
+                    handler.post(new Runnable() {
+                        public void run() {
+                            boutonFavoriCommerce.setText(R.string.ajoutFavori);
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CommerceActivity.this, R.string.erreur, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
+    private String supprimerFavori() {
+        Intent intent = getIntent();
+        final int idCommerce = intent.getIntExtra("idCommerce",0);
+        final String pseudoUser = intent.getStringExtra("pseudoUser");
+        InputStream inputStream = null;
+
+        try {
+            // 1. create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // 2. make POST request to the given URL
+            HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/favoriCommerce/supprimer");
+
+            String json = "";
+
+            // 3. build jsonObject
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("pseudo", pseudoUser);
+            jsonObject.accumulate("idCommerce", idCommerce);
+            //Log.d("insertionBase",jsonObject.toString());
+
+            // 4. convert JSONObject to JSON to String
+            json = jsonObject.toString();
+
+            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
+            // ObjectMapper mapper = new ObjectMapper();
+            // json = mapper.writeValueAsString(person);
+
+            // 5. set json to StringEntity
+            StringEntity se = new StringEntity(json);
+
+            // 6. set httpPost Entity
+            httpPost.setEntity(se);
+
+            // 7. Set some headers to inform server about the type of the content
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            // 8. Execute POST request to the given URL
+            HttpResponse httpResponse = httpclient.execute(httpPost);
+
+            // 9. receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // 10. convert inputstream to string
+            final int bufferSize = 1024;
+            final char[] buffer = new char[bufferSize];
+            final StringBuilder out = new StringBuilder();
+            Reader in = new InputStreamReader(inputStream, "UTF-8");
+            for (; ; ) {
+                int rsz = in.read(buffer, 0, buffer.length);
+                if (rsz < 0)
+                    break;
+                out.append(buffer, 0, rsz);
+            }
+            String resultat = out.toString();
+
+            return resultat;
+
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private void ajouterFavoriThread(){
+        new Thread() {
+            public void run() {
+                final String ajoutFavori = ajouterFavori();
+
+                if (ajoutFavori == null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CommerceActivity.this, R.string.erreur, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else if (ajoutFavori.equals("1")){
+                    handler.post(new Runnable() {
+                        public void run() {
+                            boutonFavoriCommerce.setText(R.string.supprimerFavori);
+                        }
+                    });
+                } else {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(CommerceActivity.this, R.string.erreur, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
+    private String ajouterFavori() {
+        Intent intent = getIntent();
+        final int idCommerce = intent.getIntExtra("idCommerce",0);
+        final String pseudoUser = intent.getStringExtra("pseudoUser");
+        InputStream inputStream = null;
+
+        try {
+            // 1. create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // 2. make POST request to the given URL
+            HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/favoriCommerce/ajout");
+
+            String json = "";
+
+            // 3. build jsonObject
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("pseudo", pseudoUser);
+            jsonObject.accumulate("idCommerce", idCommerce);
+            //Log.d("insertionBase",jsonObject.toString());
+
+            // 4. convert JSONObject to JSON to String
+            json = jsonObject.toString();
+
+            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
+            // ObjectMapper mapper = new ObjectMapper();
+            // json = mapper.writeValueAsString(person);
+
+            // 5. set json to StringEntity
+            StringEntity se = new StringEntity(json);
+
+            // 6. set httpPost Entity
+            httpPost.setEntity(se);
+
+            // 7. Set some headers to inform server about the type of the content
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            // 8. Execute POST request to the given URL
+            HttpResponse httpResponse = httpclient.execute(httpPost);
+
+            // 9. receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // 10. convert inputstream to string
+            final int bufferSize = 1024;
+            final char[] buffer = new char[bufferSize];
+            final StringBuilder out = new StringBuilder();
+            Reader in = new InputStreamReader(inputStream, "UTF-8");
+            for (; ; ) {
+                int rsz = in.read(buffer, 0, buffer.length);
+                if (rsz < 0)
+                    break;
+                out.append(buffer, 0, rsz);
+            }
+            String resultat = out.toString();
+
+            return resultat;
+
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
 

@@ -4,7 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".RechercheCommerceActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutTypeRecherche"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/rechercheProximite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/par_proximite"/>
+
+        <Button
+            android:id="@+id/rechercheAlphabetique"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/par_ordre_alphabetique"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/typeRecherche"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:visibility="gone"/>
+
 
     <ListView
         android:id="@+id/listeViewCommerce"

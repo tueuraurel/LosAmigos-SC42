@@ -54,8 +54,9 @@
         <activity android:name=".ChoixPartieCommerceActivity" />
         <activity android:name=".RechercheCommerceActivity" />
         <activity android:name=".OffreCommerceActivity" />
-        <activity android:name=".CommerceActivity"/>
+        <activity android:name=".CommerceActivity" />
         <activity android:name=".publiciteActivity" />
+        <activity android:name=".ListeFavorisCommerceActivity"></activity>
     </application>
 
 </manifest>

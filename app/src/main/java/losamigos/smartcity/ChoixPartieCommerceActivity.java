@@ -21,6 +21,19 @@ public class ChoixPartieCommerceActivity extends AppCompatActivity {
         // On recupere l'intent precedent pour avoir les donnees qu'il transporte
         final Intent intentIn = getIntent();
 
+        Button listeFavoris = (Button) findViewById(R.id.listeFavoriCommerce);
+        listeFavoris.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intentIn = getIntent();
+                Intent intent = new Intent(ChoixPartieCommerceActivity.this, ListeFavorisCommerceActivity.class );
+                intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
+                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                startActivity(intent);
+            }
+        });
+
         Button boutonRecherche = findViewById(R.id.rechercheCommerces);
         boutonRecherche.setOnClickListener(new View.OnClickListener() {
             @Override

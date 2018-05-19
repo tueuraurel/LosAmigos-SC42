@@ -43,10 +43,15 @@
 
     <string name="ajoutFavori">Ajouter un favori</string>
     <string name="supprimerFavori">Supprimer un favori</string>
+    <string name="favori">Voir les commerces favoris</string>
 
     <string name="presentationCommerce">Cette publicite vous est proposée par : </string>
 
 
+    <string name="rechercheProximite">Recherche par proximité</string>
+    <string name="rechercheAlphabetique">Recherche par ordre alphabétique</string>
+    <string name="par_proximite">Proximite</string>
+    <string name="par_ordre_alphabetique">Ordre alphabétique</string>
 
 
     <!--____________Demande adhesion activity ______________-->

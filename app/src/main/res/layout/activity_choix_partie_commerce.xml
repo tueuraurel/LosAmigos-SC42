@@ -7,6 +7,11 @@
     android:orientation="vertical"
     tools:context=".ChoixPartieCommerceActivity">
 
+    <Button
+        android:id="@+id/listeFavoriCommerce"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/favori"/>
 
     <Button
         android:id="@+id/rechercheCommerces"

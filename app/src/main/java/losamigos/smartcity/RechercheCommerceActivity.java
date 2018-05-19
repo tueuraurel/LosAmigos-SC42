@@ -2,7 +2,10 @@ package losamigos.smartcity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +24,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -35,6 +42,16 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
     ArrayList<Commerce> commerceList;
     CommerceAdapter commerceAdapter;
+    CommerceAdapterProximite commerceAdapterProximite;
+
+    String typeRecherche = "alphabetique";
+    String echecGPS = "";
+
+    GPSTracker gps;
+    double latitude;
+    double longitude;
+
+    private static final int REQUEST_CODE_ONE = 1;
 
     Handler handler;
 
@@ -53,8 +70,44 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         super.onResume();
 
         liste = (ListView) findViewById(R.id.listeViewCommerce);
+
+        Button boutonProximite = (Button) findViewById(R.id.rechercheProximite);
+        boutonProximite.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                typeRecherche = "proximite";
+                updateCommerceData();
+            }
+        });
+
+        Button boutonAlphabetique = (Button) findViewById(R.id.rechercheAlphabetique);
+        boutonAlphabetique.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                typeRecherche = "alphabetique";
+                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
+                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                updateCommerceData();
+
+            }
+        });
+
+        
         //recuperer les données du serveur
         updateThemesCommerceData();
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ONE: {
+                if (typeRecherche.equals("proximite")) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Permission GPS Acceptée", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Permission GPS refusée", Toast.LENGTH_LONG).show();
+                    }
+                    return;
+                }
+            }
+        }
     }
 
     private void updateThemesCommerceData() {
@@ -91,7 +144,48 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 Intent intent = getIntent();
                 final int idTheme = intent.getIntExtra("idTheme",0);
                 final String ville = intent.getStringExtra("VILLE");
-                final JSONArray jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville);
+                final JSONArray jsonCommerce;
+
+                if (typeRecherche.equals("proximite")) {
+                    if(ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                    }
+                    else {
+                        ActivityCompat.requestPermissions(RechercheCommerceActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
+                    }
+                    //on recupere la position géographique
+                    gps = new GPSTracker(RechercheCommerceActivity.this);
+                    // si le GPS est disponible
+                    if (gps.canGetLocation()) {
+                        //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
+                        longitude = gps.getLongitude();
+                        latitude = gps.getLatitude();
+
+                        if (longitude == 0 || latitude == 0) {
+                            typeRecherche = "alphabetique";
+                            echecGPS = "noDATA";
+                        } else {
+                            echecGPS = "";
+                        }
+
+                        jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville, typeRecherche, longitude, latitude);
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Erreur GPS, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
+                        // can't get location
+                        // GPS or Network is not enabled
+                        // Ask user to enable GPS/network in settings
+                        gps.showSettingsAlert();
+
+                        typeRecherche = "alphabetique";
+                        echecGPS = "erreurGPS";
+
+                        jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville, typeRecherche, longitude, latitude);
+                    }
+                } else {
+                    echecGPS = "";
+                    jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville, typeRecherche, longitude, latitude);
+                }
 
                 if (jsonCommerce == null) {
                     handler.post(new Runnable() {
@@ -102,10 +196,34 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
+
+                            LinearLayout typeRechercheLayout = findViewById(R.id.layoutTypeRecherche);
+                            TextView typeRechercheText = findViewById(R.id.typeRecherche);
+                            typeRechercheLayout.setVisibility(View.VISIBLE);
+                            typeRechercheText.setVisibility(View.VISIBLE);
+
                             commerceList = renderCommerce(jsonCommerce);
-                            commerceAdapter = new CommerceAdapter(commerceList,RechercheCommerceActivity.this);
-                            liste.setAdapter(commerceAdapter);
-                            liste.setOnItemClickListener(new ListClickHandlerCommerce());
+                            if (echecGPS.equals("noDATA")) {
+                                Toast.makeText(getApplicationContext(), "Aucunes données de localisation récuperées, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
+                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
+                                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                            } else if (echecGPS.equals("erreurGPS")) {
+                                Toast.makeText(getApplicationContext(), "Erreur GPS, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
+                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
+                                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                            }
+
+                            if (typeRecherche.equals("proximite")) {
+                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
+                                affichageTypeRecherche.setText(R.string.rechercheProximite);
+                                commerceAdapterProximite = new CommerceAdapterProximite(commerceList, RechercheCommerceActivity.this);
+                                liste.setAdapter(commerceAdapterProximite);
+                                liste.setOnItemClickListener(new ListClickHandlerCommerce());
+                            } else {
+                                commerceAdapter = new CommerceAdapter(commerceList,RechercheCommerceActivity.this);
+                                liste.setAdapter(commerceAdapter);
+                                liste.setOnItemClickListener(new ListClickHandlerCommerce());
+                            }
                         }
                     });
                 }
@@ -136,7 +254,13 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
             for (int i = 0; i < json.length(); i++) {
                 JSONObject jsonobject = json.getJSONObject(i);
-                commerce.add(new Commerce(jsonobject.getInt("id"), jsonobject.getString("nom"), jsonobject.getString("pseudoCommercant"), jsonobject.getString("localisation")));
+                if (typeRecherche.equals("proximite")) {
+                    commerce.add(new Commerce(jsonobject.getInt("id"), jsonobject.getString("nom"), jsonobject.getString("pseudoCommercant"), jsonobject.getString("localisation"),
+                            jsonobject.getString("longitude"), jsonobject.getString("latitude"), jsonobject.getDouble("dist")));
+                } else {
+                    commerce.add(new Commerce(jsonobject.getInt("id"), jsonobject.getString("nom"), jsonobject.getString("pseudoCommercant"), jsonobject.getString("localisation"),
+                            jsonobject.getString("longitude"), jsonobject.getString("latitude")));
+                }
             }
             Log.v("test",commerce.toString());
             return commerce;
@@ -248,6 +372,7 @@ class ThemesCommerceAdapter extends ArrayAdapter<ThemeCommerce> {
             v = inflater.inflate(R.layout.single_textview_item, null);
 
             holder.nom = (TextView) v.findViewById(R.id.textView);
+            v.setTag(holder);
         } else {
             holder = (ThemesHolder) v.getTag();
         }
@@ -262,12 +387,18 @@ class ThemesCommerceAdapter extends ArrayAdapter<ThemeCommerce> {
 class RecuperationCommerce {
 
     // Recupere l'ensemble des commerces correspondant au thème
-    public static JSONArray getJSON(int idTheme, String ville){
+    public static JSONArray getJSON(int idTheme, String ville, String typeRecherche,
+                                    double longitude, double latitude){
 
         try {
             URL url;
             Log.v("IDTheme",String.valueOf(idTheme));
-            url = new URL(MainActivity.chemin+"commerce/theme/"+idTheme+"/"+ville);
+
+            if (typeRecherche.equals("proximite")) {
+                url = new URL(MainActivity.chemin+"commerce/proximite/"+ville+"/"+latitude+"/"+longitude);
+            } else {
+                url = new URL(MainActivity.chemin+"commerce/theme/"+idTheme+"/"+ville);
+            }
 
             Log.v("test","URI");
             HttpURLConnection connection =
@@ -319,13 +450,56 @@ class CommerceAdapter extends ArrayAdapter<Commerce> {
             v = inflater.inflate(R.layout.single_textview_item, null);
 
             holder.nom = (TextView) v.findViewById(R.id.textView);
+            v.setTag(holder);
         } else {
             holder = (CommerceHolder) v.getTag();
         }
 
         Commerce p = commerceList.get(position);
         holder.nom.setText(p.getNom());
-        Log.v("test","COUCOU JE SUIS DANS COMMERCEADAPTER ET LA VIE EST BELLE PAR ICI");
+
+        return v;
+    }
+}
+
+class CommerceAdapterProximite extends ArrayAdapter<Commerce> {
+
+    private List<Commerce> commerceList;
+    private Context context;
+
+    public CommerceAdapterProximite(List<Commerce> commerceList, Context context) {
+        super(context, R.layout.single_textview_item, commerceList);
+        this.commerceList = commerceList;
+        this.context = context;
+    }
+
+    private static class CommerceHolder {
+        public TextView nom;
+        public TextView distance;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        View v = convertView;
+
+        CommerceHolder holder = new CommerceHolder();
+
+        if(convertView == null) {
+
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = inflater.inflate(R.layout.proximite_textview_item, null);
+
+            holder.nom = (TextView) v.findViewById(R.id.textView);
+            holder.distance = (TextView) v.findViewById(R.id.textViewDistance);
+            v.setTag(holder);
+        } else {
+            holder = (CommerceHolder) v.getTag();
+        }
+
+        Commerce p = commerceList.get(position);
+        holder.nom.setText(p.getNom());
+        holder.distance.setText(String.valueOf(p.getDistance()));
 
         return v;
     }

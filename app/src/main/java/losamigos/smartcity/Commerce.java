@@ -6,14 +6,29 @@ public class Commerce {
     String nom;
     String pseudoCommercant;
     String localisation;
+    String longitude;
+    String latitude;
+    double distance;
 
     public Commerce() {}
 
-    public Commerce(int id, String nom, String pseudoCommercant, String localisation) {
+    public Commerce(int id, String nom, String pseudoCommercant, String localisation, String longitude, String latitude) {
         this.id = id;
         this.nom = nom;
         this.pseudoCommercant = pseudoCommercant;
         this.localisation = localisation;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    public Commerce(int id, String nom, String pseudoCommercant, String localisation, String longitude, String latitude, double distance) {
+        this.id = id;
+        this.nom = nom;
+        this.pseudoCommercant = pseudoCommercant;
+        this.localisation = localisation;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.distance = distance;
     }
 
     public String getNom() {
@@ -48,13 +63,39 @@ public class Commerce {
         this.id = id;
     }
 
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
     @Override
     public String toString() {
         return "Commerce{" +
-                "nom='" + nom + '\'' +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
                 ", pseudoCommercant='" + pseudoCommercant + '\'' +
                 ", localisation='" + localisation + '\'' +
-                ", id=" + id +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
                 '}';
     }
 }
