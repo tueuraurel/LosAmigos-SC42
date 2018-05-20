@@ -28,8 +28,10 @@ import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +77,14 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         boutonProximite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 typeRecherche = "proximite";
+                if(ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                }
+                else {
+                    ActivityCompat.requestPermissions(RechercheCommerceActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
+                }
+                //on recupere la position géographique
+                gps = new GPSTracker(RechercheCommerceActivity.this);
                 updateCommerceData();
             }
         });
@@ -147,19 +157,15 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 final JSONArray jsonCommerce;
 
                 if (typeRecherche.equals("proximite")) {
-                    if(ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                    }
-                    else {
-                        ActivityCompat.requestPermissions(RechercheCommerceActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
-                    }
-                    //on recupere la position géographique
-                    gps = new GPSTracker(RechercheCommerceActivity.this);
                     // si le GPS est disponible
                     if (gps.canGetLocation()) {
                         //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
                         longitude = gps.getLongitude();
                         latitude = gps.getLatitude();
+
+                        Log.d("longitude", String.valueOf(longitude));
+                        Log.d("latitude", String.valueOf(latitude));
 
                         if (longitude == 0 || latitude == 0) {
                             typeRecherche = "alphabetique";
@@ -490,7 +496,7 @@ class CommerceAdapterProximite extends ArrayAdapter<Commerce> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.proximite_textview_item, null);
 
-            holder.nom = (TextView) v.findViewById(R.id.textView);
+            holder.nom = (TextView) v.findViewById(R.id.textViewNom);
             holder.distance = (TextView) v.findViewById(R.id.textViewDistance);
             v.setTag(holder);
         } else {
@@ -499,7 +505,21 @@ class CommerceAdapterProximite extends ArrayAdapter<Commerce> {
 
         Commerce p = commerceList.get(position);
         holder.nom.setText(p.getNom());
-        holder.distance.setText(String.valueOf(p.getDistance()));
+
+        double distance = p.getDistance();
+        String textDistance = "";
+        if (distance > 1) {
+            DecimalFormat df = new DecimalFormat("#.#");
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            textDistance = df.format(distance);
+            holder.distance.setText(textDistance + "km");
+        } else {
+            distance = distance * 1000;
+            DecimalFormat df = new DecimalFormat("#");
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            textDistance = df.format(distance);
+            holder.distance.setText(textDistance + "m");
+        }
 
         return v;
     }
