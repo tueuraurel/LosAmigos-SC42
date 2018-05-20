@@ -110,7 +110,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             case REQUEST_CODE_ONE: {
                 if (typeRecherche.equals("proximite")) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(this, "Permission GPS Acceptée", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(this, "Permission GPS refusée", Toast.LENGTH_LONG).show();
                     }
