@@ -65,4 +65,14 @@
     <string name="listeReseauUtilisateurAjout">Créer</string>
     <string name="listeReseauUtilisateurRechercher">Rechercher</string>
     <string name="listeReseauUtilisateurTexte">Liste de mes réseaux</string>
+    <string name="rechercheVide">Veuillez remplir la recherche</string>
+    <string name="aucunReseauCorrespondant">Aucun réseau correspondant !</string>
+    <string name="ok">OK</string>
+    <string name="texteRecherche">Recherche</string>
+    <string name="mesInvitations">Mes Invitations</string>
+    <string name="accepter">Accepter</string>
+    <string name="refuser">Refuser</string>
+    <string name="aucuneInvitation">Aucune invitation</string>
+    <string name="listeReseauUtilisateurMesInvitations">Mes Invitations</string>
+    <string name="listeReseauUtilisateurMesReseaux">Mes réseaux</string>
 </resources>

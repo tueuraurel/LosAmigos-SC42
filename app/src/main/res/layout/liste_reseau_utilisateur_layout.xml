@@ -15,17 +15,33 @@
             android:id="@+id/boutonVersCreationReseau"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:drawableStart="@drawable/ic_add_black_24dp"/>
+            <!--android:text="@string/listeReseauUtilisateurAjout" -->
 
-            android:drawableStart="@drawable/ic_add_black_24dp"
-            android:text="@string/listeReseauUtilisateurAjout"
-        />
 
         <Button
             android:id="@+id/boutonVersRechercheReseau"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_search_black_24dp"
-            android:text="@string/listeReseauUtilisateurRechercher" />
+            android:textSize="10sp"
+            android:drawableStart="@drawable/ic_search_black_24dp" />
+            <!--android:text="@string/listeReseauUtilisateurRechercher" -->
+
+
+        <Button
+            android:id="@+id/boutonVersMesInvitations"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/listeReseauUtilisateurMesInvitations" />
+
+        <Button
+            android:id="@+id/boutonVersGestionReseaux"
+            android:textSize="10sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/listeReseauUtilisateurMesReseaux" />
     </android.support.v7.widget.LinearLayoutCompat>
     <TextView
         android:layout_width="wrap_content"

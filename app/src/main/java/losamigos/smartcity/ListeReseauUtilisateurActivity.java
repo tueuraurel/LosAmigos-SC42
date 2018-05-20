@@ -64,6 +64,8 @@ public class ListeReseauUtilisateurActivity extends Activity {
         // On recupere les elements du layout:
         Button boutonAjouterReseau = findViewById(R.id.boutonVersCreationReseau);
         Button boutonRechercherReseau = findViewById(R.id.boutonVersRechercheReseau);
+        Button boutonMesInvitations = findViewById(R.id.boutonVersMesInvitations);
+        Button boutonMesReseaux = findViewById(R.id.boutonVersGestionReseaux);
 
         // Sur le bouton d'ajout on place un click listener permettant d'amener a l activite de creation
         boutonAjouterReseau.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +92,15 @@ public class ListeReseauUtilisateurActivity extends Activity {
                 intentVersRechercheReseau.putExtra("lieuUser",intentIn.getStringExtra("lieuUser"));
                 startActivity(intentVersRechercheReseau);
 
+            }
+        });
+
+        boutonMesInvitations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentVersMesInvitations = new Intent(ListeReseauUtilisateurActivity.this, ActiviteMesInvitations.class);
+                intentVersMesInvitations.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
+                startActivity(intentVersMesInvitations);
             }
         });
     }

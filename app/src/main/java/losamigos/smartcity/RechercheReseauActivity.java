@@ -67,7 +67,21 @@ public class RechercheReseauActivity extends Activity {
         super.onResume();
         ListeDesReseaux = (ListView) findViewById(R.id.listeViewRechercheNouveauReseau);
         //recuperer les données du serveur
-        updateReseauData();
+        updateReseauData(false);
+
+        final EditText champRecherche = findViewById(R.id.textRecherche);
+        Button boutonOK = findViewById(R.id.rechercheNouveauReseauOK);
+
+        boutonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(champRecherche.getText().toString().equals("")){
+                    Toast.makeText(RechercheReseauActivity.this, R.string.rechercheVide, Toast.LENGTH_LONG).show();
+                }else {
+                    updateReseauData(true);
+                }
+            }
+        });
 
         // On recupere l'intent precedent pour avoir les donnees qu'il transporte
         final Intent intentIn = getIntent();
@@ -78,15 +92,22 @@ public class RechercheReseauActivity extends Activity {
     }
 
 
-    private void updateReseauData() {
+    private void updateReseauData(final boolean avecRecherche) {
         new Thread() {
             public void run() {
                 final Intent intent = getIntent();
-                final JSONArray json = RecuperationNouveauReseaux.getJSON(intent.getStringExtra("pseudoUser"),intent.getStringExtra("lieuUser"));
+                EditText champRecherche = findViewById(R.id.textRecherche);
+                final JSONArray json;
+                if (avecRecherche){
+                     json = RecuperationNouveauReseauxRecherche.getJSON(intent.getStringExtra("pseudoUser"),intent.getStringExtra("lieuUser"),champRecherche.getText().toString());
+                }
+                else {
+                     json = RecuperationNouveauReseaux.getJSON(intent.getStringExtra("pseudoUser"), intent.getStringExtra("lieuUser"));
+                }
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(RechercheReseauActivity.this, R.string.pas_de_reseau, Toast.LENGTH_LONG).show();
+                            Toast.makeText(RechercheReseauActivity.this, R.string.aucunReseauCorrespondant, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
@@ -169,159 +190,13 @@ class RecuperationNouveauReseaux {
     }
 }
 
-
-
-
-
-/*package losamigos.smartcity;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-
-public class RechercheReseauActivity extends Activity {
-
-
-    ListView ListeDeNouveauxReseaux;
-    ArrayList<Reseau> reseauList;
-    RechercheReseauAdapter RechercheReseauAdapter;
-    Handler handler;
-
-    public RechercheReseauActivity() {
-        handler = new Handler();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.recherche_nouveau_reseau_layout);
-        ListeDeNouveauxReseaux = findViewById(R.id.listeViewRechercheNouveauReseau);
-        updateRechercheReseauData();
-
-    }
-
-
-  /*  @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Log.d("HelloListView", "You clicked Item: " + id + " at position:" + position);
-        Log.d("HelloListView", "Vous avez choisi "+adapterView.getItemAtPosition(position));
-        Intent intent = new Intent(RechercheReseauActivity.this,DemandeAdhesionActivity.class);
-        intent.putExtra("reseauClique",(String)adapterView.getItemAtPosition(position));
-        startActivity(intent);
-    }*/
-
- /*   @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-    }*/
-
-    // charge les infos du serveur
-   /* private void updateRechercheReseauData() {
-        new Thread() {
-            public void run() {
-                final Intent intent = getIntent();
-                Log.d("pseudo",intent.getStringExtra("pseudoUser"));
-                Log.d("ville",intent.getStringExtra("lieuUser"));
-
-                final JSONArray json = RechercheReseaux.getJSON(intent.getStringExtra("lieuUser"),intent.getStringExtra("pseudoUser"));
-                if (json == null) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            Toast.makeText(RechercheReseauActivity.this, R.string.pas_de_message, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            reseauList = renderRechercheReseau(json);
-                            RechercheReseauAdapter= new RechercheReseauAdapter(reseauList,RechercheReseauActivity.this);
-                            ListeDeNouveauxReseaux.setAdapter(RechercheReseauAdapter);
-                            ListeDeNouveauxReseaux.setOnItemClickListener(new ListClickHandler());
-                        }
-                    });
-                }
-            }
-        }.start();
-
-    }
-
-    public ArrayList<Reseau> renderRechercheReseau(JSONArray json) {
-        try {
-            ArrayList<Reseau> reseaux = new ArrayList<Reseau>();
-
-            for (int i = 0; i < json.length(); i++) {
-                JSONObject jsonobject = json.getJSONObject(i);
-                reseaux.add(new Reseau(jsonobject.getString("sujet"), jsonobject.getString("description"), jsonobject.getString("pseudoAdmin"), jsonobject.getString("localisation"), jsonobject.getInt("visibilite")));
-            }
-
-            return reseaux;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-   public class ListClickHandler implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
-            Intent intentIn = getIntent();
-            Reseau resultat = (Reseau) adapter.getItemAtPosition(position);
-            Intent intent = new Intent(RechercheReseauActivity.this, DemandeAdhesionActivity.class );
-            intent.putExtra("sujetReseau",resultat.getSujet());
-            intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
-            intent.putExtra("lieuUser",intentIn.getStringExtra("lieuUser"));
-            startActivity(intent);
-        }
-
-    }
-}
-
-
-class RechercheReseaux {
+class RecuperationNouveauReseauxRecherche {
 
     // Recupere l'ensemble des message d un reseau.
-    public static JSONArray getJSON(String lieu,String pseudo){
+    public static JSONArray getJSON(String pseudo, String lieu,String recherche){
         try {
-            URL url = new URL(MainActivity.chemin+"reseau/"+lieu+"/"+pseudo);
-            Log.v("getJsonRecherche",url.toString());
+            URL url = new URL(MainActivity.chemin+"rechercheReseau/"+lieu+"/"+pseudo+"/"+recherche);
+            Log.v("getJSON URI",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -343,47 +218,3 @@ class RechercheReseaux {
     }
 }
 
-
-class RechercheReseauAdapter extends ArrayAdapter<Reseau> {
-
-    private List<Reseau> reseauList;
-    private Context context;
-
-    public RechercheReseauAdapter(List<Reseau> reseauList, Context context) {
-        super(context, R.layout.single_listview_item, reseauList);
-        this.reseauList = reseauList;
-        this.context = context;
-    }
-
-    private static class ReseauHolder {
-        public TextView sujet;
-        public TextView description;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View v = convertView;
-
-        ReseauHolder holder = new ReseauHolder();
-
-        if(convertView == null) {
-
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.single_reseau_item, null);
-
-            holder.sujet = (TextView) v.findViewById(R.id.sujet);
-            Log.d("The bug",holder.sujet.toString());
-            holder.description = (TextView) v.findViewById(R.id.description);
-        } else {
-            holder = (ReseauHolder) v.getTag();
-        }
-
-        Reseau p = reseauList.get(position);
-        Log.d("The bug",p.getSujet());
-        holder.sujet.setText(p.getSujet());
-        holder.description.setText(p.getDescription());
-
-        return v;
-    }
-} */
