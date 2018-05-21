@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,62 +21,56 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class ActiviteMesInvitations extends AppCompatActivity {
-
-
-    ListView ListeDesReseaux;
+public class ListeReseauAdmin extends AppCompatActivity {
+    ListView ListeDeMesReseaux;
     ArrayList<Reseau> reseauList;
-    InvitationAdapter invitationAdapter;
+    ReseauAdapter reseauAdapter;
     Handler handler;
+    //ArrayList<Theme> themeChoisi = new ArrayList<>();
 
-
-    public ActiviteMesInvitations() {
+    public ListeReseauAdmin() {
         handler = new Handler();
     }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gestioninvitation);
-
+        setContentView(R.layout.liste_reseau_admin_layout);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ListeDesReseaux = (ListView) findViewById(R.id.listeViewMesInvitations);
+        ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauAdmin);
         //recuperer les données du serveur
-        updateInvitationData();
-
+        updateReseauData();
 
         // On recupere l'intent precedent pour avoir les donnees qu'il transporte
         final Intent intentIn = getIntent();
         Log.d("pseudoListeRes",intentIn.getStringExtra("pseudoUser"));
 
 
+
     }
 
 
-    private void updateInvitationData() {
+    private void updateReseauData() {
         new Thread() {
             public void run() {
                 final Intent intent = getIntent();
-                final JSONArray json = RecuperationInvitation.getJSON(intent.getStringExtra("pseudoUser"));
-
+                final JSONArray json = RecuperationReseauxAdmin.getJSON(intent.getStringExtra("pseudoUser"));
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(ActiviteMesInvitations.this, R.string.aucuneInvitation, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ListeReseauAdmin.this, R.string.pas_de_reseau_admin, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
-                            ListeDesReseaux = (ListView) findViewById(R.id.listeViewMesInvitations);
                             reseauList = renderReseau(json);
-                            Log.d("handlerBug",reseauList.toString());
-                            invitationAdapter= new InvitationAdapter(reseauList,ActiviteMesInvitations.this,intent.getStringExtra("pseudoUser"));
-                            ListeDesReseaux.setAdapter(invitationAdapter);
-                            ListeDesReseaux.setOnItemClickListener(new ActiviteMesInvitations.ListClickHandler());
+                            reseauAdapter= new ReseauAdapter(reseauList,ListeReseauAdmin.this);
+                            ListeDeMesReseaux.setAdapter(reseauAdapter);
+                            ListeDeMesReseaux.setOnItemClickListener(new ListeReseauAdmin.ListClickHandler());
                         }
                     });
                 }
@@ -92,7 +85,7 @@ public class ActiviteMesInvitations extends AppCompatActivity {
 
             for (int i = 0; i < json.length(); i++) {
                 JSONObject jsonobject = json.getJSONObject(i);
-                reseaux.add(new Reseau(jsonobject.getString("sujetReseau"), jsonobject.getString("description"), jsonobject.getString("pseudoAdmin"), jsonobject.getString("localisation"), jsonobject.getInt("visibilite")));
+                reseaux.add(new Reseau(jsonobject.getString("sujet"), jsonobject.getString("description"), jsonobject.getString("pseudoAdmin"), jsonobject.getString("localisation"), jsonobject.getInt("visibilite")));
             }
 
             return reseaux;
@@ -106,37 +99,23 @@ public class ActiviteMesInvitations extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
-            final Handler actualisation= new Handler();
-            Log.d("clickEvent","vous avez cliqué");
-            actualisation.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d("clickEvent","vous avez cliqué");
-                    updateInvitationData();
-                }},2000);
-
-            /*Intent intentIn = getIntent();
             Reseau resultat = (Reseau) adapter.getItemAtPosition(position);
-            Intent intent = new Intent(RechercheReseauActivity.this, DemandeAdhesionActivity.class );
+            Intent intent = new Intent(ListeReseauAdmin.this, LancementInvitation.class );
             intent.putExtra("sujetReseau",resultat.getSujet());
-            intent.putExtra("descriptionReseau",resultat.getDescription());
-            intent.putExtra("pseudoAdmin",resultat.getPseudoAdmin());
-            intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
-            intent.putExtra("lieuUser",intentIn.getStringExtra("lieuUser"));
-            startActivity(intent);*/
+            startActivity(intent);
         }
 
     }
 }
 
 
-class RecuperationInvitation {
+class RecuperationReseauxAdmin {
 
     // Recupere l'ensemble des message d un reseau.
     public static JSONArray getJSON(String pseudo){
         try {
-            URL url = new URL(MainActivity.chemin+"invitation/"+pseudo);
-            Log.v("getJSON URI",url.toString());
+            URL url = new URL(MainActivity.chemin+"listeReseauAdmin/"+pseudo);
+            Log.v("test","URI");
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -157,5 +136,4 @@ class RecuperationInvitation {
         }
     }
 }
-
 

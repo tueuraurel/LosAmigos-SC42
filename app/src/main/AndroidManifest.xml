@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".ListeReseauUtilisateurActivity" />
         <activity android:name=".ListeMessageReseauActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden|adjustResize|stateVisible"/>
         <activity android:name=".CreationReseauxActivity" />
         <activity android:name=".RechercheReseauActivity" />
         <activity android:name=".DemandeAdhesionActivity" />
@@ -57,6 +57,8 @@
         <activity android:name=".CommerceActivity"/>
         <activity android:name=".publiciteActivity" />
         <activity android:name=".ActiviteMesInvitations" />
+        <activity android:name=".ListeReseauAdmin" />
+        <activity android:name=".LancementInvitation" />
     </application>
 
 </manifest>

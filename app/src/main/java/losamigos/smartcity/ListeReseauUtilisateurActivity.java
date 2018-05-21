@@ -103,6 +103,14 @@ public class ListeReseauUtilisateurActivity extends Activity {
                 startActivity(intentVersMesInvitations);
             }
         });
+
+        boutonMesReseaux.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentVersMesReseaux = new Intent(ListeReseauUtilisateurActivity.this,ListeReseauAdmin.class);
+                intentVersMesReseaux.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
+                startActivity(intentVersMesReseaux);
+        }});
     }
 
     @Override

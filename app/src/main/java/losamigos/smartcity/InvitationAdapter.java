@@ -1,6 +1,8 @@
 package losamigos.smartcity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -92,6 +94,13 @@ public class InvitationAdapter extends ArrayAdapter<Reseau> {
                 //prise en compte de l'adhesion dans la base du serveur
                 new AccepterInvitationServeur().execute(parametres);
                 new SupprimerInvitationServeur().execute(parametres);
+                Intent intent = new Intent(context,ActiviteMesInvitations.class);
+                intent.putExtra("pseudoUser",pseudo);
+                //context.startActivity(intent);
+
+                //Activity.finish();
+
+
 
             }
         });

@@ -224,6 +224,7 @@ public class MainActivity extends Activity {
                     editor.commit();
                 }
                 startActivity(intent);
+                finish();
             }
         }
     }

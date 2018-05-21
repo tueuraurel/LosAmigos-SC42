@@ -75,4 +75,10 @@
     <string name="aucuneInvitation">Aucune invitation</string>
     <string name="listeReseauUtilisateurMesInvitations">Mes Invitations</string>
     <string name="listeReseauUtilisateurMesReseaux">Mes réseaux</string>
+    <string name="listeReseauAdmin">Liste des réseaux dont vous êtes Admin</string>
+    <string name="pas_de_reseau_admin">Vous n\'êtes pas admin d\'un réseau</string>
+    <string name="EnvoyerUneInvit">Envoyer une invitation à :</string>
+    <string name="pseudoUtilisateur">Pseudo utilisateur</string>
+    <string name="valider">OK</string>
+    <string name="pas_d_utilisateur">Vous n\'avez pas entré de nom</string>
 </resources>
