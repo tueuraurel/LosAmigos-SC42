@@ -56,8 +56,8 @@ public class MainActivity extends Activity {
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
-        //chemin = "https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/";
-        chemin = "http://192.168.1.151/~smartcity/smartcity/serveur.php/";
+        chemin = "https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/";
+        //chemin = "http://192.168.1.151/~smartcity/smartcity/serveur.php/";
         Log.d("testPreference", preferences.getString("cheminDev", ""));
 
 
@@ -85,19 +85,6 @@ public class MainActivity extends Activity {
                     startActivity(intent);
                 }
             });
-
-      /*  Button btn3 = (Button) findViewById(R.id.boutonSkip);
-        btn3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
-                intent.putExtra("pseudoUser","tueuraurel");
-                intent.putExtra("PSEUDO","tueuraurel");
-                intent.putExtra("LATITUDE", "43.6");
-                intent.putExtra("LONGITUDE", "3.883333");
-                intent.putExtra("VILLE","MONTPELLIER");
-                startActivity(intent);
-            }
-        }); */
         }
 
     public void Affiche(){
@@ -155,8 +142,6 @@ public class MainActivity extends Activity {
             else {
                 connecte.setText(result + " est connecté !");
                 new RequestInfosTask(login).execute(chemin+"choisiVille/"+login);
-                /*Intent intent = new Intent(MainActivity.this, ActivitePrincipale.class);
-                startActivity(intent);*/
             }
         }
     }
@@ -229,5 +214,3 @@ public class MainActivity extends Activity {
         }
     }
 }
-
-//Serveur à été modifié : route GET /utilisateur/choisiVille/pseudo en /choisiVille/pseudo

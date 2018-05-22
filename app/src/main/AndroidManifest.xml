@@ -22,8 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ListeReseauUtilisateurActivity" />
-        <activity android:name=".ListeMessageReseauActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize|stateVisible"/>
+        <activity
+            android:name=".ListeMessageReseauActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize|stateVisible" />
         <activity android:name=".CreationReseauxActivity" />
         <activity android:name=".RechercheReseauActivity" />
         <activity android:name=".DemandeAdhesionActivity" />
@@ -47,20 +48,22 @@
 
         <activity android:name=".ChoixThemeActivity" />
         <activity android:name=".ActivitePrincipale" />
-        <activity android:name=".ChoixVilleActivity"
+        <activity
+            android:name=".ChoixVilleActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PhotoActivity" />
         <activity android:name=".MapsActivity" />
         <activity android:name=".ChoixPartieCommerceActivity" />
         <activity android:name=".RechercheCommerceActivity" />
         <activity android:name=".OffreCommerceActivity" />
-        <activity android:name=".CommerceActivity"/>
+        <activity android:name=".CommerceActivity" />
         <activity android:name=".publiciteActivity" />
         <activity android:name=".ListeFavorisCommerceActivity" />
         <activity android:name=".AnnonceActivity" />
         <activity android:name=".ActiviteMesInvitations" />
         <activity android:name=".ListeReseauAdmin" />
         <activity android:name=".LancementInvitation" />
+        <activity android:name=".PreferencesActivity"></activity>
     </application>
 
 </manifest>
