@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -29,6 +30,7 @@ public class MeteoFragment extends Fragment {
     TextView detailsField;
     TextView currentTemperatureField;
     TextView weatherIcon;
+    TextView temps;
 
     Handler handler;
 
@@ -45,7 +47,7 @@ public class MeteoFragment extends Fragment {
         detailsField = (TextView)rootView.findViewById(R.id.details_field);
         currentTemperatureField = (TextView)rootView.findViewById(R.id.current_temperature_field);
         weatherIcon = (TextView)rootView.findViewById(R.id.weather_icon);
-
+        temps = (TextView) rootView.findViewById(R.id.temps);
         weatherIcon.setTypeface(weatherFont);
         return rootView;
     }
@@ -87,23 +89,20 @@ public class MeteoFragment extends Fragment {
 
     private void renderWeather(JSONObject json){
         try {
-            cityField.setText(json.getString("name").toUpperCase(Locale.FRENCH) +
-                    ", " +
-                    json.getJSONObject("sys").getString("country"));
+            cityField.setText(json.getString("name"));
 
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
-            detailsField.setText(
-                    details.getString("description").toUpperCase(Locale.FRENCH) +
-                            "\n" + "Humidité: " + main.getString("humidity") + "%" +
-                            "\n" + "Pression: " + main.getString("pressure") + " hPa");
+            detailsField.setText("Humidité: " + main.getString("humidity") + "%" +"\n" + "Pression: " + main.getString("pressure") + " hPa");
 
-            currentTemperatureField.setText(
-                    String.format("%.2f", ((main.getDouble("temp"))-273.15)) + " ℃");
+            temps.setText(details.getString("description"));
 
-            DateFormat df = DateFormat.getDateTimeInstance();
-            String updatedOn = df.format(new Date(json.getLong("dt")*1000));
-            updatedField.setText("Dernière modification : " + updatedOn);
+            currentTemperatureField.setText(String.format("%.2f", ((main.getDouble("temp"))-273.15)) + " ℃");
+
+            SimpleDateFormat formater = null;
+            Date aujourdhui = new Date();
+            formater = new SimpleDateFormat("EEEE, d MMM yyyy",Locale.FRENCH);
+            updatedField.setText(formater.format(aujourdhui));
 
             setWeatherIcon(details.getInt("id"),
                     json.getJSONObject("sys").getLong("sunrise") * 1000,

@@ -2,7 +2,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="losamigos.smartcity.MeteoFragment" >
+        tools:context="losamigos.smartcity.MeteoFragment"
+        android:background="@drawable/meteo">
 
         <TextView
             android:id="@+id/city_field"
@@ -10,7 +11,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textStyle="bold"
+            android:textSize="40sp"/>
 
         <TextView
             android:id="@+id/updated_field"
@@ -18,8 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/city_field"
             android:layout_centerHorizontal="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="13sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/weather_icon"
@@ -28,7 +29,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="90sp"
+            android:textSize="150sp"
             />
 
         <TextView
@@ -38,16 +39,25 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="40sp" />
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/temps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weather_icon"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            />
 
         <TextView
             android:id="@+id/details_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/weather_icon"
+            android:layout_below="@+id/temps"
             android:layout_centerHorizontal="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="20sp"
+            android:textSize="15sp"
             />
 
     </RelativeLayout>

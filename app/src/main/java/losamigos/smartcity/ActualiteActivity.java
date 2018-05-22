@@ -18,8 +18,14 @@ public class ActualiteActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.buttonAlarme);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ActualiteActivity.this, HorlogeActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(ActualiteActivity.this, HorlogeActivity.class);
+                startActivity(intent);*/
+                //va chercher l'alarme du téléphone
+                Intent i = getPackageManager().getLaunchIntentForPackage("com.android.deskclock");
+                if (i != null)
+                {
+                    startActivity(i);
+                }
             }
         });
 

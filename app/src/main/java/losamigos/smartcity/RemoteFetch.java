@@ -12,7 +12,7 @@ public class RemoteFetch {
 
     public static JSONObject getJSON(String city){
         try {
-            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID=ea574594b9d36ab688642d5fbeab847e");
+            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q="+city+"&lang=fr&APPID=ea574594b9d36ab688642d5fbeab847e");
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
