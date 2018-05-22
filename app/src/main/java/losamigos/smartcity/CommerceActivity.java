@@ -2,16 +2,24 @@ package losamigos.smartcity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +35,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,9 +52,18 @@ import java.util.List;
 public class CommerceActivity extends AppCompatActivity {
 
     TextView textViewNomCommerce;
+    TextView textViewDescription;
+    TextView textViewAdresse;
+    TextView textViewTelephone;
+    TextView textViewHoraires;
+    String lienImage;
+    String nomCommerce;
+    ImageView logoCommerce;
     Button boutonFavoriCommerce;
     Button voirOffresCommerce;
+    Button voirMap;
     Handler handler;
+    double longitude, latitude;
 
     public CommerceActivity() {
         handler = new Handler();
@@ -81,6 +99,30 @@ public class CommerceActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater findMenuItems = getMenuInflater();
+        findMenuItems.inflate(R.menu.menucommerce, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.retourAccueil:
+                Intent intentIn = getIntent();
+                Intent intent = new Intent(CommerceActivity.this, ActivitePrincipale.class );
+                intent.putExtra("PSEUDO",intentIn.getStringExtra("pseudoUser"));
+                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void updateCommerce() {
         new Thread() {
             public void run() {
@@ -101,8 +143,45 @@ public class CommerceActivity extends AppCompatActivity {
                             try {
                                 textViewNomCommerce = (TextView) findViewById(R.id.nomCommerce);
                                 boutonFavoriCommerce = (Button) findViewById(R.id.favoriCommerce);
+                                textViewDescription = (TextView) findViewById(R.id.descriptionCommerce);
+                                textViewTelephone = (TextView) findViewById(R.id.numeroTelephone);
+                                textViewAdresse = (TextView) findViewById(R.id.adresse);
+                                textViewHoraires = (TextView) findViewById(R.id.horaires);
+                                logoCommerce = (ImageView) findViewById(R.id.imageCommerce);
+                                voirMap = (Button) findViewById(R.id.voirMap);
 
                                 textViewNomCommerce.setText(jsonCommerce.getString("nom"));
+                                textViewDescription.setText(jsonCommerce.getString("description"));
+                                textViewTelephone.setText(jsonCommerce.getString("numeroTelephone"));
+                                textViewAdresse.setText(jsonCommerce.getString("adresse"));
+                                textViewHoraires.setText(jsonCommerce.getString("horaires"));
+
+                                lienImage = jsonCommerce.getString("lienImage");
+
+                                if (!lienImage.equals("")) {
+                                    new DownloadImageTask(logoCommerce)
+                                            .execute(lienImage);
+                                }
+
+                                longitude = jsonCommerce.getDouble("longitude");
+                                latitude = jsonCommerce.getDouble("latitude");
+                                nomCommerce = jsonCommerce.getString("nom");
+
+                                if (longitude != 0 && latitude != 0) {
+                                    voirMap.setVisibility(View.VISIBLE);
+                                    voirMap.setOnClickListener(new View.OnClickListener() {
+                                        public void onClick(View v) {
+                                            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+ String.valueOf(latitude) +","+ String.valueOf(longitude) + "("+ nomCommerce +")");
+                                            Log.d("lienMap", gmmIntentUri.toString());
+                                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                            mapIntent.setPackage("com.google.android.apps.maps");
+                                            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                                startActivity(mapIntent);
+                                            }
+                                        }
+                                    });
+                                }
+
 
                                 if (jsonCommerce.getBoolean("favori")) {
                                     boutonFavoriCommerce.setText(R.string.supprimerFavori);
@@ -308,6 +387,31 @@ public class CommerceActivity extends AppCompatActivity {
 
         return null;
     }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 }
 
 class RecuperationInfosCommerce {
@@ -366,3 +470,4 @@ class RecuperationInfosCommerce {
 
     }
 }
+

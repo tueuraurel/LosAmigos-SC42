@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ListeFavorisCommerceActivity">
+    tools:context=".ListeFavorisCommerceActivity"
+    android:background="@color/partieCommerce">
 
     <TextView
         android:layout_width="match_parent"
@@ -16,6 +17,6 @@
     <ListView
         android:id="@+id/listeViewFavorisCommerce"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
