@@ -7,41 +7,49 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="25sp"
         android:text="@string/demandeAdhesion_NomReseau"/>
 
     <TextView
         android:id="@+id/demandeAdhesionSujetReseau"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""/>
+        android:text=""
+        android:textSize="27sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/demandeAdhesion_DescriptionReseau"/>
+        android:text="@string/demandeAdhesion_DescriptionReseau"
+        android:textSize="25sp"/>
 
     <TextView
         android:id="@+id/demandeAdhesionDesciptionReseau"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""/>
+        android:text=""
+        android:textSize="25sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/demandeAdhesion_AdminReseau"/>
+        android:text="@string/demandeAdhesion_AdminReseau"
+        android:textSize="25sp"/>
 
     <TextView
         android:id="@+id/demandeAdhesionAdminReseau"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""/>
+        android:text=""
+        android:textSize="25sp"/>
 
     <Button
         android:id="@+id/demandeAdhesionValider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/DemandeAdhesionBouton"/>
+        android:text="@string/DemandeAdhesionBouton"
+        android:textSize="30sp"/>
 
 
 </LinearLayout>

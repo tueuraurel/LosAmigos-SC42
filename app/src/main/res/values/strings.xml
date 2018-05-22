@@ -90,6 +90,8 @@
     <string name="info_commerce">INFO COMMERCE</string>
     <string name="actualiser">Actualiser</string>
     <string name="desinscription">Se désinscrire</string>
+    <string name="login_incorrecte">L\'utilisateur n\'existe pas</string>
+    <string name="invitationEnvoyer">Invitation envoyée</string>
 
     <string-array name="choixFiltreAnnonce">
         <item>Toutes les annonces</item>

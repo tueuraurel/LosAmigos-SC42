@@ -55,7 +55,7 @@ public class DemandeAdhesionActivity extends Activity {
                 //prise en compte de l'adhesion dans la base du serveur
                 new AdhesionBase().execute(parametres);
 
-                Intent intentSuite = new Intent();
+                finish();
 
             }
         });
