@@ -25,6 +25,9 @@ public class ActualiteActivity extends AppCompatActivity {
                 if (i != null)
                 {
                     startActivity(i);
+                }else{
+                    Intent intent = new Intent(ActualiteActivity.this, HorlogeActivity.class);
+                    startActivity(intent);
                 }
             }
         });
