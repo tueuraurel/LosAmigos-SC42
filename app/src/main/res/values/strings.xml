@@ -39,7 +39,7 @@
     <string name="pas_de_reseau">Aucun réseaux adhéré !</string>
     <string name="pas_de_commerce">Aucun commerce !</string>
     <string name="erreur">Erreur</string>
-    <string name="setting">Option</string>
+    <string name="setting">Options</string>
 
     <string name="ajoutFavori">Ajouter un favori</string>
     <string name="supprimerFavori">Supprimer un favori</string>

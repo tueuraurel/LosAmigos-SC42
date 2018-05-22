@@ -108,7 +108,6 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
                 Intent intent = new Intent(ActivitePrincipale.this,ChoixPartieCommerceActivity.class);
                 Intent intent2 = getIntent();
                 intent.putExtra("pseudoUser",pseudoUser);
-                //intent.putExtra("lieuUser",lieuUser);
                 intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
                 intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
                 intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
@@ -137,7 +136,15 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
   public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
           case R.id.menu_setting:
-              return true;
+              Intent intent = getIntent();
+              Intent settings=new Intent(ActivitePrincipale.this,PreferencesActivity.class);
+              final String pseudo = intent.getStringExtra("PSEUDO");
+              settings.putExtra("LATITUDE", intent.getStringExtra("LATITUDE"));
+              settings.putExtra("LONGITUDE", intent.getStringExtra("LONGITUDE"));
+              settings.putExtra("VILLE", intent.getStringExtra("VILLE"));
+              settings.putExtra("PSEUDO",pseudo);
+              startActivity(settings);
+              break;
           case R.id.deconnexion:
               Intent pageConnexion=new Intent(ActivitePrincipale.this,MainActivity.class);
               SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitePrincipale.this);
@@ -146,9 +153,11 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
               editor.remove("mdp");
               editor.commit();
               startActivity(pageConnexion);
+              break;
           default:
               return super.onOptionsItemSelected(item);
       }
+      return false;
     }
 
     public void recupereIDPlace(JSONObject json) {
@@ -171,8 +180,6 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
                 Log.d("PlaceData ",latitude);
                 Log.d("PlaceData ",longitude);
                 final JSONObject json = RemoteFetchIDPlace.getJSON(latitude,longitude);
-                Log.d("jsonPlaceData", json.toString());
-
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {

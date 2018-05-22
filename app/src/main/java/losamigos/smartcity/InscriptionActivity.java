@@ -59,54 +59,7 @@ public class InscriptionActivity extends AppCompatActivity {
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*if(pseudo.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez remplir tous les champs ! ", Toast.LENGTH_LONG).show();
-                }
-                if(MDP.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez remplir tous les champs ! ", Toast.LENGTH_LONG).show();
-                }
-                if(Integer.parseInt(taille.getText().toString()) <= 0){
-                        Toast.makeText(InscriptionActivity.this, "Veuillez entrer une taille valide (en metre) ! ", Toast.LENGTH_LONG).show();
-                }
-                if(taille.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez remplir tous les champs ! ", Toast.LENGTH_LONG).show();
-                }
-                if(Integer.parseInt(poids.getText().toString()) <= 0){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez entrer un poids valide (en kg) ! ", Toast.LENGTH_LONG).show();
-                }
-                if(poids.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez remplir tous les champs ! ", Toast.LENGTH_LONG).show();
-                }
-*/
                 final String date = jour.getText().toString()+"-"+mois.getText().toString()+"-"+annee.getText().toString();
-               /* if(date.equals("--")){
-                    Toast.makeText(InscriptionActivity.this, "Date incorrecte ! ", Toast.LENGTH_LONG).show();
-                }
-                if(jour.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez saisir un jour ! ", Toast.LENGTH_LONG).show();
-                }
-                if(mois.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez saisir un mois ! ", Toast.LENGTH_LONG).show();
-                }
-                if(annee.getText().toString().equals(null)){
-                    Toast.makeText(InscriptionActivity.this, "Veuillez saisir un année ! ", Toast.LENGTH_LONG).show();
-                }
-                if(Integer.parseInt(jour.getText().toString()) < 0 && Integer.parseInt(jour.getText().toString())>31){
-
-                        Toast.makeText(InscriptionActivity.this, "Veuillez entrer un jour valide ! ", Toast.LENGTH_LONG).show();
-
-                }
-                if(Integer.parseInt(mois.getText().toString()) < 0 && Integer.parseInt(mois.getText().toString())>12){
-
-                        Toast.makeText(InscriptionActivity.this, "Veuillez entrer un mois valide ! ", Toast.LENGTH_LONG).show();
-
-                }
-                if(Integer.parseInt(annee.getText().toString()) < 1900 && Integer.parseInt(annee.getText().toString())>2018){
-
-                        Toast.makeText(InscriptionActivity.this, "Veuillez entrer une année valide ! ", Toast.LENGTH_LONG).show();
-
-                }*/
-
                 Intent intent  = new Intent(InscriptionActivity.this, ChoixThemeActivity.class);
 
                 //sexe
@@ -120,9 +73,8 @@ public class InscriptionActivity extends AppCompatActivity {
                     if (boutonRadio.getText().equals("Homme")) {
                         sexe = 0;
                     }
-                }/*else{
-                    Toast.makeText(InscriptionActivity.this, "Champs incorrect, veuillez saisir le sexe ! ", Toast.LENGTH_LONG).show();
-                }*/
+                }
+
                 HashMap<String, String> parametres = new HashMap<String, String>();
                 parametres.put("pseudo", pseudo.getText().toString());
                 parametres.put("MDP", MDP.getText().toString());
