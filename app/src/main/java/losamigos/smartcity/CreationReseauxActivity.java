@@ -89,16 +89,16 @@ public class CreationReseauxActivity extends Activity {
 
                             //creation du reseau dans la base du serveur
                             new insertionReseauBase().execute(parametres);
-                                ReseauBDD maBaseReseau = new ReseauBDD(CreationReseauxActivity.this);
-                                maBaseReseau.open();
+                                //ReseauBDD maBaseReseau = new ReseauBDD(CreationReseauxActivity.this);
+                                //maBaseReseau.open();
 
                                 Log.d("CreationReseau","La visibilite est : " + visibilite);
 
-                                maBaseReseau.insertReseau(new Reseau (editTextSujet.getText().toString(),editTextDescription.getText().toString(),
-                                        intent.getStringExtra("pseudoUser"),intent.getStringExtra("lieuUser"),visibilite));
+                              //  maBaseReseau.insertReseau(new Reseau (editTextSujet.getText().toString(),editTextDescription.getText().toString(),
+                               //         intent.getStringExtra("pseudoUser"),intent.getStringExtra("lieuUser"),visibilite));
                                 Log.d("CreationReseau", "pseudoUser : "+intent.getStringExtra("pseudoUser"));
                                 Log.d("CreationReseau", "lieuUser : " + intent.getStringExtra("lieuUser"));
-                                maBaseReseau.close();
+                                //maBaseReseau.close();
                     /* A modifier ensuite pour ne pas pouvoir faire un retour dessus,
                      utiliser finish();
                      */
@@ -142,6 +142,7 @@ class insertionReseauBase extends AsyncTask<java.util.HashMap<String,String>, Vo
             jsonObject.accumulate("pseudoAdmin", hashMap.get("pseudoAdmin"));
             jsonObject.accumulate("localisation", hashMap.get("localisation"));
             jsonObject.accumulate("visibilite", Integer.parseInt(hashMap.get("visibilite")));
+            Log.d("insertionReseau",MainActivity.chemin+"reseau/ajoutReseau");
             Log.d("insertionReseau",jsonObject.toString());
 
             // 4. convert JSONObject to JSON to String
@@ -153,7 +154,7 @@ class insertionReseauBase extends AsyncTask<java.util.HashMap<String,String>, Vo
 
             // 5. set json to StringEntity
             StringEntity se = new StringEntity(json);
-
+            Log.d("insertionReseau",se.getContent().toString());
             // 6. set httpPost Entity
             httpPost.setEntity(se);
 

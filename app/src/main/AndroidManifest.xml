@@ -14,19 +14,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListeReseauUtilisateurActivity" />
+        <activity android:name=".ListeReseauUtilisateurActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ListeMessageReseauActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize|stateVisible"/>
-        <activity android:name=".CreationReseauxActivity" />
-        <activity android:name=".RechercheReseauActivity" />
-        <activity android:name=".DemandeAdhesionActivity" />
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreationReseauxActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RechercheReseauActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DemandeAdhesionActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".NouveauMessageActivity" />
         <activity android:name=".HorlogeActivity" />
 
@@ -36,7 +42,6 @@
         <activity android:name=".ActualitesActivity" />
         <activity android:name=".ActualiteActivity" />
         <activity android:name=".InscriptionActivity" />
-        <activity android:name=".PrincipalActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -46,7 +51,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ChoixThemeActivity" />
-        <activity android:name=".ActivitePrincipale" />
+        <activity android:name=".ActivitePrincipale"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ChoixVilleActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PhotoActivity" />
@@ -55,7 +61,8 @@
         <activity android:name=".RechercheCommerceActivity" />
         <activity android:name=".OffreCommerceActivity" />
         <activity android:name=".CommerceActivity"/>
-        <activity android:name=".publiciteActivity" />
+        <activity android:name=".publiciteActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ListeFavorisCommerceActivity" />
         <activity android:name=".AnnonceActivity" />
         <activity android:name=".ActiviteMesInvitations" />

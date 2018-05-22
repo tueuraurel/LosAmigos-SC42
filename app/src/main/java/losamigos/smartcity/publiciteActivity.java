@@ -38,25 +38,12 @@ public class publiciteActivity extends Activity {
     String lienPub;
     Handler handler;
 
-    publiciteActivity() {handler = new Handler();}
+    public publiciteActivity() {handler = new Handler();}
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Recuperation des préferecnes :
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Pour l'instant mise de l'url dans les preferences ici, a voir ensuite pour recuperation serveur
-        SharedPreferences.Editor editor = preferences.edit();
-        //editor.putString("lienPub","http://192.168.1.64/~aurelien/small.mp4");
-        editor.putString("lienPub", "http://192.168.1.64/~aurelien/panda.jpg");
-        editor.commit();
-
-
-        // Recuperation du lien :
-        //lienPub = preferences.getString("lienPub", "");
 
         // On recupere les informations d'une pub
         updatePubData();

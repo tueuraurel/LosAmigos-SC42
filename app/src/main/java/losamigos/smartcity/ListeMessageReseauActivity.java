@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -43,7 +46,7 @@ import java.util.List;
 
 
 
-public class ListeMessageReseauActivity extends Activity {
+public class ListeMessageReseauActivity extends AppCompatActivity {
 
     ListView lv;
     ArrayList<Message> messageList;
@@ -99,18 +102,6 @@ public class ListeMessageReseauActivity extends Activity {
                 boucleMessage.postDelayed(monRunnable,2000);
                 nouveauMessage.setText("");
 
-                //MessageBDD maBaseMessage = new MessageBDD(NouveauMessageActivity.this);
-                //maBaseMessage.open();
-                /*maBaseMessage.insertMessage(new Message(nouveauMessage.getText()),
-                        intent.getStringExtra(pseudoUser),intent.getStringExtra(sujetReseau));*/
-                //Log.d("NouveauMessageActivity",String.valueOf(nouveauMessage.getText()));
-                //Log.d("NouveauMessageActivity",intent.getStringExtra("sujetReseau"));
-              //  maBaseMessage.insertMessage(new Message(nouveauMessage.getText().toString(),intent.getStringExtra("sujetReseau"),"Aurelien"));
-               // maBaseMessage.close();
-                //finish();
-                /*Intent intent2 = new Intent(NouveauMessageActivity.this,ListeMessageReseau.class);
-                intent2.putExtra("sujetReseau",intent.getStringExtra("sujetReseau"));
-                startActivity(intent2);*/
             }
         });
     }
@@ -122,6 +113,30 @@ public class ListeMessageReseauActivity extends Activity {
             updateMessageData();
         }
     };
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_message, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actualiseMessage:
+                final Handler boucleMessage= new Handler();
+                boucleMessage.post(monRunnable);
+                return true;
+            case R.id.seDesinscrire:
+                final HashMap<String, String> parametres = new HashMap<String, String>();
+                parametres.put("pseudo", getIntent().getStringExtra("pseudoUser"));
+                parametres.put("sujetReseau",getIntent().getStringExtra("sujetReseau"));
+                new SupprimerAdhesion().execute(parametres);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     private void updateMessageData() {
         new Thread() {
@@ -311,7 +326,47 @@ class exportMessageServeur extends AsyncTask<java.util.HashMap<String,String>, V
     }
 }
 
+class SupprimerAdhesion extends AsyncTask<HashMap<String,String>, Void, Void> {
 
+    @Override
+    //
+    //
+    // Classe sans aucun sens logique, on utilise un service get dont on recupere les
+    // resultat pour faire passer une requete delete !!!!!!
+
+    protected Void doInBackground(HashMap<String, String>[] hashMaps) {
+        HashMap<String, String> hashMap = hashMaps[0];
+        try {
+            URL url = new URL(MainActivity.chemin+"SuppressionAdhere/"+hashMap.get("pseudo")+"/"+hashMap.get("sujetReseau"));
+            Log.d("test",url.toString());
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+
+            StringBuffer json = new StringBuffer(1024);
+            String tmp="";
+            while((tmp=reader.readLine())!=null)
+                json.append(tmp).append("\n");
+            reader.close();
+
+            return null;
+
+        } catch (MalformedURLException e1) {
+            Log.d("refus",e1.getMessage());
+            e1.printStackTrace();
+
+        } catch (ClientProtocolException e) {
+            Log.d("refus",e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.d("refus",e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+}
 
 
 /*

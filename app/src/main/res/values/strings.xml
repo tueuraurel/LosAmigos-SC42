@@ -88,6 +88,8 @@
     <string name="voirCommerce">Voir le commerce</string>
     <string name="voirOffresCommerce">Voir les offres du commerce</string>
     <string name="info_commerce">INFO COMMERCE</string>
+    <string name="actualiser">Actualiser</string>
+    <string name="desinscription">Se désinscrire</string>
 
     <string-array name="choixFiltreAnnonce">
         <item>Toutes les annonces</item>
