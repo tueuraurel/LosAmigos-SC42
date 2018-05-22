@@ -1,7 +1,5 @@
 package losamigos.smartcity;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,47 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-class Theme {
-    String nom;
-    int id;
-    boolean selected = false;
+import java.util.List;
 
-    public Theme(String nom, int id) {
-        this.nom = nom;
-        this.id= id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-}
-
-class ThemeAdapter extends ArrayAdapter<Theme>{
+class ThemeAdapter2 extends ArrayAdapter<Theme>{
 
     private List<Theme>  themeList;
     private Context context;
 
-    public ThemeAdapter(List<Theme> themeList, Context context) {
+    public ThemeAdapter2(List<Theme> themeList, Context context) {
         super(context, R.layout.single_listview_item, themeList);
         this.themeList = themeList;
         this.context = context;
@@ -75,7 +40,7 @@ class ThemeAdapter extends ArrayAdapter<Theme>{
 
             holder.themeName = (TextView) v.findViewById(R.id.name);
             holder.chkBox = (CheckBox) v.findViewById(R.id.chk_box);
-            holder.chkBox.setOnCheckedChangeListener((ChoixThemeActivity) context);
+            holder.chkBox.setOnCheckedChangeListener((AffinageThemeActivity) context);
             v.setTag(holder);
 
         } else {
