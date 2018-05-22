@@ -1,12 +1,7 @@
 package losamigos.smartcity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -33,77 +31,84 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChoixThemeActivity extends Activity implements android.widget.CompoundButton.OnCheckedChangeListener {
+public class AffinageThemeActivity extends Activity implements android.widget.CompoundButton.OnCheckedChangeListener{
 
     ListView lv;
     ArrayList<Theme> themeList;
-    ThemeAdapter thAdapter;
+    ThemeAdapter2 thAdapter;
     Handler handler;
+    String pseudo = "";
 
-    public ChoixThemeActivity() {
+    public AffinageThemeActivity(){
         handler = new Handler();
     }
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        lv = (ListView) findViewById(R.id.listview);
-        //recuperer les données du serveur
-        updateThemeData();
-        Button boutonChoix = (Button) findViewById(R.id.choixButton);
+        setContentView(R.layout.activity_affinage_theme);
+
+        final Intent intent2 = getIntent();
+        pseudo = intent2.getStringExtra("PSEUDO");
+
+        lv = (ListView) findViewById(R.id.listViewAffinage);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateAffinageThemeData(pseudo);
+
+        Button boutonChoix = (Button) findViewById(R.id.buttonThemeAffinage);
         boutonChoix.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
+                Intent intent2 = getIntent();
+                Intent intent  = new Intent(AffinageThemeActivity.this, ActivitePrincipale.class);
+                intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
+                intent.putExtra("pseudoUser",pseudo);
+                intent.putExtra("PSEUDO",pseudo);
                 for (Theme theme : themeList) {
                     if(theme.selected) {
                         Log.d("themechoisi", theme.getNom());
                         HashMap<String, String> parametres = new HashMap<String, String>();
-                        //recuperation du pseudo
-                        final Intent intent = getIntent();
-                        String pseudo = intent.getStringExtra("PSEUDO");
-                        //pour la suite, on conserve le pseudo
-                        Intent intent2  = new Intent(ChoixThemeActivity.this, ChoixVilleActivity.class);
-                        intent2.putExtra("PSEUDO", pseudo);
                         parametres.put("pseudo", pseudo);
                         parametres.put("idTheme", String.valueOf(theme.getId()));
                         //creation de l'utilisateur dans la base du serveur
-                        new RetrieveThemeTask().execute(parametres);
-                        //lancement de la prochaine activité -> choix de la ville
-                        startActivity(intent2);
+                        new RetrieveAffinageThemeTask().execute(parametres);
                     }
                 }
-
+                startActivity(intent);
             }
         });
-
-
     }
 
-
-    private void updateThemeData() {
+    private void updateAffinageThemeData(final String pseudo) {
         new Thread() {
             public void run() {
-                final JSONArray json = RemoteFetchTheme.getJSON();
+                final JSONArray json = RemoteFetchAffinageTheme.getJSON(pseudo);
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(ChoixThemeActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
+                            Toast.makeText(AffinageThemeActivity.this, R.string.data_not_found, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
-                            themeList = renderTheme(json);
-                            thAdapter= new ThemeAdapter(themeList,ChoixThemeActivity.this);
+                            themeList = renderAffinageTheme(json);
+                            thAdapter= new ThemeAdapter2(themeList,AffinageThemeActivity.this);
                             lv.setAdapter(thAdapter);
                         }
                     });
                 }
             }
         }.start();
-
     }
 
-    public ArrayList<Theme> renderTheme(JSONArray json) {
+    private ArrayList<Theme> renderAffinageTheme(JSONArray json) {
         try {
             ArrayList<Theme> themes = new ArrayList<Theme>();
 
@@ -119,7 +124,6 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
         return null;
     }
 
-    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
         int pos = lv.getPositionForView(buttonView);
@@ -129,10 +133,10 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
             //Toast.makeText(this, "Clicked on Theme: " + t.getNom() + ". State: is " + isChecked, Toast.LENGTH_SHORT).show();
         }
     }
+
 }
 
-
-class RetrieveThemeTask extends AsyncTask<HashMap<String,String>, Void, Void> {
+class RetrieveAffinageThemeTask extends AsyncTask<HashMap<String,String>, Void, Void> {
 
     @Override
     protected Void doInBackground(HashMap<String, String>[] hashMaps) {

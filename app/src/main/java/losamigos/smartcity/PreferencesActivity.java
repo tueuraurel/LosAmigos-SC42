@@ -41,6 +41,7 @@ public class PreferencesActivity extends Activity {
         EditText annee;
         RadioButton boutonRadio;
         RadioGroup groupe;
+        Button affinage;
 
         public PreferencesActivity(){
             handler = new Handler();
@@ -51,6 +52,7 @@ public class PreferencesActivity extends Activity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_preferences);
             btn = (Button) findViewById(R.id.Modifiebutton);
+            affinage = (Button) findViewById(R.id.affinerThemes);
             MDP = (EditText) findViewById(R.id.passwordModifie);
             taille = (EditText) findViewById(R.id.tailleModifie);
             poids = (EditText) findViewById(R.id.poidsModifie);
@@ -65,6 +67,8 @@ public class PreferencesActivity extends Activity {
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent  = new Intent(PreferencesActivity.this, ActivitePrincipale.class);
+                    Intent intent2 = getIntent();
+                    final String pseudo = intent.getStringExtra("PSEUDO");
                     intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
                     intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
                     intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
@@ -91,6 +95,20 @@ public class PreferencesActivity extends Activity {
                     parametres.put("sexe", String.valueOf(sexe));
                     //creation de l'utilisateur dans la base du serveur
                     new UtilisateurModifieTask(pseudo).execute(parametres);
+                    startActivity(intent);
+                }
+            });
+
+            affinage.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent  = new Intent(PreferencesActivity.this, AffinageThemeActivity.class);
+                    Intent intent2 = getIntent();
+                    final String pseudo = intent2.getStringExtra("PSEUDO");
+                    intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
+                    intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
+                    intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
+                    intent.putExtra("pseudoUser",pseudo);
+                    intent.putExtra("PSEUDO",pseudo);
                     startActivity(intent);
                 }
             });
