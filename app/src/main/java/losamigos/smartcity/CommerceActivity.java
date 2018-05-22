@@ -44,6 +44,7 @@ public class CommerceActivity extends AppCompatActivity {
 
     TextView textViewNomCommerce;
     Button boutonFavoriCommerce;
+    Button voirOffresCommerce;
     Handler handler;
 
     public CommerceActivity() {
@@ -64,6 +65,20 @@ public class CommerceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int idCommerce = intent.getIntExtra("idTheme",0);
         Log.v("test",String.valueOf(idCommerce));
+
+        voirOffresCommerce = (Button) findViewById(R.id.voirOffresCommerce);
+        voirOffresCommerce.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intentIn = getIntent();
+                Intent intent = new Intent(CommerceActivity.this, OffreCommerceActivity.class );
+                intent.putExtra("idCommerce", intentIn.getIntExtra("idCommerce",0));
+                intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
+                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                startActivity(intent);
+            }
+        });
     }
 
     private void updateCommerce() {
@@ -118,7 +133,10 @@ public class CommerceActivity extends AppCompatActivity {
     private void supprimerFavoriThread(){
         new Thread() {
             public void run() {
-                final String supprimerFavori = supprimerFavori();
+                Intent intent = getIntent();
+                final int idCommerce = intent.getIntExtra("idCommerce",0);
+                final String pseudoUser = intent.getStringExtra("pseudoUser");
+                final String supprimerFavori = supprimerFavori(idCommerce, pseudoUser);
 
                 if (supprimerFavori == null) {
                     handler.post(new Runnable() {
@@ -129,7 +147,13 @@ public class CommerceActivity extends AppCompatActivity {
                 } else if (supprimerFavori.equals("1")){
                     handler.post(new Runnable() {
                         public void run() {
+                            Toast.makeText(CommerceActivity.this, R.string.commerceSupprimeFavori, Toast.LENGTH_LONG).show();
                             boutonFavoriCommerce.setText(R.string.ajoutFavori);
+                            boutonFavoriCommerce.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    ajouterFavoriThread();
+                                }
+                            });
                         }
                     });
                 } else {
@@ -143,72 +167,36 @@ public class CommerceActivity extends AppCompatActivity {
         }.start();
     }
 
-    private String supprimerFavori() {
-        Intent intent = getIntent();
-        final int idCommerce = intent.getIntExtra("idCommerce",0);
-        final String pseudoUser = intent.getStringExtra("pseudoUser");
-        InputStream inputStream = null;
-
+    public static String supprimerFavori(int idCommerce, String pseudoUser) {
         try {
-            // 1. create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
+            URL url = new URL(MainActivity.chemin+"utilisateur/favoriCommerce/supprimer/"+pseudoUser+"/"+idCommerce);
+            Log.d("url", url.toString());
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
-            // 2. make POST request to the given URL
-            HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/favoriCommerce/supprimer");
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
 
-            String json = "";
+            StringBuffer reponse = new StringBuffer(1024);
+            String tmp="";
+            while((tmp=reader.readLine())!=null)
+                reponse.append(tmp).append("\n");
+            reader.close();
 
-            // 3. build jsonObject
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("pseudo", pseudoUser);
-            jsonObject.accumulate("idCommerce", idCommerce);
-            //Log.d("insertionBase",jsonObject.toString());
+            String resultat = reponse.toString();
 
-            // 4. convert JSONObject to JSON to String
-            json = jsonObject.toString();
-
-            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
-            // ObjectMapper mapper = new ObjectMapper();
-            // json = mapper.writeValueAsString(person);
-
-            // 5. set json to StringEntity
-            StringEntity se = new StringEntity(json);
-
-            // 6. set httpPost Entity
-            httpPost.setEntity(se);
-
-            // 7. Set some headers to inform server about the type of the content
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
-
-            // 8. Execute POST request to the given URL
-            HttpResponse httpResponse = httpclient.execute(httpPost);
-
-            // 9. receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // 10. convert inputstream to string
-            final int bufferSize = 1024;
-            final char[] buffer = new char[bufferSize];
-            final StringBuilder out = new StringBuilder();
-            Reader in = new InputStreamReader(inputStream, "UTF-8");
-            for (; ; ) {
-                int rsz = in.read(buffer, 0, buffer.length);
-                if (rsz < 0)
-                    break;
-                out.append(buffer, 0, rsz);
-            }
-            String resultat = out.toString();
+            resultat = resultat.replaceAll("\\s+","");
 
             return resultat;
 
         } catch (MalformedURLException e1) {
+            Log.d("refus",e1.getMessage());
             e1.printStackTrace();
+
         } catch (ClientProtocolException e) {
+            Log.d("refus",e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+            Log.d("refus",e.getMessage());
             e.printStackTrace();
         }
 
@@ -229,7 +217,13 @@ public class CommerceActivity extends AppCompatActivity {
                 } else if (ajoutFavori.equals("1")){
                     handler.post(new Runnable() {
                         public void run() {
+                            Toast.makeText(CommerceActivity.this, R.string.commerceAjouteFavori, Toast.LENGTH_LONG).show();
                             boutonFavoriCommerce.setText(R.string.supprimerFavori);
+                            boutonFavoriCommerce.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    supprimerFavoriThread();
+                                }
+                            });
                         }
                     });
                 } else {

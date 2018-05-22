@@ -56,6 +56,8 @@
         <activity android:name=".OffreCommerceActivity" />
         <activity android:name=".CommerceActivity"/>
         <activity android:name=".publiciteActivity" />
+        <activity android:name=".ListeFavorisCommerceActivity" />
+        <activity android:name=".AnnonceActivity" />
         <activity android:name=".ActiviteMesInvitations" />
         <activity android:name=".ListeReseauAdmin" />
         <activity android:name=".LancementInvitation" />

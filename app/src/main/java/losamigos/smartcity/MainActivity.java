@@ -56,8 +56,8 @@ public class MainActivity extends Activity {
         // a enlever après le dev
         this.deleteDatabase("SmartCity.db");
 
-        chemin = "https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/";
-        //chemin = "http://192.168.1.151/~smartcity/smartcity/serveur.php/";
+        //chemin = "https://calypso42.ddns.net/~smartcity/smartcity/serveur.php/";
+        chemin = "http://192.168.1.151/~smartcity/smartcity/serveur.php/";
         Log.d("testPreference", preferences.getString("cheminDev", ""));
 
 

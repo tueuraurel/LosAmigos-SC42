@@ -11,17 +11,24 @@
         android:id="@+id/infosCommerce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="INFO COMMERCE"/>
+        android:text="@string/info_commerce"/>
     
     <TextView
         android:id="@+id/nomCommerce"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:id="@+id/voirOffresCommerce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/voirOffresCommerce"/>
 
     <Button
         android:id="@+id/favoriCommerce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Favori (en cours de dev)"/>
+        tools:text="Favori"/>
 
 </LinearLayout>

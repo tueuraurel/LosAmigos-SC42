@@ -3,11 +3,11 @@ package losamigos.smartcity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -77,10 +75,9 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         boutonProximite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 typeRecherche = "proximite";
-                if(ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                }
-                else {
+                } else {
                     ActivityCompat.requestPermissions(RechercheCommerceActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
                 }
                 //on recupere la position géographique
@@ -100,9 +97,10 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             }
         });
 
-        
+
         //recuperer les données du serveur
         updateThemesCommerceData();
+
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -118,6 +116,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void updateThemesCommerceData() {
         new Thread() {
@@ -169,6 +168,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                         if (longitude == 0 || latitude == 0) {
                             typeRecherche = "alphabetique";
                             echecGPS = "noDATA";
+
                         } else {
                             echecGPS = "";
                         }
@@ -274,6 +274,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         }
         return null;
     }
+
 
     public class ListClickHandler implements AdapterView.OnItemClickListener {
 

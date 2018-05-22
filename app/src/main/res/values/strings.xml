@@ -81,4 +81,18 @@
     <string name="pseudoUtilisateur">Pseudo utilisateur</string>
     <string name="valider">OK</string>
     <string name="pas_d_utilisateur">Vous n\'avez pas entré de nom</string>
+    <string name="commerces_favoris">Liste des commerces favoris</string>
+    <string name="commerceAjouteFavori">Commerce ajouté aux favoris</string>
+    <string name="commerceSupprimeFavori">Commerce supprimé des favoris</string>
+    <string name="noAnnonces">Pas d\'annonces !</string>
+    <string name="voirCommerce">Voir le commerce</string>
+    <string name="voirOffresCommerce">Voir les offres du commerce</string>
+    <string name="info_commerce">INFO COMMERCE</string>
+
+    <string-array name="choixFiltreAnnonce">
+        <item>Toutes les annonces</item>
+        <item>Annonces selon préférences</item>
+        <item>Annonces des commerces favoris</item>
+    </string-array>
+
 </resources>
