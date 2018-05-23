@@ -103,6 +103,8 @@
     <string name="rechercheCommerces">Recherche de commerces</string>
     <string name="offresMoment">Offres du moment</string>
     <string name="retourAccueil">Retour accueil</string>
+    <string name="channel_name">annoncesChannel</string>
+    <string name="channel_description">Annonces</string>
 
 
 </resources>

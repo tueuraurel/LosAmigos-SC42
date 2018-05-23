@@ -1,8 +1,13 @@
 package losamigos.smartcity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -39,7 +44,7 @@ import java.util.List;
 public class RechercheCommerceActivity extends AppCompatActivity {
 
     ListView liste;
-
+    //lv.setSelection(lv.getAdapter().getCount()-1);
     ArrayList<ThemeCommerce> themeList;
     ThemesCommerceAdapter themesCommerceAdapter;
 
@@ -90,6 +95,9 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 //on recupere la position géographique
                 gps = new GPSTracker(RechercheCommerceActivity.this);
                 updateCommerceData();
+
+                Intent serviceIntent = new Intent(RechercheCommerceActivity.this, AnnoncesService.class);
+                startService(serviceIntent);
             }
         });
 
@@ -103,7 +111,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
             }
         });
-
 
         //recuperer les données du serveur
         updateThemesCommerceData();
@@ -252,17 +259,14 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                             commerceList = renderCommerce(jsonCommerce);
                             if (echecGPS.equals("noDATA")) {
                                 Toast.makeText(getApplicationContext(), "Aucunes données de localisation récuperées, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
-                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-                                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                                typeRechercheText.setText(R.string.rechercheAlphabetique);
                             } else if (echecGPS.equals("erreurGPS")) {
                                 Toast.makeText(getApplicationContext(), "Erreur GPS, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
-                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-                                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                                typeRechercheText.setText(R.string.rechercheAlphabetique);
                             }
 
                             if (typeRecherche.equals("proximite")) {
-                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-                                affichageTypeRecherche.setText(R.string.rechercheProximite);
+                                typeRechercheText.setText(R.string.rechercheProximite);
                                 commerceAdapterProximite = new CommerceAdapterProximite(commerceList, RechercheCommerceActivity.this);
                                 liste.setAdapter(commerceAdapterProximite);
                                 liste.setOnItemClickListener(new ListClickHandlerCommerce());
@@ -367,8 +371,7 @@ class RecuperationThemesCommerce {
                 String typeTheme = "Commerce";
                 url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/nom/"+typeTheme);
             } else {
-                int typeTheme = idTheme;
-                url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/id/"+typeTheme);
+                url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/id/"+idTheme);
             }
 
             Log.v("test","URI");

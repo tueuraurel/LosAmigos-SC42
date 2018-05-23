@@ -1,9 +1,14 @@
 package losamigos.smartcity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -12,11 +17,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 public class AnnoncesService extends Service {
 
     Handler handler;
     final Handler boucleAnnonces= new Handler();
+
 
     public AnnoncesService() {
         handler = new Handler();
@@ -30,7 +37,7 @@ public class AnnoncesService extends Service {
     @Override
     public void onCreate() {
 
-        boucleAnnonces.postDelayed(monRunnable,5000);
+        boucleAnnonces.postDelayed(monRunnable,10000);
 
         super.onCreate();
     }
@@ -50,7 +57,7 @@ public class AnnoncesService extends Service {
         @Override
         public void run() {
             verifAnnonces();
-            boucleAnnonces.postDelayed(this,5000);
+            boucleAnnonces.postDelayed(this,10000);
         }
     };
 
@@ -60,16 +67,21 @@ public class AnnoncesService extends Service {
 
                 final JSONArray json = RemoteFetchIDAnnonces.getJSON();
 
-                if (json == null) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            Toast.makeText(AnnoncesService.this, "NULL", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
+                if (json != null) {
                     handler.post(new Runnable() {
                         public void run() {
                             Toast.makeText(AnnoncesService.this, "SUCCES", Toast.LENGTH_LONG).show();
+
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(AnnoncesService.this, "annoncesChannel")
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setContentTitle("Test")
+                                    .setContentText("Test")
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+                            mNotificationManager.notify(m, mBuilder.build());
+
                         }
                     });
                 }
