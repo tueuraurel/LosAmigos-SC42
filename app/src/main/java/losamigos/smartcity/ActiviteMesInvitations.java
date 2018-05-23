@@ -95,7 +95,7 @@ public class ActiviteMesInvitations extends AppCompatActivity {
                             Log.d("handlerBug",reseauList.toString());
                             invitationAdapter= new InvitationAdapter(reseauList,ActiviteMesInvitations.this,intent.getStringExtra("pseudoUser"));
                             ListeDesReseaux.setAdapter(invitationAdapter);
-                            ListeDesReseaux.setOnItemClickListener(new ListClickHandlerInvitation());
+                           // ListeDesReseaux.setOnItemClickListener(new ListClickHandlerInvitation());
                         }
                     });
                 }
@@ -120,7 +120,7 @@ public class ActiviteMesInvitations extends AppCompatActivity {
         return null;
     }
 
-    public class ListClickHandlerInvitation implements AdapterView.OnItemClickListener {
+   /* public class ListClickHandlerInvitation implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
@@ -142,9 +142,9 @@ public class ActiviteMesInvitations extends AppCompatActivity {
             intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
             intent.putExtra("lieuUser",intentIn.getStringExtra("lieuUser"));
             startActivity(intent);*/
-        }
+       /* }
 
-    }
+    }*/
 
 
     class InvitationAdapter extends ArrayAdapter<Reseau> {
@@ -208,7 +208,15 @@ public class ActiviteMesInvitations extends AppCompatActivity {
                     //prise en compte de l'adhesion dans la base du serveur
                     new AccepterInvitationServeur().execute(parametres);
                     new SupprimerInvitationServeur().execute(parametres);
-                    updateInvitationData();
+                    Toast.makeText(ActiviteMesInvitations.this, R.string.invitationAccepter, Toast.LENGTH_LONG).show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateInvitationData();
+                        }
+                    },2000);
+
 
                 }
             });
@@ -218,6 +226,7 @@ public class ActiviteMesInvitations extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     new SupprimerInvitationServeur().execute(parametres);
+                    Toast.makeText(ActiviteMesInvitations.this, R.string.invitationRefuser, Toast.LENGTH_LONG).show();
                     updateInvitationData();
                 }
             });
@@ -299,6 +308,8 @@ public class ActiviteMesInvitations extends AppCompatActivity {
             protected Void doInBackground(HashMap<String, String>[] hashMaps) {
                 HashMap<String, String> hashMap = hashMaps[0];
                 try {
+                    Log.d("HashMapPseudo",hashMap.get("pseudo"));
+                    Log.d("HashMapReseau",hashMap.get("sujetReseau"));
                     URL url = new URL(MainActivity.chemin+"SuppressionInvitation/"+hashMap.get("pseudo")+"/"+hashMap.get("sujetReseau"));
                     Log.d("test",url.toString());
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();

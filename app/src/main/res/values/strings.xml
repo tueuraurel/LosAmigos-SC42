@@ -92,6 +92,8 @@
     <string name="desinscription">Se désinscrire</string>
     <string name="login_incorrecte">L\'utilisateur n\'existe pas</string>
     <string name="invitationEnvoyer">Invitation envoyée</string>
+    <string name="invitationAccepter">Invitation accepter</string>
+    <string name="invitationRefuser">Invitation refuser</string>
 
     <string-array name="choixFiltreAnnonce">
         <item>Toutes les annonces</item>

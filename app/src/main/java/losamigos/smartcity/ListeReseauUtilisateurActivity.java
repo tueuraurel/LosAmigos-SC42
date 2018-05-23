@@ -7,8 +7,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,7 +46,7 @@ import java.util.List;
 
 
 
-public class ListeReseauUtilisateurActivity extends Activity {
+public class ListeReseauUtilisateurActivity extends AppCompatActivity {
 
     ListView ListeDeMesReseaux;
     ArrayList<Reseau> reseauList;
@@ -127,6 +130,30 @@ public class ListeReseauUtilisateurActivity extends Activity {
 
 
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_reseau, menu);
+        return true;
+    }
+
+    private Runnable monRunnable =new Runnable() {
+        @Override
+        public void run() {
+             Log.d("runnable","dans runnable");updateReseauData();       }
+    };
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actualiseReseau:
+                final Handler boucleMessage= new Handler();
+                boucleMessage.post(monRunnable);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     private void updateReseauData() {

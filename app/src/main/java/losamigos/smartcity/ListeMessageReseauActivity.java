@@ -106,7 +106,7 @@ public class ListeMessageReseauActivity extends AppCompatActivity {
         });
     }
 
-    // met a jour les messages toutes les 2 secondes
+    // met a jour les messages
     private Runnable monRunnable =new Runnable() {
         @Override
         public void run() {
@@ -137,7 +137,6 @@ public class ListeMessageReseauActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
     private void updateMessageData() {
         new Thread() {
             public void run() {
