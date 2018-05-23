@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,17 +23,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListeReseauUtilisateurActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ListeMessageReseauActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CreationReseauxActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".RechercheReseauActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".DemandeAdhesionActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ListeReseauUtilisateurActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ListeMessageReseauActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".CreationReseauxActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RechercheReseauActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DemandeAdhesionActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".NouveauMessageActivity" />
         <activity android:name=".HorlogeActivity" />
 
@@ -51,9 +57,11 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ChoixThemeActivity" />
-        <activity android:name=".ActivitePrincipale"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ChoixVilleActivity"
+        <activity
+            android:name=".ActivitePrincipale"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChoixVilleActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PhotoActivity" />
         <activity android:name=".MapsActivity" />
@@ -63,16 +71,25 @@
         <activity
             android:name=".CommerceActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".publiciteActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".publiciteActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ListeFavorisCommerceActivity" />
         <activity android:name=".AnnonceActivity" />
         <activity android:name=".ActiviteMesInvitations" />
         <activity android:name=".ListeReseauAdmin" />
         <activity android:name=".LancementInvitation" />
         <activity android:name=".PreferencesActivity" />
-        <activity android:name=".AffinageThemeActivity"></activity>
-        <activity android:name=".RechercheDirecteCommercesActivity"></activity>
+        <activity android:name=".AffinageThemeActivity" />
+        <activity android:name=".RechercheDirecteCommercesActivity" />
+
+        <service
+            android:name=".AnnoncesService"
+            android:exported="false" />
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

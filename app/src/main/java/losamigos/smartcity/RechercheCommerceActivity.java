@@ -76,12 +76,12 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
         TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
         affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
-        typeRecherche = "alphabetique";
 
         Button boutonProximite = (Button) findViewById(R.id.rechercheProximite);
         boutonProximite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 typeRecherche = "proximite";
+                //startService(new Intent(getApplicationContext(), AnnoncesService.class));
                 if (ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
                 } else {
