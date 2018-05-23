@@ -1,8 +1,13 @@
 package losamigos.smartcity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -39,7 +44,7 @@ import java.util.List;
 public class RechercheCommerceActivity extends AppCompatActivity {
 
     ListView liste;
-
+    //lv.setSelection(lv.getAdapter().getCount()-1);
     ArrayList<ThemeCommerce> themeList;
     ThemesCommerceAdapter themesCommerceAdapter;
 
@@ -81,6 +86,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         boutonProximite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 typeRecherche = "proximite";
+                //startService(new Intent(getApplicationContext(), AnnoncesService.class));
                 if (ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
                 } else {
@@ -89,6 +95,9 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 //on recupere la position géographique
                 gps = new GPSTracker(RechercheCommerceActivity.this);
                 updateCommerceData();
+
+                Intent serviceIntent = new Intent(RechercheCommerceActivity.this, AnnoncesService.class);
+                startService(serviceIntent);
             }
         });
 
@@ -102,7 +111,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
             }
         });
-
 
         //recuperer les données du serveur
         updateThemesCommerceData();
