@@ -153,21 +153,32 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = getIntent();
                 final int idTheme = intent.getIntExtra("idTheme",0);
+                final String nomTheme = intent.getStringExtra("nomTheme");
                 final JSONArray json = RecuperationThemesCommerce.getJSON(idTheme);
 
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
+                            TextView nomCategorie = (TextView) findViewById(R.id.nomCategorieCommerce);
+                            nomCategorie.setVisibility(View.VISIBLE);
+                            nomCategorie.setText(nomTheme);
                             updateCommerceData();
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
+
                             themeList = renderThemesCommerce(json);
                             themesCommerceAdapter = new ThemesCommerceAdapter(themeList,RechercheCommerceActivity.this);
                             liste.setAdapter(themesCommerceAdapter);
                             liste.setOnItemClickListener(new ListClickHandler());
+
+                            if (idTheme != 0) {
+                                TextView nomCategorie = (TextView) findViewById(R.id.nomCategorieCommerce);
+                                nomCategorie.setVisibility(View.VISIBLE);
+                                nomCategorie.setText(nomTheme);
+                            }
                         }
                     });
                 }
@@ -314,6 +325,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             ThemeCommerce resultat = (ThemeCommerce) adapter.getItemAtPosition(position);
             Intent intent = new Intent(RechercheCommerceActivity.this, RechercheCommerceActivity.class );
             intent.putExtra("idTheme",resultat.getId());
+            intent.putExtra("nomTheme",resultat.getNom());
             intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
             intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
             intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));

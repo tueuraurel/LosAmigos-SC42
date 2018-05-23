@@ -83,20 +83,6 @@ public class CommerceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int idCommerce = intent.getIntExtra("idTheme",0);
         Log.v("test",String.valueOf(idCommerce));
-
-        voirOffresCommerce = (Button) findViewById(R.id.voirOffresCommerce);
-        voirOffresCommerce.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intentIn = getIntent();
-                Intent intent = new Intent(CommerceActivity.this, OffreCommerceActivity.class );
-                intent.putExtra("idCommerce", intentIn.getIntExtra("idCommerce",0));
-                intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
-                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
-                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
-                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -166,6 +152,21 @@ public class CommerceActivity extends AppCompatActivity {
                                 longitude = jsonCommerce.getDouble("longitude");
                                 latitude = jsonCommerce.getDouble("latitude");
                                 nomCommerce = jsonCommerce.getString("nom");
+
+                                voirOffresCommerce = (Button) findViewById(R.id.voirOffresCommerce);
+                                voirOffresCommerce.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View v) {
+                                        Intent intentIn = getIntent();
+                                        Intent intent = new Intent(CommerceActivity.this, OffreCommerceActivity.class );
+                                        intent.putExtra("idCommerce", intentIn.getIntExtra("idCommerce",0));
+                                        intent.putExtra("nomCommerce", nomCommerce);
+                                        intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
+                                        intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                                        intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                                        intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                                        startActivity(intent);
+                                    }
+                                });
 
                                 if (longitude != 0 && latitude != 0) {
                                     voirMap.setVisibility(View.VISIBLE);
