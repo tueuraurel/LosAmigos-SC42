@@ -76,7 +76,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
         TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
         affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
-        typeRecherche = "alphabetique";
 
         Button boutonProximite = (Button) findViewById(R.id.rechercheProximite);
         boutonProximite.setOnClickListener(new View.OnClickListener() {
