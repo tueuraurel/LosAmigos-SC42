@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,6 +43,30 @@ public class AnnonceActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateAnnonce();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater findMenuItems = getMenuInflater();
+        findMenuItems.inflate(R.menu.menucommerce, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.retourAccueil:
+                Intent intentIn = getIntent();
+                Intent intent = new Intent(AnnonceActivity.this, ActivitePrincipale.class );
+                intent.putExtra("PSEUDO",intentIn.getStringExtra("pseudoUser"));
+                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateAnnonce() {

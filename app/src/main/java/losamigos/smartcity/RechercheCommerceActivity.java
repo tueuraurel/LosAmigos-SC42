@@ -10,6 +10,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -71,6 +74,9 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
         liste = (ListView) findViewById(R.id.listeViewCommerce);
 
+        TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
+        affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+
         Button boutonProximite = (Button) findViewById(R.id.rechercheProximite);
         boutonProximite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -103,6 +109,30 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater findMenuItems = getMenuInflater();
+        findMenuItems.inflate(R.menu.menucommerce, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.retourAccueil:
+                Intent intentIn = getIntent();
+                Intent intent = new Intent(RechercheCommerceActivity.this, ActivitePrincipale.class );
+                intent.putExtra("PSEUDO",intentIn.getStringExtra("pseudoUser"));
+                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ONE: {
@@ -123,21 +153,32 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = getIntent();
                 final int idTheme = intent.getIntExtra("idTheme",0);
+                final String nomTheme = intent.getStringExtra("nomTheme");
                 final JSONArray json = RecuperationThemesCommerce.getJSON(idTheme);
 
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
+                            TextView nomCategorie = (TextView) findViewById(R.id.nomCategorieCommerce);
+                            nomCategorie.setVisibility(View.VISIBLE);
+                            nomCategorie.setText(nomTheme);
                             updateCommerceData();
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
+
                             themeList = renderThemesCommerce(json);
                             themesCommerceAdapter = new ThemesCommerceAdapter(themeList,RechercheCommerceActivity.this);
                             liste.setAdapter(themesCommerceAdapter);
                             liste.setOnItemClickListener(new ListClickHandler());
+
+                            if (idTheme != 0) {
+                                TextView nomCategorie = (TextView) findViewById(R.id.nomCategorieCommerce);
+                                nomCategorie.setVisibility(View.VISIBLE);
+                                nomCategorie.setText(nomTheme);
+                            }
                         }
                     });
                 }
@@ -284,6 +325,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             ThemeCommerce resultat = (ThemeCommerce) adapter.getItemAtPosition(position);
             Intent intent = new Intent(RechercheCommerceActivity.this, RechercheCommerceActivity.class );
             intent.putExtra("idTheme",resultat.getId());
+            intent.putExtra("nomTheme",resultat.getNom());
             intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
             intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
             intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
@@ -384,84 +426,6 @@ class ThemesCommerceAdapter extends ArrayAdapter<ThemeCommerce> {
         }
 
         ThemeCommerce p = themeCommerceList.get(position);
-        holder.nom.setText(p.getNom());
-
-        return v;
-    }
-}
-
-class RecuperationCommerce {
-
-    // Recupere l'ensemble des commerces correspondant au thème
-    public static JSONArray getJSON(int idTheme, String ville, String typeRecherche,
-                                    double longitude, double latitude){
-
-        try {
-            URL url;
-            Log.v("IDTheme",String.valueOf(idTheme));
-
-            if (typeRecherche.equals("proximite")) {
-                url = new URL(MainActivity.chemin+"commerce/proximite/"+ville+"/"+latitude+"/"+longitude);
-            } else {
-                url = new URL(MainActivity.chemin+"commerce/theme/"+idTheme+"/"+ville);
-            }
-
-            Log.v("test","URI");
-            HttpURLConnection connection =
-                    (HttpURLConnection)url.openConnection();
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-
-            StringBuffer json = new StringBuffer(1024);
-            String tmp="";
-            while((tmp=reader.readLine())!=null)
-                json.append(tmp).append("\n");
-            reader.close();
-
-            JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
-            return data;
-        }catch(Exception e){
-            return null;
-        }
-    }
-}
-
-class CommerceAdapter extends ArrayAdapter<Commerce> {
-
-    private List<Commerce> commerceList;
-    private Context context;
-
-    public CommerceAdapter(List<Commerce> commerceList, Context context) {
-        super(context, R.layout.single_textview_item, commerceList);
-        this.commerceList = commerceList;
-        this.context = context;
-    }
-
-    private static class CommerceHolder {
-        public TextView nom;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View v = convertView;
-
-        CommerceHolder holder = new CommerceHolder();
-
-        if(convertView == null) {
-
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.single_textview_item, null);
-
-            holder.nom = (TextView) v.findViewById(R.id.textView);
-            v.setTag(holder);
-        } else {
-            holder = (CommerceHolder) v.getTag();
-        }
-
-        Commerce p = commerceList.get(position);
         holder.nom.setText(p.getNom());
 
         return v;

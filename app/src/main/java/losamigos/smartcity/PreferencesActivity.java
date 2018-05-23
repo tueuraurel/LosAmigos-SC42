@@ -68,7 +68,7 @@ public class PreferencesActivity extends Activity {
                 public void onClick(View v) {
                     Intent intent  = new Intent(PreferencesActivity.this, ActivitePrincipale.class);
                     Intent intent2 = getIntent();
-                    final String pseudo = intent.getStringExtra("PSEUDO");
+                    final String pseudo = intent2.getStringExtra("PSEUDO");
                     intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
                     intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
                     intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));

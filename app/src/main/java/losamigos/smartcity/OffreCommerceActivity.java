@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -58,6 +61,7 @@ public class OffreCommerceActivity extends AppCompatActivity implements AdapterV
         super.onResume();
 
         Spinner spinner = (Spinner) findViewById(R.id.selectFiltreAnnonce);
+        TextView nomCommerce = (TextView) findViewById(R.id.nomCommerceAnnonces);
 
         Intent intent = getIntent();
         int idCommerce = intent.getIntExtra("idCommerce", 0);
@@ -72,6 +76,9 @@ public class OffreCommerceActivity extends AppCompatActivity implements AdapterV
             spinner.setOnItemSelectedListener(this);
         } else {
             spinner.setVisibility(View.GONE);
+            nomCommerce.setVisibility(View.VISIBLE);
+            String annoncesNomCommerce = "Liste des annonces du commerce : "+intent.getStringExtra("nomCommerce");
+            nomCommerce.setText(annoncesNomCommerce);
         }
 
         liste = (ListView) findViewById(R.id.listeViewAnnonces);
@@ -79,6 +86,30 @@ public class OffreCommerceActivity extends AppCompatActivity implements AdapterV
         updateAnnoncesData();
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater findMenuItems = getMenuInflater();
+        findMenuItems.inflate(R.menu.menucommerce, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.retourAccueil:
+                Intent intentIn = getIntent();
+                Intent intent = new Intent(OffreCommerceActivity.this, ActivitePrincipale.class );
+                intent.putExtra("PSEUDO",intentIn.getStringExtra("pseudoUser"));
+                intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
+                intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
+                intent.putExtra("VILLE", intentIn.getStringExtra("VILLE"));
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateAnnoncesData() {
@@ -188,7 +219,7 @@ class RecuperationAnnoncesCommerce {
                 }
 
             } else {
-                url = new URL(MainActivity.chemin+"annonces/"+idCommerce);
+                url = new URL(MainActivity.chemin+"annonces/idCommerce/"+idCommerce+"/"+pseudoUser);
             }
 
             Log.d("url", url.toString());

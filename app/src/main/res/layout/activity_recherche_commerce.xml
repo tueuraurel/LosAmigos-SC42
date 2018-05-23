@@ -5,7 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RechercheCommerceActivity">
+    tools:context=".RechercheCommerceActivity"
+    android:background="@color/partieCommerce">
+
+    <TextView
+        android:id="@+id/nomCategorieCommerce"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        tools:text="Affichage test"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/layoutTypeRecherche"

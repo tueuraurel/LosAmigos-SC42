@@ -60,7 +60,9 @@
         <activity android:name=".ChoixPartieCommerceActivity" />
         <activity android:name=".RechercheCommerceActivity" />
         <activity android:name=".OffreCommerceActivity" />
-        <activity android:name=".CommerceActivity"/>
+        <activity
+            android:name=".CommerceActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".publiciteActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ListeFavorisCommerceActivity" />
@@ -70,6 +72,7 @@
         <activity android:name=".LancementInvitation" />
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".AffinageThemeActivity"></activity>
+        <activity android:name=".RechercheDirecteCommercesActivity"></activity>
     </application>
 
 </manifest>

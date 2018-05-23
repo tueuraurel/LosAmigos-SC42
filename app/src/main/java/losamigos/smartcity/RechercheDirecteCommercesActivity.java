@@ -1,22 +1,18 @@
 package losamigos.smartcity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -28,35 +24,47 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-public class ListeFavorisCommerceActivity extends AppCompatActivity {
+public class RechercheDirecteCommercesActivity extends AppCompatActivity {
 
-    ListView liste;
-
-    ArrayList<Commerce> favorisList;
-    FavorisCommerceAdapter favorisCommerceAdapter;
-
+    ListView listeCommerces;
+    ArrayList<Commerce> commercesList;
+    CommerceAdapter commerceAdapter;
     Handler handler;
-
-    public ListeFavorisCommerceActivity() {
-        handler = new Handler();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_liste_favoris_commerce);
+        setContentView(R.layout.activity_recherche_directe_commerces);
+    }
+
+    public RechercheDirecteCommercesActivity() {
+        handler = new Handler();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        listeCommerces = (ListView) findViewById(R.id.listeViewRechercheCommerce);
 
-        liste = (ListView) findViewById(R.id.listeViewFavorisCommerce);
+        final EditText champRecherche = findViewById(R.id.textRecherche);
+        Button boutonOK = findViewById(R.id.rechercheCommerceOK);
 
-        //recuperer les données du serveur
-        updateFavorisCommerceData();
+        boutonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(champRecherche.getText().toString().equals("")){
+                    Toast.makeText(RechercheDirecteCommercesActivity.this, R.string.rechercheVide, Toast.LENGTH_LONG).show();
+                }else {
+                    updateCommerceData(true);
+                }
+            }
+        });
+
+        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
+        final Intent intentIn = getIntent();
+
+
     }
 
     @Override
@@ -71,7 +79,7 @@ public class ListeFavorisCommerceActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.retourAccueil:
                 Intent intentIn = getIntent();
-                Intent intent = new Intent(ListeFavorisCommerceActivity.this, ActivitePrincipale.class );
+                Intent intent = new Intent(RechercheDirecteCommercesActivity.this, ActivitePrincipale.class );
                 intent.putExtra("PSEUDO",intentIn.getStringExtra("pseudoUser"));
                 intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
                 intent.putExtra("LONGITUDE", intentIn.getStringExtra("LONGITUDE"));
@@ -83,58 +91,64 @@ public class ListeFavorisCommerceActivity extends AppCompatActivity {
         }
     }
 
-    private void updateFavorisCommerceData() {
+
+    private void updateCommerceData(final boolean avecRecherche) {
         new Thread() {
             public void run() {
-                Intent intent = getIntent();
-                final String pseudoUser = intent.getStringExtra("pseudoUser");
-                final JSONArray json = RecuperationFavorisCommerce.getJSON(pseudoUser);
+                final Intent intent = getIntent();
+                final String ville = intent.getStringExtra("VILLE");
+                EditText champRecherche = findViewById(R.id.textRecherche);
+                final JSONArray json;
+
+                json = RecuperationCommerceRecherche.getJSON(ville, champRecherche.getText().toString());
 
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
-
+                            Toast.makeText(RechercheDirecteCommercesActivity.this, R.string.pas_de_commerce, Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
                     handler.post(new Runnable() {
                         public void run() {
-                            favorisList = renderFavorisCommerce(json);
-                            favorisCommerceAdapter = new FavorisCommerceAdapter(favorisList,ListeFavorisCommerceActivity.this);
-                            liste.setAdapter(favorisCommerceAdapter);
-                            liste.setOnItemClickListener(new ListClickHandlerCommerce());
+                            listeCommerces = (ListView) findViewById(R.id.listeViewRechercheCommerce);
+                            commercesList = renderCommerce(json);
+                            commerceAdapter= new CommerceAdapter(commercesList,RechercheDirecteCommercesActivity.this);
+                            listeCommerces.setAdapter(commerceAdapter);
+                            listeCommerces.setOnItemClickListener(new ListClickHandler());
                         }
                     });
                 }
+
             }
         }.start();
 
     }
 
-    public ArrayList<Commerce> renderFavorisCommerce(JSONArray json) {
+    public ArrayList<Commerce> renderCommerce(JSONArray json) {
         try {
-            ArrayList<Commerce> commerce = new ArrayList<>();
+            ArrayList<Commerce> commerces = new ArrayList<>();
 
             for (int i = 0; i < json.length(); i++) {
                 JSONObject jsonobject = json.getJSONObject(i);
-                commerce.add(new Commerce(jsonobject.getInt("id"), jsonobject.getString("nom"), jsonobject.getString("pseudoCommercant"), jsonobject.getString("localisation"),
+                commerces.add(new Commerce(jsonobject.getInt("id"), jsonobject.getString("nom"), jsonobject.getString("pseudoCommercant"), jsonobject.getString("localisation"),
                         jsonobject.getString("longitude"), jsonobject.getString("latitude")));
             }
-            Log.v("test",commerce.toString());
-            return commerce;
+
+            return commerces;
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public class ListClickHandlerCommerce implements AdapterView.OnItemClickListener {
+    public class ListClickHandler implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
             Intent intentIn = getIntent();
             Commerce resultat = (Commerce) adapter.getItemAtPosition(position);
-            Intent intent = new Intent(ListeFavorisCommerceActivity.this, CommerceActivity.class );
+            Intent intent = new Intent(RechercheDirecteCommercesActivity.this, CommerceActivity.class );
             intent.putExtra("idCommerce",resultat.getId());
             intent.putExtra("pseudoUser",intentIn.getStringExtra("pseudoUser"));
             intent.putExtra("LATITUDE", intentIn.getStringExtra("LATITUDE"));
@@ -146,16 +160,14 @@ public class ListeFavorisCommerceActivity extends AppCompatActivity {
     }
 }
 
-class RecuperationFavorisCommerce {
 
-    // Recupere l'ensemble des commerces favoris
-    public static JSONArray getJSON(String user){
+class RecuperationCommerceRecherche {
 
+
+    public static JSONArray getJSON(String lieu,String recherche){
         try {
-            URL url;
-            url = new URL(MainActivity.chemin+"utilisateur2/favorisCommerce/"+user);
-
-            Log.v("test",url.toString());
+            URL url = new URL(MainActivity.chemin+"commerceRecherche/"+recherche+"/"+lieu);
+            Log.v("getJSON URI",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -174,45 +186,5 @@ class RecuperationFavorisCommerce {
         }catch(Exception e){
             return null;
         }
-    }
-}
-
-class FavorisCommerceAdapter extends ArrayAdapter<Commerce> {
-
-    private List<Commerce> favorisList;
-    private Context context;
-
-    public FavorisCommerceAdapter(List<Commerce> favorisList, Context context) {
-        super(context, R.layout.single_textview_item, favorisList);
-        this.favorisList = favorisList;
-        this.context = context;
-    }
-
-    private static class CommerceHolder {
-        public TextView nom;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View v = convertView;
-
-        CommerceHolder holder = new CommerceHolder();
-
-        if(convertView == null) {
-
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.single_textview_item, null);
-
-            holder.nom = (TextView) v.findViewById(R.id.textView);
-            v.setTag(holder);
-        } else {
-            holder = (CommerceHolder) v.getTag();
-        }
-
-        Commerce p = favorisList.get(position);
-        holder.nom.setText(p.getNom());
-
-        return v;
     }
 }

@@ -5,25 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ChoixPartieCommerceActivity">
+    tools:context=".ChoixPartieCommerceActivity"
+    android:background="@color/colorPrimary">
 
-    <Button
-        android:id="@+id/listeFavoriCommerce"
+    <LinearLayout
+        android:id="@+id/layoutTypeRecherche"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/favori"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/listeFavoriCommerce"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/favori"
+            android:background="@color/partieCommerce"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/rechercheDirecte"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/recherche_directe"
+            android:background="@color/partieCommerce"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/rechercheCommerces"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Recherche de commerces" />
+        android:text="@string/rechercheCommerces"
+        android:background="@color/partieCommerce"/>
 
     <Button
         android:id="@+id/annoncesCommerces"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Offres du moment" />
+        android:text="@string/offresMoment"
+        android:background="@color/partieCommerce"/>
 </LinearLayout>

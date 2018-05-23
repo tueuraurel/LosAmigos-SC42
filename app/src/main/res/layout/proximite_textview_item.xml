@@ -7,15 +7,15 @@
 
     <TextView
         android:id="@+id/textViewNom"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
+        android:layout_width="465dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
         android:textSize="25sp"
-        tools:text="Pas de titre"/>
+        android:textStyle="bold"
+        tools:text="Pas de titre" />
 
     <TextView
         android:id="@+id/textViewDistance"
@@ -29,6 +29,6 @@
         android:textSize="25sp"
         android:gravity="right"
         android:textAlignment="gravity"
-        tools:text="Pas de titre"/>
+        tools:text="1000km"/>
 
 </LinearLayout>
