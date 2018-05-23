@@ -251,17 +251,14 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                             commerceList = renderCommerce(jsonCommerce);
                             if (echecGPS.equals("noDATA")) {
                                 Toast.makeText(getApplicationContext(), "Aucunes données de localisation récuperées, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
-                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-                                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                                typeRechercheText.setText(R.string.rechercheAlphabetique);
                             } else if (echecGPS.equals("erreurGPS")) {
                                 Toast.makeText(getApplicationContext(), "Erreur GPS, affichage par ordre alphabétique", Toast.LENGTH_LONG).show();
-                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-                                affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
+                                typeRechercheText.setText(R.string.rechercheAlphabetique);
                             }
 
                             if (typeRecherche.equals("proximite")) {
-                                TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-                                affichageTypeRecherche.setText(R.string.rechercheProximite);
+                                typeRechercheText.setText(R.string.rechercheProximite);
                                 commerceAdapterProximite = new CommerceAdapterProximite(commerceList, RechercheCommerceActivity.this);
                                 liste.setAdapter(commerceAdapterProximite);
                                 liste.setOnItemClickListener(new ListClickHandlerCommerce());
@@ -366,8 +363,7 @@ class RecuperationThemesCommerce {
                 String typeTheme = "Commerce";
                 url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/nom/"+typeTheme);
             } else {
-                int typeTheme = idTheme;
-                url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/id/"+typeTheme);
+                url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/id/"+idTheme);
             }
 
             Log.v("test","URI");
