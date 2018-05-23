@@ -3,6 +3,16 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
+        android:id="@+id/inscriptionTitre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableLeft="@drawable/baseline_location_city_black_24dp"
+        android:gravity="center"
+        android:text="Localisation"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"

@@ -61,6 +61,7 @@ public class OffreCommerceActivity extends AppCompatActivity implements AdapterV
         super.onResume();
 
         Spinner spinner = (Spinner) findViewById(R.id.selectFiltreAnnonce);
+        TextView nomCommerce = (TextView) findViewById(R.id.nomCommerceAnnonces);
 
         Intent intent = getIntent();
         int idCommerce = intent.getIntExtra("idCommerce", 0);
@@ -75,6 +76,9 @@ public class OffreCommerceActivity extends AppCompatActivity implements AdapterV
             spinner.setOnItemSelectedListener(this);
         } else {
             spinner.setVisibility(View.GONE);
+            nomCommerce.setVisibility(View.VISIBLE);
+            String annoncesNomCommerce = "Liste des annonces du commerce : "+intent.getStringExtra("nomCommerce");
+            nomCommerce.setText(annoncesNomCommerce);
         }
 
         liste = (ListView) findViewById(R.id.listeViewAnnonces);
