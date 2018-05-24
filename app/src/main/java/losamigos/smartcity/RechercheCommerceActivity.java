@@ -64,6 +64,8 @@ public class RechercheCommerceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recherche_commerce);
+        TextView affichageTypeRecherche = (TextView) findViewById(R.id.typeRecherche);
+        affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
     }
 
     @Override
@@ -71,9 +73,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         super.onResume();
 
         liste = (ListView) findViewById(R.id.listeViewCommerce);
-
-        TextView affichageTypeRecherche = findViewById(R.id.typeRecherche);
-        affichageTypeRecherche.setText(R.string.rechercheAlphabetique);
 
         Button boutonProximite = (Button) findViewById(R.id.rechercheProximite);
         boutonProximite.setOnClickListener(new View.OnClickListener() {
@@ -83,9 +82,19 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 if (!(ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
                     ActivityCompat.requestPermissions(RechercheCommerceActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
                 }
-                //on recupere la position géographique
-                gps = new GPSTracker(RechercheCommerceActivity.this);
-                updateCommerceData();
+
+                if (gps == null) {
+                    //on recupere la position géographique
+                    gps = new GPSTracker(RechercheCommerceActivity.this);
+
+                    Toast.makeText(getApplicationContext(), "Localisation en cours...", Toast.LENGTH_LONG).show();
+
+                    Handler updateProximite = new Handler();
+                    updateProximite.postDelayed(monRunnable,3000);
+                } else {
+                    updateCommerceData();
+                }
+
             }
         });
 
@@ -103,6 +112,21 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         //recuperer les données du serveur
         updateThemesCommerceData();
 
+    }
+
+    private Runnable monRunnable =new Runnable() {
+        @Override
+        public void run() {
+            updateCommerceData();
+        }
+    };
+
+    @Override
+    protected void onStop() {
+        if (gps != null) {
+            gps.stopUsingGPS();
+        }
+        super.onStop();
     }
 
     @Override
@@ -193,7 +217,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
 
                     // si le GPS est disponible
                     if (gps.canGetLocation()) {
-                        //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
                         longitude = gps.getLongitude();
                         latitude = gps.getLatitude();
 
@@ -220,6 +243,9 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                         jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville, typeRecherche, longitude, latitude);
                     }
                 } else {
+                    if (gps != null) {
+                        gps.stopUsingGPS();
+                    }
                     echecGPS = "";
                     jsonCommerce = RecuperationCommerce.getJSON(idTheme, ville, typeRecherche, longitude, latitude);
                 }

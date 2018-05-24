@@ -82,6 +82,8 @@
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".AffinageThemeActivity" />
         <activity android:name=".RechercheDirecteCommercesActivity" />
+
+        <service android:name=".GPSTracker" />
     </application>
 
 </manifest>
