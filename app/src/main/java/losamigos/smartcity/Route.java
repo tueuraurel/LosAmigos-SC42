@@ -1,7 +1,6 @@
 package losamigos.smartcity;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 
 public class Route {
@@ -11,6 +10,5 @@ public class Route {
     public LatLng endLocation;
     public String startAddress;
     public LatLng startLocation;
-
     public List<LatLng> points;
 }

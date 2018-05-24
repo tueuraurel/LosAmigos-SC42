@@ -2,7 +2,6 @@ package losamigos.smartcity;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +28,6 @@ class ReseauAdapter extends ArrayAdapter<Reseau> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        Log.d("getView",String.valueOf(position));
         View v = convertView;
 
         ReseauHolder holder = new ReseauHolder();
@@ -49,9 +46,6 @@ class ReseauAdapter extends ArrayAdapter<Reseau> {
 
 
         Reseau p = reseauList.get(position);
-        Log.d("ReseauAdapterList",p.toString());
-        Log.d("ReseauAdapterSujet",p.getSujet());
-        Log.d("ReseauAdapterDesc",p.getDescription());
         holder.sujet.setText(p.getSujet());
         holder.description.setText(p.getDescription());
 

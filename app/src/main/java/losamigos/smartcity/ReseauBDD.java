@@ -4,16 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.util.ArrayList;
 
 
 public class ReseauBDD {
-
     private static final int VERSION_BDD = 1;
     private static final String NOM_BDD = "SmartCity.db";
-
     private static final String TABLE_RESEAU = "Reseau";
     private static final String COL_SUJET = "sujet";
     private static final int NUM_COL_SUJET = 0;
@@ -25,10 +21,7 @@ public class ReseauBDD {
     private static final int NUM_COL_LOCALISATION = 3;
     private static final String COL_VISIBILITE = "visibilite";
     private static final int NUM_COL_VISIBILITE = 4;
-
-
     private SQLiteDatabase bdd;
-
     private MaBaseSQLite maBaseSQLite;
 
     public ReseauBDD(Context context){
@@ -106,26 +99,17 @@ public class ReseauBDD {
     //Cette méthode permet de convertir un cursor de reseaux en ArrayList de reseau;
     private ArrayList<Reseau> cursorToArray(Cursor c) {
         ArrayList<Reseau> resultat = new ArrayList<>();
-        Log.d("CursorToArray","La taille du curseur est : "+ c.getCount());
         //si aucun élément n'a été retourné dans la requête, on renvoie null
         if (c.getCount() == 0)
             return null;
 
         //Sinon on se place sur le premier élément
         c.moveToFirst();
-        Log.d("CursorToArray","isAfterLast : "+ c.isAfterLast());
         while (!c.isAfterLast()){
             //On créé un reseau
             //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
             resultat.add(new Reseau(c.getString(NUM_COL_SUJET),c.getString(NUM_COL_DESCRIPTION),c.getString(NUM_COL_PSEUDOADMIN),
                     c.getString(NUM_COL_LOCALISATION),c.getInt(NUM_COL_VISIBILITE)));
-            /*reseau.setSujet(c.getString(NUM_COL_SUJET));
-            reseau.setDescription(c.getString(NUM_COL_DESCRIPTION));
-            reseau.setPseudoAdmin(c.getString(NUM_COL_PSEUDOADMIN));
-            reseau.setLocalisation(c.getString(NUM_COL_LOCALISATION));
-            reseau.setVisibilite(c.getInt(NUM_COL_VISIBILITE));
-            resultat.add(reseau);*/
-
             c.moveToNext();
         }
 

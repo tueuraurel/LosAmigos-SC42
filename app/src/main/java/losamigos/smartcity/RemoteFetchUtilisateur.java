@@ -1,10 +1,6 @@
 package losamigos.smartcity;
 
-import android.util.Log;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -17,8 +13,7 @@ public class RemoteFetchUtilisateur {
             URL url = new URL(MainActivity.chemin+"utilisateur/"+pseudo);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuffer json = new StringBuffer(1024);
             String tmp="";
             while((tmp=reader.readLine())!=null)
@@ -26,7 +21,6 @@ public class RemoteFetchUtilisateur {
             reader.close();
 
             JSONObject data = new JSONObject(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;

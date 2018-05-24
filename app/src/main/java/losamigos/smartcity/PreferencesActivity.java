@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +15,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
@@ -24,9 +22,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PreferencesActivity extends Activity {
         Handler handler;
@@ -47,6 +43,7 @@ public class PreferencesActivity extends Activity {
             handler = new Handler();
             utilisateur = new Utilisateur();
         }
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -179,17 +176,16 @@ public class PreferencesActivity extends Activity {
     protected Void doInBackground(HashMap<String, String>[] hashMaps) {
         HashMap<String, String> hashMap = hashMaps[0];
         InputStream inputStream = null;
-        String result = "";
         try {
-            // 1. create HttpClient
+            // 1. crée HttpClient
             HttpClient httpclient = new DefaultHttpClient();
 
-            // 2. make PUT request to the given URL
+            // 2. spécifier que c'est une requête POST
             HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateurModifie");
 
             String json = "";
 
-            // 3. build jsonObject
+            // 3. construire le jsonObject
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("pseudo", hashMap.get("pseudo"));
             jsonObject.accumulate("MDP", hashMap.get("MDP"));
@@ -198,26 +194,24 @@ public class PreferencesActivity extends Activity {
             jsonObject.accumulate("dateNaissance", hashMap.get("dateNaissance"));
             jsonObject.accumulate("poids", Float.parseFloat(hashMap.get("poids")));
 
-            // 4. convert JSONObject to JSON to String
+            // 4. convertir JSONObject en String
             json = jsonObject.toString();
-            Log.d("json", json.toString());
-            // 5. set json to StringEntity
+
+            // 5. json en StringEntity
             StringEntity se = new StringEntity(json);
 
-            // 6. set httpPut Entity
             httpPost.setEntity(se);
 
-            // 7. Set some headers to inform server about the type of the content
+            // 7. mise en place du Headers permettant au serveur de connaitre le format des données
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
-            // 8. Execute POST request to the given URL
+            // 8. Executer la requete POST
             HttpResponse httpResponse = httpclient.execute(httpPost);
 
-            // 9. receive response as inputStream
+            // 9. recevoir la reponse
             inputStream = httpResponse.getEntity().getContent();
 
-            // 10. convert inputstream to string
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         } catch (ClientProtocolException e) {

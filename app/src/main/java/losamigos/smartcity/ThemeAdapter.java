@@ -1,7 +1,6 @@
 package losamigos.smartcity;
 
 import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,15 +68,12 @@ class ThemeAdapter extends ArrayAdapter<Theme>{
         ThemeHolder holder = new ThemeHolder();
 
         if(convertView == null) {
-
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = inflater.inflate(R.layout.single_listview_item, null);
-
             holder.themeName = (TextView) v.findViewById(R.id.name);
             holder.chkBox = (CheckBox) v.findViewById(R.id.chk_box);
             holder.chkBox.setOnCheckedChangeListener((ChoixThemeActivity) context);
             v.setTag(holder);
-
         } else {
             holder = (ThemeHolder) v.getTag();
         }

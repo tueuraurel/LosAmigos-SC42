@@ -19,7 +19,6 @@ public class Utilisateur {
         this.sexe = sexe;
         this.taille = taille;
         this.poids = poids;
-        // CODER POUR OBTENIR L AGE EN FONCTION DE LA DATE
     }
 
     public String getPseudo() {

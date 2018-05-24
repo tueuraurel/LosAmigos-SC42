@@ -4,7 +4,6 @@ package losamigos.smartcity;
 
 public class Adherent  {
     private String pseudo;
-    //private ArrayList<Reseau> listeReseau= new ArrayList<>();
     private String sujetReseau;
 
     public Adherent(String pseudo, String sujetReseau) {

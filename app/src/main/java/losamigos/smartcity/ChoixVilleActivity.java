@@ -1,25 +1,19 @@
 package losamigos.smartcity;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -29,7 +23,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -57,7 +50,6 @@ public class ChoixVilleActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ville);
         if(ContextCompat.checkSelfPermission(ChoixVilleActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
         }
         else {
             ActivityCompat.requestPermissions(ChoixVilleActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
@@ -66,10 +58,8 @@ public class ChoixVilleActivity extends Activity {
         gps = new GPSTracker(ChoixVilleActivity.this);
         // si le GPS est disponible
         if(gps.canGetLocation()){
-            //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
             longitude = gps.getLongitude();
             latitude = gps.getLatitude();
-            Log.d("ChoixVilleGPS",longitude+" "+latitude);
             Button boutonChoix2 = (Button) findViewById(R.id.buttonSaisie);
             boutonChoix2.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -81,9 +71,7 @@ public class ChoixVilleActivity extends Activity {
             });
         }else{
             Toast.makeText(getApplicationContext(), "Erreur GPS", Toast.LENGTH_LONG).show();
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
+            //on a pas pu localiser, on lance une alarme sur les parametres du telephone
             gps.showSettingsAlert();
         }
 
@@ -126,7 +114,6 @@ public class ChoixVilleActivity extends Activity {
                         public void run() {
                             try {
                                 ville = new Villes(json.getString("nom"), json.getString("latitude"), json.getString(("longitude")));
-                                Log.d("ville",ville.toString());
                                 HashMap<String, String> parametres = new HashMap<String, String>();
                                 //recuperation du pseudo
                                 final Intent intent = getIntent();
@@ -215,7 +202,7 @@ public class ChoixVilleActivity extends Activity {
             parametres.put("nomVille",ville.nom);
             //creation de l'utilisateur dans la base du serveur
             new RetrieveVilleTask().execute(parametres);
-            //lancement de la prochaine activité -> choix de la photo
+            //lancement de la prochaine activité -> Activité principale
             startActivity(intent2);
         }
 
@@ -233,40 +220,23 @@ class RetrieveVilleTask extends AsyncTask<HashMap<String,String>, Void, Void> {
         InputStream inputStream = null;
         String result = "";
         try {
-            // 1. create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
-            // 2. make POST request to the given URL
             HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/choisiVille");
-            Log.d("ChoixVilleBackground",httpPost.toString());
-
             String json = "";
-
-            // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("pseudo", hashMap.get("pseudo"));
             jsonObject.accumulate("nomVille", hashMap.get("nomVille"));
-
-            // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
-
-            // 5. set json to StringEntity
             StringEntity se = new StringEntity(json);
 
-            // 6. set httpPost Entity
             httpPost.setEntity(se);
 
-            // 7. Set some headers to inform server about the type of the content
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
-            // 8. Execute POST request to the given URL
             HttpResponse httpResponse = httpclient.execute(httpPost);
-
-            // 9. receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
 
-            // 10. convert inputstream to string
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         } catch (ClientProtocolException e) {
@@ -280,6 +250,3 @@ class RetrieveVilleTask extends AsyncTask<HashMap<String,String>, Void, Void> {
         return null;
     }
 }
-//bug permision si GPS activé avant que l'application soit utilisé une premiere fois
-
-//serveur utilise : route proximité qui a été crée + modifié POST utilisateur/choisiVille

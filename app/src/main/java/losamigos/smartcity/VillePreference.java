@@ -1,6 +1,6 @@
 package losamigos.smartcity;
+
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
 public class VillePreference {
@@ -11,7 +11,7 @@ public class VillePreference {
         prefs = activity.getPreferences(Activity.MODE_PRIVATE);
     }
 
-    //ville preferée
+    //ville préférée
     String getCity(){
         return prefs.getString("city", "Montpellier, FR");
     }

@@ -76,12 +76,7 @@ public class Reseau {
                 '}';
     }
 
-    /**
-     * Created by aurelien on 15/03/18.
-     */
-
     public static class ListeMessageReseau extends Activity {
-
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

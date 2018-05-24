@@ -1,50 +1,24 @@
 package losamigos.smartcity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-
 
 public class ListeReseauUtilisateurActivity extends AppCompatActivity {
 
@@ -52,7 +26,6 @@ public class ListeReseauUtilisateurActivity extends AppCompatActivity {
     ArrayList<Reseau> reseauList;
     ReseauAdapter reseauAdapter;
     Handler handler;
-    //ArrayList<Theme> themeChoisi = new ArrayList<>();
 
     public ListeReseauUtilisateurActivity() {
         handler = new Handler();
@@ -62,7 +35,6 @@ public class ListeReseauUtilisateurActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.liste_reseau_utilisateur_layout);
         final Intent intentIn = getIntent();
-
 
         // On recupere les elements du layout:
         Button boutonAjouterReseau = findViewById(R.id.boutonVersCreationReseau);
@@ -83,9 +55,7 @@ public class ListeReseauUtilisateurActivity extends AppCompatActivity {
             }
         });
 
-
         // Sur le bouton de recherche on place un click listener permettant d'amener a l activite de recherche
-
         boutonRechercherReseau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,13 +92,6 @@ public class ListeReseauUtilisateurActivity extends AppCompatActivity {
         ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauUtilisateur);
         //recuperer les données du serveur
         updateReseauData();
-
-        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
-        final Intent intentIn = getIntent();
-        Log.d("pseudoListeRes",intentIn.getStringExtra("pseudoUser"));
-        Log.d("villeListeRes",intentIn.getStringExtra("lieuUser"));
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,8 +101,7 @@ public class ListeReseauUtilisateurActivity extends AppCompatActivity {
 
     private Runnable monRunnable =new Runnable() {
         @Override
-        public void run() {
-             Log.d("runnable","dans runnable");updateReseauData();       }
+        public void run() {updateReseauData();       }
     };
 
 
@@ -185,12 +147,10 @@ public class ListeReseauUtilisateurActivity extends AppCompatActivity {
     public ArrayList<Reseau> renderReseau(JSONArray json) {
         try {
             ArrayList<Reseau> reseaux = new ArrayList<Reseau>();
-
             for (int i = 0; i < json.length(); i++) {
                 JSONObject jsonobject = json.getJSONObject(i);
                 reseaux.add(new Reseau(jsonobject.getString("sujet"), jsonobject.getString("description"), jsonobject.getString("pseudoAdmin"), jsonobject.getString("localisation"), jsonobject.getInt("visibilite")));
             }
-
             return reseaux;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -221,21 +181,14 @@ class RecuperationReseaux {
     public static JSONArray getJSON(String pseudo){
         try {
             URL url = new URL(MainActivity.chemin+"reseauAccess/"+pseudo);
-            Log.v("test","URI");
-            HttpURLConnection connection =
-                    (HttpURLConnection)url.openConnection();
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuffer json = new StringBuffer(1024);
             String tmp="";
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
-
             JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;

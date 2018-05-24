@@ -11,7 +11,6 @@ import java.util.List;
 
 public class ArticleAdapter extends ArrayAdapter<Article> {
 
-    //tweets est la liste des models à afficher
     public ArticleAdapter(Context context, List<Article> articles) {
         super(context, 0, articles);
     }

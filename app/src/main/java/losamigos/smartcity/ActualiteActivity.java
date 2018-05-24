@@ -1,6 +1,5 @@
 package losamigos.smartcity;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +12,9 @@ public class ActualiteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actualite);
-
-
         final Button button = findViewById(R.id.buttonAlarme);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*Intent intent = new Intent(ActualiteActivity.this, HorlogeActivity.class);
-                startActivity(intent);*/
                 //va chercher l'alarme du téléphone
                 Intent i = getPackageManager().getLaunchIntentForPackage("com.android.deskclock");
                 if (i != null)
@@ -76,6 +71,4 @@ public class ActualiteActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

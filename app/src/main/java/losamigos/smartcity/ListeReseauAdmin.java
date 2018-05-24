@@ -7,14 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -26,7 +23,6 @@ public class ListeReseauAdmin extends AppCompatActivity {
     ArrayList<Reseau> reseauList;
     ReseauAdapter reseauAdapter;
     Handler handler;
-    //ArrayList<Theme> themeChoisi = new ArrayList<>();
 
     public ListeReseauAdmin() {
         handler = new Handler();
@@ -43,13 +39,6 @@ public class ListeReseauAdmin extends AppCompatActivity {
         ListeDeMesReseaux = (ListView) findViewById(R.id.listeViewReseauAdmin);
         //recuperer les données du serveur
         updateReseauData();
-
-        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
-        final Intent intentIn = getIntent();
-        Log.d("pseudoListeRes",intentIn.getStringExtra("pseudoUser"));
-
-
-
     }
 
 
@@ -116,20 +105,16 @@ class RecuperationReseauxAdmin {
         try {
             URL url = new URL(MainActivity.chemin+"listeReseauAdmin/"+pseudo);
             Log.v("test","URI");
-            HttpURLConnection connection =
-                    (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
             StringBuffer json = new StringBuffer(1024);
             String tmp="";
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
-
             JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;

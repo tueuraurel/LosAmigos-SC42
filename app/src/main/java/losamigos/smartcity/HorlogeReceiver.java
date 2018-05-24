@@ -14,7 +14,7 @@ public class HorlogeReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Toast.makeText(context, "C'est l'heure, réveillez-vous !", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "C'est l'heure !", Toast.LENGTH_LONG).show();
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null)
         {

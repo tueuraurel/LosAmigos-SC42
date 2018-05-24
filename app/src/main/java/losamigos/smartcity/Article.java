@@ -6,7 +6,6 @@ public class Article {
     String auteur;
     String description;
     String URL;
-    String URLImage;
 
     public Article(String titre, String auteur, String description, String URL){
         this.titre = titre;

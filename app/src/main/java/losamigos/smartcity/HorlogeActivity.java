@@ -9,10 +9,8 @@ import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import java.util.Calendar;
 
-//import android.support.v7.app.AppCompatActivity;
 
 public class HorlogeActivity extends Activity {
         TimePicker alarmTimePicker;

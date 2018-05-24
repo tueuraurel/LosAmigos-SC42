@@ -1,37 +1,28 @@
 package losamigos.smartcity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONObject;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class MeteoFragment extends Fragment {
     Typeface weatherFont;
-
     TextView cityField;
     TextView updatedField;
     TextView detailsField;
     TextView currentTemperatureField;
     TextView weatherIcon;
     TextView temps;
-
     Handler handler;
 
     public MeteoFragment(){
@@ -39,8 +30,7 @@ public class MeteoFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_meteo, container, false);
         cityField = (TextView)rootView.findViewById(R.id.city_field);
         updatedField = (TextView)rootView.findViewById(R.id.updated_field);
@@ -59,8 +49,6 @@ public class MeteoFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         VillePreference villePref = new VillePreference(getActivity());
         villePref.setCity(intent.getStringExtra("VILLE"));
-        Log.d("test",villePref.getCity());
-        Log.d("test"," "+intent.getStringExtra("VILLE"));
         updateWeatherData(villePref.getCity());
     }
 
@@ -90,27 +78,20 @@ public class MeteoFragment extends Fragment {
     private void renderWeather(JSONObject json){
         try {
             cityField.setText(json.getString("name"));
-
             JSONObject details = json.getJSONArray("weather").getJSONObject(0);
             JSONObject main = json.getJSONObject("main");
             detailsField.setText("Humidité: " + main.getString("humidity") + "%" +"\n" + "Pression: " + main.getString("pressure") + " hPa");
-
             temps.setText(details.getString("description"));
-
             currentTemperatureField.setText(String.format("%.2f", ((main.getDouble("temp"))-273.15)) + " ℃");
-
             SimpleDateFormat formater = null;
             Date aujourdhui = new Date();
             formater = new SimpleDateFormat("EEEE, d MMM yyyy",Locale.FRENCH);
             updatedField.setText(formater.format(aujourdhui));
-
             setWeatherIcon(details.getInt("id"),
                     json.getJSONObject("sys").getLong("sunrise") * 1000,
                     json.getJSONObject("sys").getLong("sunset") * 1000);
 
-        }catch(Exception e){
-            Log.e("Météo locale", "Manque information JSON");
-        }
+        }catch(Exception e){}
     }
 
     private void setWeatherIcon(int actualId, long sunrise, long sunset){

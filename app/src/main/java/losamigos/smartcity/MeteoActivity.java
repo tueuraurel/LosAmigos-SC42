@@ -1,6 +1,5 @@
 package losamigos.smartcity;
 
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 public class MeteoActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

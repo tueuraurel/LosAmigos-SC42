@@ -2,25 +2,18 @@ package losamigos.smartcity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +22,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
 public class publiciteActivity extends Activity {
 
@@ -44,11 +36,8 @@ public class publiciteActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // On recupere les informations d'une pub
         updatePubData();
-
-
     } // fin onCreate()
 
 
@@ -56,8 +45,6 @@ public class publiciteActivity extends Activity {
         // Recuperation de l'extension :
         // l'appli est ici prepare pour des mp4 et des jpg, a voir pour la suite
         String extension = lienPub.substring(lienPub.length() - 3);
-        Log.d("lienPub", extension);
-
 
         // Disposition du layout et recuperation des widgets
         setContentView(R.layout.publicite_image);
@@ -66,26 +53,18 @@ public class publiciteActivity extends Activity {
         TextView titrePub = findViewById(R.id.titrePub);
         TextView commercePub = findViewById(R.id.commercePub);
 
-
         // Affichage du titre de la pub
-
         titrePub.setText(titrePublicite);
 
         // Affichage du commerce de la pub;
-
         commercePub.setText(fournisseur);
 
-
         // Debut difference entre une image ou une video
-
         if (extension.equals("mp4")) {
-
             video.setVisibility(VideoView.VISIBLE);
             imageView.setVisibility(ImageView.GONE);
-
-
             video.setMediaController(new MediaController(this));
-            // Mise en place de la video
+            //Mise en place de la video
             video.setVideoURI(Uri.parse(lienPub));
             video.start();
         } else {
@@ -93,7 +72,6 @@ public class publiciteActivity extends Activity {
                 video.setVisibility(VideoView.GONE);
                 imageView.setVisibility(ImageView.VISIBLE);
                 this.setImage(lienPub, imageView);
-
             }
         }
     }
@@ -125,10 +103,7 @@ public class publiciteActivity extends Activity {
                         }
                     });
 
-                } catch (IOException e) {
-                    Log.d("getImageBitmap", "Error getting bitmap", e);
-
-                }
+                } catch (IOException e) {}
             }
         }).start();
     } // fin setImage();
@@ -141,8 +116,6 @@ public class publiciteActivity extends Activity {
             public void run() {
                 Intent intent = getIntent();
                 final JSONObject json = RecuperationPub.getJSON("Montpellier");
-                //final JSONArray json = RecuperationPub.getJSON(intent.getStringExtra("lieuUser"));
-                Log.d("updateMessage","json: "+json);
                 if (json == null) {
                     handler.post(new Runnable() {
                         public void run() {
@@ -170,26 +143,20 @@ public class publiciteActivity extends Activity {
 
 }
 
-    class RecuperationPub {
-
-        // Recupere une publicite.
-        public static JSONObject getJSON(String ville){
-            try {
-                URL url = new URL(MainActivity.chemin+"publicite/"+ville);
-
-                Log.d("recupPub","URL  : "+url.toString());
-                HttpURLConnection connection =
-                        (HttpURLConnection)url.openConnection();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
-                String ligne=reader.readLine();
-                reader.close();
-
-                JSONObject jso=new JSONObject(ligne);
-                return jso;
-            }catch(Exception e){
-                return null;
-            }
+class RecuperationPub {
+    // Recupere une publicite.
+    public static JSONObject getJSON(String ville){
+        try {
+            URL url = new URL(MainActivity.chemin+"publicite/"+ville);
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String ligne=reader.readLine();
+            reader.close();
+            JSONObject jso=new JSONObject(ligne);
+            return jso;
+        }catch(Exception e){
+            return null;
         }
     }
+}
 

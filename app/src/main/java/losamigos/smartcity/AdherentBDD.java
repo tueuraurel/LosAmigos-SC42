@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.util.ArrayList;
 
 
@@ -14,16 +12,12 @@ public class AdherentBDD {
 
     private static final int VERSION_BDD = 1;
     private static final String NOM_BDD = "SmartCity.db";
-
     private static final String TABLE_ADHERENT = "Adherent";
     private static final String COL_PSEUDO = "pseudo";
     private static final int NUM_COL_PSEUDO = 0;
     private static final String COL_RESEAU = "sujetReseau";
     private static final int NUM_COL_RESEAU = 1;
-
-
     private SQLiteDatabase bdd;
-
     private MaBaseSQLite maBaseSQLite;
 
     public AdherentBDD(Context context){
@@ -84,19 +78,14 @@ public class AdherentBDD {
     //Cette méthode permet de convertir un cursor de adherent en ArrayList de adherent;
     private ArrayList<Adherent> cursorToArray(Cursor c) {
         ArrayList<Adherent> resultat = new ArrayList<>();
-        Log.d("CursorToArray","La taille du curseur est : "+ c.getCount());
         //si aucun élément n'a été retourné dans la requête, on renvoie null
         if (c.getCount() == 0)
             return null;
-
         //Sinon on se place sur le premier élément
         c.moveToFirst();
-        Log.d("CursorToArray","isAfterLast : "+ c.isAfterLast());
         while (!c.isAfterLast()){
             //On créé un adherent
             //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
-
-
             c.moveToNext();
         }
 

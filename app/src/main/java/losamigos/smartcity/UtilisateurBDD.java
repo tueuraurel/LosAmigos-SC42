@@ -10,7 +10,6 @@ public class UtilisateurBDD {
 
         private static final int VERSION_BDD = 1;
         private static final String NOM_BDD = "SmartCity.db";
-
         private static final String TABLE_UTILISATEUR = "Utilisateur";
         private static final String COL_PSEUDO = "pseudo";
         private static final int NUM_COL_PSEUDO = 0;
@@ -24,10 +23,7 @@ public class UtilisateurBDD {
         private static final int NUM_COL_TAILLE = 4;
         private static final String COL_POIDS= "poids";
         private static final int NUM_COL_POIDS = 5;
-
-
         private SQLiteDatabase bdd;
-
         private MaBaseSQLite maBaseSQLite;
 
         public UtilisateurBDD(Context context){

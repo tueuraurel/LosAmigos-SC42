@@ -4,10 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
-
 public class MaBaseSQLite extends SQLiteOpenHelper {
-//ceci est un commentaire
+
     private static final String TABLE_RESEAU = "Reseau";
 
     private static final String TABLE_UTILISATEUR = "Utilisateur";
@@ -55,7 +53,6 @@ public class MaBaseSQLite extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //On peut faire ce qu'on veut ici moi j'ai décidé de supprimer la table et de la recréer
         //comme ça lorsque je change la version les id repartent de 0
-
         db.execSQL("DROP TABLE " + TABLE_RESEAU + ";");
         db.execSQL("DROP TABLE " + TABLE_UTILISATEUR + ";");
         db.execSQL("DROP TABLE " + TABLE_ANNONCE + ";");

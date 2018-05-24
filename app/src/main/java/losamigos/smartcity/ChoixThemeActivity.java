@@ -1,22 +1,15 @@
 package losamigos.smartcity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -26,7 +19,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -55,7 +47,6 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
             public void onClick(View v) {
                 for (Theme theme : themeList) {
                     if(theme.selected) {
-                        Log.d("themechoisi", theme.getNom());
                         HashMap<String, String> parametres = new HashMap<String, String>();
                         //recuperation du pseudo
                         final Intent intent = getIntent();
@@ -71,13 +62,9 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
                         startActivity(intent2);
                     }
                 }
-
             }
         });
-
-
     }
-
 
     private void updateThemeData() {
         new Thread() {
@@ -111,7 +98,6 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
                 JSONObject jsonobject = json.getJSONObject(i);
                 themes.add(new Theme(jsonobject.getString("nom"), jsonobject.getInt("id")));
             }
-
             return themes;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -126,7 +112,6 @@ public class ChoixThemeActivity extends Activity implements android.widget.Compo
         if (pos != ListView.INVALID_POSITION) {
             Theme t = themeList.get(pos);
             t.setSelected(isChecked);
-            //Toast.makeText(this, "Clicked on Theme: " + t.getNom() + ". State: is " + isChecked, Toast.LENGTH_SHORT).show();
         }
     }
 }
@@ -140,39 +125,28 @@ class RetrieveThemeTask extends AsyncTask<HashMap<String,String>, Void, Void> {
         InputStream inputStream = null;
         String result = "";
         try {
-            // 1. create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-
-            // 2. make POST request to the given URL
             HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/apprecie");
 
             String json = "";
 
-            // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("pseudo", hashMap.get("pseudo"));
             jsonObject.accumulate("idTheme", Integer.parseInt(hashMap.get("idTheme")));
 
-            // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
 
-            // 5. set json to StringEntity
             StringEntity se = new StringEntity(json);
 
-            // 6. set httpPost Entity
             httpPost.setEntity(se);
 
-            // 7. Set some headers to inform server about the type of the content
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
-            // 8. Execute POST request to the given URL
             HttpResponse httpResponse = httpclient.execute(httpPost);
 
-            // 9. receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
 
-            // 10. convert inputstream to string
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         } catch (ClientProtocolException e) {

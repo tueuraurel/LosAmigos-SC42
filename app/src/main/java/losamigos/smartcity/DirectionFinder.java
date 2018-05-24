@@ -1,13 +1,10 @@
 package losamigos.smartcity;
 
 import android.os.AsyncTask;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -109,7 +106,6 @@ public class DirectionFinder {
 
             routes.add(route);
         }
-
         listener.onDirectionFinderSuccess(routes);
     }
 

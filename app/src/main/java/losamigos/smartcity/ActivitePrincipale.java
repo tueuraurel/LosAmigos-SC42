@@ -3,17 +3,14 @@ package losamigos.smartcity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,19 +18,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
 import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
 import com.google.android.gms.location.places.PlacePhotoMetadataResult;
 import com.google.android.gms.location.places.Places;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /* Premiere page de l'application, on y presente les 4 boutons principaux.
 C'est ici également que l'on récupere les informations de l'utilisateur qui seront ensuite
@@ -45,35 +38,19 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
     Handler handler;
     String IDPLace;
 
-
-    // handler permet de
     public ActivitePrincipale() {
         handler = new Handler();
     }
-
 
     @Override
     // A la creation de l'activite :
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         updatePlaceData();
-
         final Intent intentPrecedent = getIntent();
-
         setContentView(R.layout.activite_principale);
-
-        /*UtilisateurBDD maBaseUtilisateur = new UtilisateurBDD(this);
-        maBaseUtilisateur.open();*/
-        /* Ici il faudra une methode pour recuperer le login et le lieu de la personne automatiquement */
         final String pseudoUser = intentPrecedent.getStringExtra("PSEUDO");
-        Log.d("pseudoActivitePri",pseudoUser);
-        //final String pseudoUser = "Aurelien";
         final String lieuUser = intentPrecedent.getStringExtra("VILLE");
-        Log.d("villeActivitePri",lieuUser);
-
 
         Button boutonReseau = findViewById(R.id.Reseaux);
         boutonReseau.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +70,6 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
                 Intent intent = new Intent(ActivitePrincipale.this,ActualiteActivity.class);
                 Intent intent2 = getIntent();
                 intent.putExtra("pseudoUser",pseudoUser);
-                //intent.putExtra("lieuUser",lieuUser);
                 intent.putExtra("LATITUDE", intent2.getStringExtra("LATITUDE"));
                 intent.putExtra("LONGITUDE", intent2.getStringExtra("LONGITUDE"));
                 intent.putExtra("VILLE", intent2.getStringExtra("VILLE"));
@@ -129,47 +105,46 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater findMenuItems = getMenuInflater();
         findMenuItems.inflate(R.menu.menusetting, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
-  public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-          case R.id.menu_setting:
-              Intent intent = getIntent();
-              Intent settings=new Intent(ActivitePrincipale.this,PreferencesActivity.class);
-              final String pseudo = intent.getStringExtra("PSEUDO");
-              settings.putExtra("LATITUDE", intent.getStringExtra("LATITUDE"));
-              settings.putExtra("LONGITUDE", intent.getStringExtra("LONGITUDE"));
-              settings.putExtra("VILLE", intent.getStringExtra("VILLE"));
-              settings.putExtra("PSEUDO",pseudo);
-              startActivity(settings);
-              break;
-          case R.id.deconnexion:
-              Intent pageConnexion=new Intent(ActivitePrincipale.this,MainActivity.class);
-              SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitePrincipale.this);
-              SharedPreferences.Editor editor = preferences.edit();
-              editor.remove("pseudoUser");
-              editor.remove("mdp");
-              editor.commit();
-              startActivity(pageConnexion);
-              break;
-          default:
-              return super.onOptionsItemSelected(item);
-      }
-      return false;
-    }
-
-    public void recupereIDPlace(JSONObject json) {
-        try {
-            JSONArray jsonResult = json.getJSONArray("results");
-            for (int i = 0; i < jsonResult.length(); i++) {
-                IDPLace = jsonResult.getJSONObject(i).getString("place_id");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+      public boolean onOptionsItemSelected(MenuItem item) {
+          switch (item.getItemId()) {
+              case R.id.menu_setting:
+                  Intent intent = getIntent();
+                  Intent settings=new Intent(ActivitePrincipale.this,PreferencesActivity.class);
+                  final String pseudo = intent.getStringExtra("PSEUDO");
+                  settings.putExtra("LATITUDE", intent.getStringExtra("LATITUDE"));
+                  settings.putExtra("LONGITUDE", intent.getStringExtra("LONGITUDE"));
+                  settings.putExtra("VILLE", intent.getStringExtra("VILLE"));
+                  settings.putExtra("PSEUDO",pseudo);
+                  startActivity(settings);
+                  break;
+              case R.id.deconnexion:
+                  Intent pageConnexion=new Intent(ActivitePrincipale.this,MainActivity.class);
+                  SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitePrincipale.this);
+                  SharedPreferences.Editor editor = preferences.edit();
+                  editor.remove("pseudoUser");
+                  editor.remove("mdp");
+                  editor.commit();
+                  startActivity(pageConnexion);
+                  break;
+              default:
+                  return super.onOptionsItemSelected(item);
+          }
+          return false;
         }
-    }
+
+        public void recupereIDPlace(JSONObject json) {
+            try {
+                JSONArray jsonResult = json.getJSONArray("results");
+                for (int i = 0; i < jsonResult.length(); i++) {
+                    IDPLace = jsonResult.getJSONObject(i).getString("place_id");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
     private void updatePlaceData() {
         new Thread() {
@@ -177,8 +152,6 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
                 Intent intent = getIntent();
                 String latitude = intent.getStringExtra("LATITUDE");
                 String longitude = intent.getStringExtra("LONGITUDE");
-                Log.d("PlaceData ",latitude);
-                Log.d("PlaceData ",longitude);
                 final JSONObject json = RemoteFetchIDPlace.getJSON(latitude,longitude);
                 if (json == null) {
                     handler.post(new Runnable() {
@@ -245,20 +218,14 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
          */
         @Override
         protected AttributedPhoto doInBackground(String... params) {
-            Log.d("ActiPrinciBackground",String.valueOf(params.length));
             if (params.length != 1) {
                 return null;
             }
             final String placeId = params[0];
-            Log.d("param", params[0]);
             AttributedPhoto attributedPhoto = null;
-            Log.d("tst",placeId);
             PlacePhotoMetadataResult result = Places.GeoDataApi.getPlacePhotos(mGoogleApiClient, placeId).await();
-            Log.d("GoogleCrash",result.getStatus().toString());
-
             if (result.getStatus().isSuccess()) {
                 PlacePhotoMetadataBuffer photoMetadataBuffer = result.getPhotoMetadata();
-
                 if (photoMetadataBuffer.getCount() > 0 && !isCancelled()) {
                     // Obtenir la premiere photo et son attribution
                     PlacePhotoMetadata photo = photoMetadataBuffer.get(0);
@@ -266,17 +233,12 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
                     // Charge une image redimensionnée pour cette photo
                     Bitmap bitImage = photo.getScaledPhoto(mGoogleApiClient, mWidth, mHeight).await()
                             .getBitmap();
-
                     attributedPhoto = new AttributedPhoto(attribution, bitImage);
-                    Log.d("att","test "+attributedPhoto.toString());
-
-
                 }
                 // Pour empêcher les fuites de mémoire
                 photoMetadataBuffer.release();
             }
             else{
-                Log.d("erreur", "Erreur de recuperation image");
             }
             return attributedPhoto;
         }
@@ -302,7 +264,6 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
         image = (ImageView) findViewById(R.id.imageVille);
 
         final String placeId = IDPLace;
-        Log.d("id place",placeId);
 
         // Crée une nouvelle tâche asynchrone qui affiche la bitmap une fois chargée
         new PhotoTask(image.getMaxWidth(), image.getMaxHeight()) {
@@ -325,11 +286,6 @@ public class ActivitePrincipale extends AppCompatActivity implements GoogleApiCl
     }
 
 }
-
-
-
-
-
 
  /* ici une liste d'exemple pour avoir une base pré-rempli pour les test sans
         synchronisation avec le serveur.

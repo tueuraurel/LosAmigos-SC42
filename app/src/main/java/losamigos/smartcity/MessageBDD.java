@@ -4,17 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.util.ArrayList;
-
-
 
 public class MessageBDD {
 
         private static final int VERSION_BDD = 1;
         private static final String NOM_BDD = "SmartCity.db";
-
         private static final String TABLE_MESSAGE = "Message";
         private static final String COL_ID = "id";
         private static final int NUM_COL_ID = 0;
@@ -24,10 +19,7 @@ public class MessageBDD {
         private static final int NUM_COL_SUJETRESEAU = 2;
         private static final String COL_PSEUDOAUTEUR = "pseudoAuteur";
         private static final int NUM_COL_PSEUDOAUTEUR = 3;
- 
-
         private SQLiteDatabase bdd;
-
         private MaBaseSQLite maBaseSQLite;
 
         public MessageBDD(Context context){
@@ -99,14 +91,12 @@ public class MessageBDD {
     //Cette méthode permet de convertir un cursor de message en ArrayList de message;
     private ArrayList<Message> cursorToArray(Cursor c) {
         ArrayList<Message> resultat = new ArrayList<>();
-        Log.d("CursorToArray","La taille du curseur est : "+ c.getCount());
         //si aucun élément n'a été retourné dans la requête, on renvoie null
         if (c.getCount() == 0)
             return null;
 
         //Sinon on se place sur le premier élément
         c.moveToFirst();
-        Log.d("CursorToArray","isAfterLast : "+ c.isAfterLast());
         while (!c.isAfterLast()){
             //On créé un livre
             //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
@@ -115,34 +105,32 @@ public class MessageBDD {
 
             c.moveToNext();
         }
+        //On ferme le cursor
+        c.close();
+        //On retourne le tableau
+        return resultat;
+    }
+    //Cette méthode permet de convertir un cursor en un message
+    private Message cursorToMessage(Cursor c) {
+        //si aucun élément n'a été retourné dans la requête, on renvoie null
+        if (c.getCount() == 0)
+            return null;
+
+        //Sinon on se place sur le premier élément
+        c.moveToFirst();
+        //On créé un message
+        Message message = new Message();
+        //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
+        message.setId(c.getInt(NUM_COL_ID));
+        message.setContenu(c.getString(NUM_COL_CONTENU));
+        message.setSujetReseau(c.getString(NUM_COL_SUJETRESEAU));
+        message.setPseudoAuteur(c.getString(NUM_COL_PSEUDOAUTEUR));
 
         //On ferme le cursor
         c.close();
 
-        //On retourne le tableau
-        return resultat;
-    }
-        //Cette méthode permet de convertir un cursor en un message
-        private Message cursorToMessage(Cursor c) {
-            //si aucun élément n'a été retourné dans la requête, on renvoie null
-            if (c.getCount() == 0)
-                return null;
-
-            //Sinon on se place sur le premier élément
-            c.moveToFirst();
-            //On créé un message
-            Message message = new Message();
-            //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
-            message.setId(c.getInt(NUM_COL_ID));
-            message.setContenu(c.getString(NUM_COL_CONTENU));
-            message.setSujetReseau(c.getString(NUM_COL_SUJETRESEAU));
-            message.setPseudoAuteur(c.getString(NUM_COL_PSEUDOAUTEUR));
-
-            //On ferme le cursor
-            c.close();
-
-            //On retourne le message
-            return message;
+        //On retourne le message
+        return message;
         }
-    }
+}
 
