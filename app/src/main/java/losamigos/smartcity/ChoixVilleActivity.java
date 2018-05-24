@@ -86,6 +86,14 @@ public class ChoixVilleActivity extends Activity {
 
     }
 
+    @Override
+    protected void onStop() {
+        if (gps != null) {
+            gps.stopUsingGPS();
+        }
+        super.onStop();
+    }
+
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ONE: {
