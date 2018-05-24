@@ -95,9 +95,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                 //on recupere la position géographique
                 gps = new GPSTracker(RechercheCommerceActivity.this);
                 updateCommerceData();
-
-                Intent serviceIntent = new Intent(RechercheCommerceActivity.this, AnnoncesService.class);
-                startService(serviceIntent);
             }
         });
 
