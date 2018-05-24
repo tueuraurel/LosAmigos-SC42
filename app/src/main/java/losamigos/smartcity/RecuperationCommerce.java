@@ -1,7 +1,5 @@
 package losamigos.smartcity;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
@@ -17,7 +15,6 @@ public class RecuperationCommerce {
 
         try {
             URL url;
-            Log.v("IDTheme",String.valueOf(idTheme));
 
             if (typeRecherche.equals("proximite")) {
                 url = new URL(MainActivity.chemin+"commerce/proximite/"+idTheme+"/"+ville+"/"+latitude+"/"+longitude);
@@ -25,7 +22,6 @@ public class RecuperationCommerce {
                 url = new URL(MainActivity.chemin+"commerce/theme/"+idTheme+"/"+ville);
             }
 
-            Log.v("test","URI");
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -33,13 +29,12 @@ public class RecuperationCommerce {
                     new InputStreamReader(connection.getInputStream()));
 
             StringBuffer json = new StringBuffer(1024);
-            String tmp="";
+            String tmp;
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
 
             JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;

@@ -2,13 +2,13 @@ package losamigos.smartcity;
 
 public class Commerce {
 
-    int id;
-    String nom;
-    String pseudoCommercant;
-    String localisation;
-    String longitude;
-    String latitude;
-    double distance;
+    private int id;
+    private String nom;
+    private String pseudoCommercant;
+    private String localisation;
+    private String longitude;
+    private String latitude;
+    private double distance;
 
     public Commerce() {}
 
@@ -96,6 +96,7 @@ public class Commerce {
                 ", localisation='" + localisation + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
+                ", distance=" + distance +
                 '}';
     }
 }

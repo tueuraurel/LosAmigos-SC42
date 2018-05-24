@@ -1,19 +1,13 @@
 package losamigos.smartcity;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,25 +37,24 @@ import java.util.List;
 
 public class RechercheCommerceActivity extends AppCompatActivity {
 
-    ListView liste;
-    //lv.setSelection(lv.getAdapter().getCount()-1);
-    ArrayList<ThemeCommerce> themeList;
-    ThemesCommerceAdapter themesCommerceAdapter;
+    private ListView liste;
+    private ArrayList<ThemeCommerce> themeList;
+    private ThemesCommerceAdapter themesCommerceAdapter;
 
-    ArrayList<Commerce> commerceList;
-    CommerceAdapter commerceAdapter;
-    CommerceAdapterProximite commerceAdapterProximite;
+    private ArrayList<Commerce> commerceList;
+    private CommerceAdapter commerceAdapter;
+    private CommerceAdapterProximite commerceAdapterProximite;
 
-    String typeRecherche = "alphabetique";
-    String echecGPS = "";
+    private String typeRecherche = "alphabetique";
+    private String echecGPS = "";
 
-    GPSTracker gps;
-    double latitude;
-    double longitude;
+    private GPSTracker gps;
+    private double latitude;
+    private double longitude;
 
     private static final int REQUEST_CODE_ONE = 1;
 
-    Handler handler;
+    private Handler handler;
 
     public RechercheCommerceActivity() {
         handler = new Handler();
@@ -87,9 +80,7 @@ public class RechercheCommerceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 typeRecherche = "proximite";
                 //startService(new Intent(getApplicationContext(), AnnoncesService.class));
-                if (ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
+                if (!(ContextCompat.checkSelfPermission(RechercheCommerceActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
                     ActivityCompat.requestPermissions(RechercheCommerceActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ONE);
                 }
                 //on recupere la position géographique
@@ -142,11 +133,9 @@ public class RechercheCommerceActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CODE_ONE: {
                 if (typeRecherche.equals("proximite")) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    } else {
+                    if (!(grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                         Toast.makeText(this, "Permission GPS refusée", Toast.LENGTH_LONG).show();
                     }
-                    return;
                 }
             }
         }
@@ -207,9 +196,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                         //Toast.makeText(getApplicationContext(), "Votre localisation est - \nLat: " + gps.getLatitude() + "\nLong: " + gps.getLongitude(), Toast.LENGTH_LONG).show();
                         longitude = gps.getLongitude();
                         latitude = gps.getLatitude();
-
-                        Log.d("longitude", String.valueOf(longitude));
-                        Log.d("latitude", String.valueOf(latitude));
 
                         if (longitude == 0 || latitude == 0) {
                             typeRecherche = "alphabetique";
@@ -310,7 +296,6 @@ public class RechercheCommerceActivity extends AppCompatActivity {
                             jsonobject.getString("longitude"), jsonobject.getString("latitude")));
                 }
             }
-            Log.v("test",commerce.toString());
             return commerce;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -370,8 +355,6 @@ class RecuperationThemesCommerce {
             } else {
                 url = new URL(MainActivity.chemin+"themes/listeThemesEnfant/id/"+idTheme);
             }
-
-            Log.v("test","URI");
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -385,7 +368,6 @@ class RecuperationThemesCommerce {
             reader.close();
 
             JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;
@@ -472,18 +454,20 @@ class CommerceAdapterProximite extends ArrayAdapter<Commerce> {
         holder.nom.setText(p.getNom());
 
         double distance = p.getDistance();
-        String textDistance = "";
+        String textDistance;
         if (distance > 1) {
             DecimalFormat df = new DecimalFormat("#.#");
             df.setRoundingMode(RoundingMode.HALF_UP);
             textDistance = df.format(distance);
-            holder.distance.setText(textDistance + "km");
+            String affichageDistance = textDistance + "km";
+            holder.distance.setText(affichageDistance);
         } else {
             distance = distance * 1000;
             DecimalFormat df = new DecimalFormat("#");
             df.setRoundingMode(RoundingMode.HALF_UP);
             textDistance = df.format(distance);
-            holder.distance.setText(textDistance + "m");
+            String affichageDistance = textDistance + "m";
+            holder.distance.setText(affichageDistance);
         }
 
         return v;

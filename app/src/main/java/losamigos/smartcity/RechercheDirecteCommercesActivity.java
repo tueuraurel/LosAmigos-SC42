@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,10 +26,10 @@ import java.util.ArrayList;
 
 public class RechercheDirecteCommercesActivity extends AppCompatActivity {
 
-    ListView listeCommerces;
-    ArrayList<Commerce> commercesList;
-    CommerceAdapter commerceAdapter;
-    Handler handler;
+    private ListView listeCommerces;
+    private ArrayList<Commerce> commercesList;
+    private CommerceAdapter commerceAdapter;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +55,10 @@ public class RechercheDirecteCommercesActivity extends AppCompatActivity {
                 if(champRecherche.getText().toString().equals("")){
                     Toast.makeText(RechercheDirecteCommercesActivity.this, R.string.rechercheVide, Toast.LENGTH_LONG).show();
                 }else {
-                    updateCommerceData(true);
+                    updateCommerceData();
                 }
             }
         });
-
-        // On recupere l'intent precedent pour avoir les donnees qu'il transporte
-        final Intent intentIn = getIntent();
-
 
     }
 
@@ -92,7 +87,7 @@ public class RechercheDirecteCommercesActivity extends AppCompatActivity {
     }
 
 
-    private void updateCommerceData(final boolean avecRecherche) {
+    private void updateCommerceData() {
         new Thread() {
             public void run() {
                 final Intent intent = getIntent();
@@ -167,7 +162,6 @@ class RecuperationCommerceRecherche {
     public static JSONArray getJSON(String lieu,String recherche){
         try {
             URL url = new URL(MainActivity.chemin+"commerceRecherche/"+recherche+"/"+lieu);
-            Log.v("getJSON URI",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -175,13 +169,12 @@ class RecuperationCommerceRecherche {
                     new InputStreamReader(connection.getInputStream()));
 
             StringBuffer json = new StringBuffer(1024);
-            String tmp="";
+            String tmp;
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
 
             JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;

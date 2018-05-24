@@ -37,4 +37,12 @@ public class ThemeCommerce {
         this.idNomPere = idNomPere;
     }
 
+    @Override
+    public String toString() {
+        return "ThemeCommerce{" +
+                "nom='" + nom + '\'' +
+                ", id=" + id +
+                ", idNomPere=" + idNomPere +
+                '}';
+    }
 }

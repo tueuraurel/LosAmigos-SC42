@@ -2,10 +2,9 @@ package losamigos.smartcity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,10 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,12 +29,12 @@ import java.util.List;
 
 public class ListeFavorisCommerceActivity extends AppCompatActivity {
 
-    ListView liste;
+    private ListView liste;
 
-    ArrayList<Commerce> favorisList;
-    FavorisCommerceAdapter favorisCommerceAdapter;
+    private ArrayList<Commerce> favorisList;
+    private FavorisCommerceAdapter favorisCommerceAdapter;
 
-    Handler handler;
+    private Handler handler;
 
     public ListeFavorisCommerceActivity() {
         handler = new Handler();
@@ -120,7 +117,6 @@ public class ListeFavorisCommerceActivity extends AppCompatActivity {
                 commerce.add(new Commerce(jsonobject.getInt("id"), jsonobject.getString("nom"), jsonobject.getString("pseudoCommercant"), jsonobject.getString("localisation"),
                         jsonobject.getString("longitude"), jsonobject.getString("latitude")));
             }
-            Log.v("test",commerce.toString());
             return commerce;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -155,7 +151,6 @@ class RecuperationFavorisCommerce {
             URL url;
             url = new URL(MainActivity.chemin+"utilisateur2/favorisCommerce/"+user);
 
-            Log.v("test",url.toString());
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -169,7 +164,6 @@ class RecuperationFavorisCommerce {
             reader.close();
 
             JSONArray data = new JSONArray(json.toString());
-            Log.v("json", json.toString());
             return data;
         }catch(Exception e){
             return null;

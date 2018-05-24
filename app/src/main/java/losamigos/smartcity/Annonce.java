@@ -76,8 +76,12 @@ public class Annonce {
     @Override
     public String toString() {
         return "Annonce{" +
-                "titre='" + titre + '\'' +
+                "id=" + id +
+                ", idTheme=" + idTheme +
+                ", idCommerce=" + idCommerce +
+                ", titre='" + titre + '\'' +
                 ", contenu='" + contenu + '\'' +
+                ", nomCommerce='" + nomCommerce + '\'' +
                 '}';
     }
 }

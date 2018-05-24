@@ -1,10 +1,9 @@
 package losamigos.smartcity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,11 +22,11 @@ import java.net.URL;
 
 public class AnnonceActivity extends AppCompatActivity {
 
-    Handler handler;
-    TextView textViewTitreAnnonce;
-    TextView textViewContenuAnnonce;
-    TextView textViewNomCommerce;
-    Button voirCommerce;
+    private Handler handler;
+    private TextView textViewTitreAnnonce;
+    private TextView textViewContenuAnnonce;
+    private TextView textViewNomCommerce;
+    private Button voirCommerce;
 
     public AnnonceActivity() {
         handler = new Handler();
@@ -86,13 +85,13 @@ public class AnnonceActivity extends AppCompatActivity {
                     handler.post(new Runnable() {
                         public void run() {
                             try {
-                                textViewTitreAnnonce = (TextView) findViewById(R.id.titreAnnonce);;
-                                textViewContenuAnnonce = (TextView) findViewById(R.id.contenuAnnonce);;
-                                textViewNomCommerce = (TextView) findViewById(R.id.nomCommerce);;
+                                textViewTitreAnnonce = (TextView) findViewById(R.id.titreAnnonce);
+                                textViewContenuAnnonce = (TextView) findViewById(R.id.contenuAnnonce);
+                                textViewNomCommerce = (TextView) findViewById(R.id.nomCommerce);
                                 voirCommerce = (Button) findViewById(R.id.voirCommerce);
 
-                                textViewTitreAnnonce.setText(jsonAnnonce.getString("titre"));;
-                                textViewContenuAnnonce.setText(jsonAnnonce.getString("contenu"));;
+                                textViewTitreAnnonce.setText(jsonAnnonce.getString("titre"));
+                                textViewContenuAnnonce.setText(jsonAnnonce.getString("contenu"));
                                 textViewNomCommerce.setText(jsonAnnonce.getString("nomCommerce"));
 
                                 voirCommerce.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +125,6 @@ public class AnnonceActivity extends AppCompatActivity {
 
 class RecuperationInfosAnnonce {
 
-    // Recupere l'ensemble des commerces correspondant au thème
     public static JSONObject getJSON(int idAnnonce){
 
         try {
@@ -135,8 +133,6 @@ class RecuperationInfosAnnonce {
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
-            Log.d("url", url.toString());
-
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
 
@@ -144,14 +140,10 @@ class RecuperationInfosAnnonce {
             reader.close();
 
             JSONObject jso=new JSONObject(ligne);
-            //response=jso.getString("pseudo");
-
-            Log.v("json", jso.toString());
 
             return jso;
 
         }catch(Exception e){
-            Log.d("erreur", e.getMessage());
             return null;
         }
 

@@ -2,13 +2,9 @@ package losamigos.smartcity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,13 +31,13 @@ import java.util.List;
 
 public class OffreCommerceActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    ListView liste;
+    private ListView liste;
 
-    ArrayList<Annonce> annonceList;
-    AnnonceAdapter annonceAdapter;
-    String choixTri = "toutes";
+    private ArrayList<Annonce> annonceList;
+    private AnnonceAdapter annonceAdapter;
+    private String choixTri = "toutes";
 
-    Handler handler;
+    private Handler handler;
 
     public OffreCommerceActivity() {
         handler = new Handler();
@@ -157,7 +151,6 @@ public class OffreCommerceActivity extends AppCompatActivity implements AdapterV
                         jsonobject.getString("contenu"), jsonobject.getString("nomCommerce")));
 
             }
-            Log.v("test", annonce.toString());
             return annonce;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -222,8 +215,6 @@ class RecuperationAnnoncesCommerce {
                 url = new URL(MainActivity.chemin+"annonces/idCommerce/"+idCommerce+"/"+pseudoUser);
             }
 
-            Log.d("url", url.toString());
-
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
 
@@ -235,12 +226,10 @@ class RecuperationAnnoncesCommerce {
             while((tmp=reader.readLine())!=null)
                 json.append(tmp).append("\n");
             reader.close();
-            Log.d("json", json.toString());
 
             JSONArray data = new JSONArray(json.toString());
             return data;
         }catch(Exception e){
-            Log.d("erreur", e.getMessage());
             return null;
         }
     }

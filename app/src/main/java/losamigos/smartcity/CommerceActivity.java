@@ -1,69 +1,53 @@
 package losamigos.smartcity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.util.IOUtils;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommerceActivity extends AppCompatActivity {
 
-    TextView textViewNomCommerce;
-    TextView textViewDescription;
-    TextView textViewAdresse;
-    TextView textViewTelephone;
-    TextView textViewHoraires;
-    String lienImage;
-    String nomCommerce;
-    ImageView logoCommerce;
-    Button boutonFavoriCommerce;
-    Button voirOffresCommerce;
-    Button voirMap;
-    Handler handler;
-    double longitude, latitude;
+    private TextView textViewNomCommerce;
+    private TextView textViewDescription;
+    private TextView textViewAdresse;
+    private TextView textViewTelephone;
+    private TextView textViewHoraires;
+    private String lienImage;
+    private String nomCommerce;
+    private ImageView logoCommerce;
+    private Button boutonFavoriCommerce;
+    private Button voirOffresCommerce;
+    private Button voirMap;
+    private Handler handler;
+    private double longitude, latitude;
 
     public CommerceActivity() {
         handler = new Handler();
@@ -79,10 +63,6 @@ public class CommerceActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateCommerce();
-
-        Intent intent = getIntent();
-        int idCommerce = intent.getIntExtra("idTheme",0);
-        Log.v("test",String.valueOf(idCommerce));
     }
 
     @Override
@@ -173,7 +153,6 @@ public class CommerceActivity extends AppCompatActivity {
                                     voirMap.setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
                                             Uri gmmIntentUri = Uri.parse("geo:0,0?q="+ String.valueOf(latitude) +","+ String.valueOf(longitude) + "("+ nomCommerce +")");
-                                            Log.d("lienMap", gmmIntentUri.toString());
                                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                                             mapIntent.setPackage("com.google.android.apps.maps");
                                             if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -250,7 +229,6 @@ public class CommerceActivity extends AppCompatActivity {
     public static String supprimerFavori(int idCommerce, String pseudoUser) {
         try {
             URL url = new URL(MainActivity.chemin+"utilisateur/favoriCommerce/supprimer/"+pseudoUser+"/"+idCommerce);
-            Log.d("url", url.toString());
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
             BufferedReader reader = new BufferedReader(
@@ -268,15 +246,7 @@ public class CommerceActivity extends AppCompatActivity {
 
             return resultat;
 
-        } catch (MalformedURLException e1) {
-            Log.d("refus",e1.getMessage());
-            e1.printStackTrace();
-
-        } catch (ClientProtocolException e) {
-            Log.d("refus",e.getMessage());
-            e.printStackTrace();
         } catch (IOException e) {
-            Log.d("refus",e.getMessage());
             e.printStackTrace();
         }
 
@@ -321,7 +291,7 @@ public class CommerceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final int idCommerce = intent.getIntExtra("idCommerce",0);
         final String pseudoUser = intent.getStringExtra("pseudoUser");
-        InputStream inputStream = null;
+        InputStream inputStream;
 
         try {
             // 1. create HttpClient
@@ -330,20 +300,15 @@ public class CommerceActivity extends AppCompatActivity {
             // 2. make POST request to the given URL
             HttpPost httpPost = new HttpPost(MainActivity.chemin+"utilisateur/favoriCommerce/ajout");
 
-            String json = "";
+            String json;
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("pseudo", pseudoUser);
             jsonObject.accumulate("idCommerce", idCommerce);
-            //Log.d("insertionBase",jsonObject.toString());
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
-
-            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
-            // ObjectMapper mapper = new ObjectMapper();
-            // json = mapper.writeValueAsString(person);
 
             // 5. set json to StringEntity
             StringEntity se = new StringEntity(json);
@@ -372,17 +337,10 @@ public class CommerceActivity extends AppCompatActivity {
                     break;
                 out.append(buffer, 0, rsz);
             }
-            String resultat = out.toString();
 
-            return resultat;
+            return out.toString();
 
-        } catch (MalformedURLException e1) {
-            e1.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -403,7 +361,6 @@ public class CommerceActivity extends AppCompatActivity {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
             return mIcon11;
@@ -417,12 +374,10 @@ public class CommerceActivity extends AppCompatActivity {
 
 class RecuperationInfosCommerce {
 
-    // Recupere l'ensemble des commerces correspondant au thème
     public static JSONObject getJSON(int idCommerce, String pseudoUser){
 
         try {
             URL url;
-            Log.v("IDCommerce",String.valueOf(idCommerce));
             url = new URL(MainActivity.chemin+"commerce/id/"+idCommerce);
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
@@ -434,15 +389,11 @@ class RecuperationInfosCommerce {
             reader.close();
 
             JSONObject jso=new JSONObject(ligne);
-            //response=jso.getString("pseudo");
-
-            Log.v("json", jso.toString());
 
             try {
                 URL url2;
                 url2 = new URL(MainActivity.chemin+"utilisateur/favoriCommerce/"+pseudoUser+"/"+idCommerce);
 
-                Log.v("test",url2.toString());
                 HttpURLConnection connection2 =
                         (HttpURLConnection)url2.openConnection();
 
@@ -458,7 +409,6 @@ class RecuperationInfosCommerce {
                     jso.put("favori", true);
                 }
 
-                Log.v("test",jso.toString());
                 return jso;
 
             }catch(Exception e){
